@@ -1,0 +1,226 @@
+<div class="page-header">
+  <div class="col-sm-12">
+    <div class="d-flex">
+      <div class="mr-auto p-2">
+        <h2 class="page-title txt-arabic">{{'categories' | translate}}</h2>
+      </div>
+      <div class="">
+        <button type="button" class="btn theme-btn" (click)="openAddForm()">
+          <i class="mdi mdi-plus-circle"></i> {{'add_category' | translate}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row" [ngClass]="{'csspinner load1':dataLoader}">
+  <div class="col-sm-12" *ngFor="let item of categories |
+    paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }; let i = index"
+  >
+  <div class=" shadow p-3 mb-3 bg-white rounded" *ngIf="item.parent_id == 0">
+    <div class="row" >
+   
+        <div class="col-sm-6">
+          <h5 class="mt-2 px-2">{{item.category_name}}</h5>
+          </div>
+          <div class="col-sm-3">
+            <p class="mt-2 px-2">{{item.status}}</p>
+            </div>
+            <div class="col-sm-3">
+             <div class="icon-block text-right">
+                <a class="cp" (click)="openEditForm(item.category_id, i)">
+                  <i class="mdi mdi-pencil b-gry"></i>
+                </a>
+              </div>
+              </div>
+            </div>
+
+      <div class="row" *ngFor="let sub_item of item.subCategory; let j = index">
+
+        <div class="col-sm-6">
+          <h5 class="mt-2 px-2">{{sub_item.category_name}}</h5>
+          </div>
+          <div class="col-sm-3">
+            <p class="mt-2 px-2">{{sub_item.status}}</p>
+            </div>
+            <div class="col-sm-3">
+              <div class="icon-block text-right">
+                <a class="cp" (click)="openEditForm(sub_item.category_id, i, j)">
+                  <i class="mdi mdi-pencil b-gry"></i>
+                </a>
+              </div>
+              </div>
+      </div>
+   
+  </div>
+</div>
+</div>
+
+<div class="row" *ngIf="categories.length">
+  <div class="col-sm-12 mt-3 text-center">
+    <pagination-controls (pageChange)="pageChanged($event)" autoHide="true" responsive="true">></pagination-controls>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="addFormModal" tabindex="-1" role="dialog"
+  aria-labelledby="addFormModal" aria-hidden="true" data-backdrop="static"
+>
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':addFormLoader}">
+      <div class="modal-header">
+        <h4 class="modal-title">{{'add_category' | translate}}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="addForm" (ngSubmit)="onSubmitAddForm()" #ngaddform="ngForm">
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group col-sm-4">
+              <label for="parent_id">{{'parent_category' | translate}}</label>
+              <select [formGroup]="addForm" formControlName="parent_id" class="form-control" id="parent_id">
+                <option value="">Select Category</option>
+                <option *ngFor="let row of allParentCategories" [value]='row.category_id'>
+                  {{row.category_name}}</option>
+              </select>
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="category_name">{{'name' | translate}} <span class="symbol required"></span></label>
+              <input type="text" class="form-control" id="category_name" placeholder="{{'enter_name' | translate}}"
+                [formGroup]="addForm" formControlName="category_name">
+              <div class="invalid-feedback" *ngIf="addForm.controls.category_name.invalid &&
+                (addForm.controls.category_name.dirty || addForm.controls.category_name.touched || ngaddform.submitted)"
+              >
+                <div *ngIf="addForm.controls.category_name.errors.required">{{'this_field_is_required' | translate}}</div>
+                <div *ngIf="addForm.controls.category_name.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                <div *ngIf="addForm.controls.category_name.errors.maxlength">{{'maximum_50_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="category_status">{{'status' | translate}} <span class="symbol required"></span></label>
+              <select formControlName="status" class="form-control" id="category_status" [formGroup]="addForm">
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+              <div class="invalid-feedback"
+                *ngIf="addForm.controls.status.invalid && (addForm.controls.status.dirty ||
+                addForm.controls.status.touched || ngaddform.submitted)"
+              >
+                <div *ngIf="addForm.controls.status.errors.required">{{'this_field_is_required' | translate}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-sm-6">
+              <label>{{'image' | translate}} <span class="symbol required"></span>
+                <div class="text-danger">
+                  <div><small>{{'only_jpg_png_files_allowed' | translate}}</small></div>
+                  <div><small>{{'file_size_should_not_be_greater_than_2_mb' | translate}}</small></div>
+                </div>
+              </label>
+              <div class="custom-file">
+                <input #ngfileinput type="file" (change)="onFileInput($event)" accept="image/*" class="custom-file-input">
+                <label class="custom-file-label" for="customFile">{{'choose_image' | translate}}</label>
+              </div>
+              <div class="invalid-feedback" *ngIf="addForm.controls.image.invalid &&
+                (addForm.controls.image.dirty || addForm.controls.image.touched || ngaddform.submitted)"
+              >
+                <div *ngIf="addForm.controls.image.errors.required">{{'this_field_is_required' | translate}}</div>
+              </div>
+            </div>
+            <div class="form-group col-sm-6 text-center" *ngIf="imageSrc">
+              <div class="img-item">
+                <img [src]="imageSrc" alt="image" class="img-ele img-fluid">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="submit" class="btn theme-btn mx-auto">{{'save' | translate}}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="updateFormModal" tabindex="-1" role="dialog"
+  aria-labelledby="updateFormModal" aria-hidden="true" data-backdrop="static"
+>
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':updateFormLoader}">
+      <div class="modal-header">
+        <h4 class="modal-title">{{'update_category' | translate}}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="updateForm" (ngSubmit)="onSubmitupdateForm()" #ngupdateform="ngForm">
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group col-sm-4">
+              <label for="parent_id_update">{{'parent_category' | translate}}</label>
+              <select formControlName="parent_id" class="form-control" id="parent_id_update">
+                <option value="0">Select Category</option>
+                <option *ngFor="let row of allParentCategories" [value]='row.category_id'>{{row.category_name}}</option>
+              </select>
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="category_name_update">{{'name' | translate}} <span class="symbol required"></span></label>
+              <input type="text" class="form-control" id="category_name_update" placeholder="{{'enter_name' | translate}}"
+               formControlName="category_name">
+              <div class="invalid-feedback"
+                *ngIf="updateForm.controls.category_name.invalid &&
+                (updateForm.controls.category_name.dirty || updateForm.controls.category_name.touched || ngupdateform.submitted)">
+                <div *ngIf="updateForm.controls.category_name.errors.required">{{'this_field_is_required' | translate}}</div>
+                <div *ngIf="updateForm.controls.category_name.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                <div *ngIf="updateForm.controls.category_name.errors.maxlength">{{'maximum_50_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="category_status_update">{{'status' | translate}} <span class="symbol required"></span></label>
+              <select formControlName="status" class="form-control" id="category_status_update">
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+              <div class="invalid-feedback" *ngIf="updateForm.controls.status.invalid &&
+                (updateForm.controls.status.dirty || updateForm.controls.status.touched || ngupdateform.submitted)"
+              >
+                <div *ngIf="updateForm.controls.status.errors.required">{{'this_field_is_required' | translate}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-sm-6">
+              <label>{{'image' | translate}} <span class="symbol required"></span>
+                <div class="text-danger">
+                  <div><small>{{'only_jpg_png_files_allowed' | translate}}</small></div>
+                  <div><small>{{'file_size_should_not_be_greater_than_2_mb' | translate}}</small></div>
+                </div>
+              </label>
+              <div class="custom-file">
+                <input #ngfileinput type="file" (change)="onFileInput($event)" accept="image/*" class="custom-file-input">
+                <label class="custom-file-label" for="customFile">{{'choose_image' | translate}}</label>
+              </div>
+              <div class="invalid-feedback" *ngIf="updateForm.controls.image.invalid &&
+                (updateForm.controls.image.dirty || updateForm.controls.image.touched || ngupdateform.submitted)"
+              >
+                <div *ngIf="updateForm.controls.image.errors.required">{{'this_field_is_required' | translate}}</div>
+              </div>
+            </div>
+            <div class="form-group col-sm-6 text-center" *ngIf="imageSrc">
+              <div class="img-item">
+                <img [src]="imageSrc" alt="image" class="img-ele img-fluid">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="submit" class="btn theme-btn mx-auto">{{'update' | translate}}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+

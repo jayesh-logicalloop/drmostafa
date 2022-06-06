@@ -1,0 +1,285 @@
+<div class="card">
+    <div class="card-title p-3">
+      <h2>
+        <span *ngIf="course_id === '0'"> {{'add_course' | translate}}</span>
+        <span *ngIf="course_id != '0'"> {{'update_course' | translate}} </span>
+      </h2>
+      <a routerLink="/course"><i class="mdi mdi-arrow-left-bold-circle"></i> {{'back_to_course' | translate}}</a>
+    </div>
+  <div class="card-body p-3">
+    <form [formGroup]="updateForm" (ngSubmit)="onSubmitUpdateForm()" #ngupdateForm="ngForm" [ngClass]="{'csspinner load1': dataLoader || updateFormLoader}">
+      <div class="form-group">
+        <label>{{'name' | translate}} <span class="symbol required"></span></label>
+        <input type="text" class="form-control" placeholder="{{'enter_course_name' | translate}}" formControlName="name">
+        <div class="invalid-feedback" *ngIf="updateForm.controls.name.invalid &&
+          (updateForm.controls.name.dirty || updateForm.controls.name.touched || ngupdateForm.submitted)"
+        >
+          <div *ngIf="updateForm.controls.name.errors.required">{{'this_field_is_required' | translate}}</div>
+          <div *ngIf="updateForm.controls.name.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+          <div *ngIf="updateForm.controls.name.errors.maxlength">{{'maximum_100_characters_allowed' | translate}}</div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <label>{{'author' | translate}} <span class="symbol required"></span></label>
+          <input type="text" class="form-control" placeholder="{{'author' | translate}}" formControlName="author">
+          <div class="invalid-feedback" *ngIf="updateForm.controls.author.invalid &&
+            (updateForm.controls.author.dirty || updateForm.controls.author.touched || ngupdateForm.submitted)"
+          >
+            <div *ngIf="updateForm.controls.author.errors.required">{{'this_field_is_required' | translate}}</div>
+          </div>
+        </div>
+        <div class="form-group col-md-4">
+          <label>{{'duration' | translate}} (hh:mm) <span class="symbol required"></span></label>
+          <input type="text" class="form-control" placeholder="{{'duration' | translate}}" formControlName="duration">
+          <div class="invalid-feedback" *ngIf="updateForm.controls.duration.invalid &&
+            (updateForm.controls.duration.dirty || updateForm.controls.duration.touched || ngupdateForm.submitted)"
+          >
+            <div *ngIf="updateForm.controls.duration.errors.required">{{'this_field_is_required' | translate}}</div>
+          </div>
+        </div>
+        <div class="form-group col-md-4">
+          <label>{{'language' | translate}} <span class="symbol required"></span></label>
+          <input type="text" class="form-control" placeholder="{{'language' | translate}}" formControlName="language">
+          <div class="invalid-feedback" *ngIf="updateForm.controls.language.invalid &&
+            (updateForm.controls.language.dirty || updateForm.controls.language.touched || ngupdateForm.submitted)"
+          >
+            <div *ngIf="updateForm.controls.language.errors.required">{{'this_field_is_required' | translate}}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <label>{{'price' | translate}} <span class="symbol required"></span></label>
+          <input type="text" class="form-control strict_numeric" placeholder="{{'enter_price' | translate}}" formControlName="price">
+          <div class="invalid-feedback" *ngIf="updateForm.controls.price.invalid &&
+            (updateForm.controls.price.dirty || updateForm.controls.price.touched || ngupdateForm.submitted)"
+          >
+            <div *ngIf="updateForm.controls.price.errors.required">{{'this_field_is_required' | translate}}</div>
+          </div>
+        </div>
+        <div class="form-group col-md-4" style="display: none;">
+          <label>{{'offer_price' | translate}}</label>
+          <input type="text" class="form-control strict_numeric" placeholder="{{'enter_offer_price' | translate}}" formControlName="offer_price">
+        </div>
+        <div class="form-group col-md-4">
+          <label>{{'status' | translate}} <span class="symbol required"></span></label>
+          <select class="form-control" formControlName="status">
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+          <div class="invalid-feedback" *ngIf="updateForm.controls.status.invalid &&
+            (updateForm.controls.status.dirty || updateForm.controls.status.touched || ngupdateForm.submitted)"
+          >
+            <div *ngIf="updateForm.controls.status.errors.required">{{'this_field_is_required' | translate}}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>{{'description' | translate}} <span class="symbol required"></span></label>
+        <textarea class="form-control" placeholder="{{'enter_description' | translate}}" formControlName="description"></textarea>
+        <div class="invalid-feedback" *ngIf="updateForm.controls.description.invalid &&
+          (updateForm.controls.description.dirty || updateForm.controls.description.touched || ngupdateForm.submitted)"
+        >
+          <div *ngIf="updateForm.controls.description.errors.required">{{'this_field_is_required' | translate}}</div>
+          <div *ngIf="updateForm.controls.description.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+          <div *ngIf="updateForm.controls.description.errors.maxlength">{{'maximum_250_characters_allowed' | translate}}</div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label>{{'image' | translate}} <span class="symbol required"></span>
+            <div class="text-danger">
+              <div><small>{{'only_jpg_png_files_allowed' | translate}}</small></div>
+              <div><small>{{'file_size_should_not_be_greater_than_500_kb' | translate}}</small></div>
+            </div>
+          </label>
+          <div class="custom-file">
+            <input #ngimagefileinput type="file" (change)="onChangeCourseImage($event)" accept="image/*" class="custom-file-input">
+            <label class="custom-file-label" for="customFile">{{'choose_image' | translate}}</label>
+          </div>
+        </div>
+        <div class="form-group col-sm-6 text-center" *ngIf="image_src">
+          <div class="img-item">
+            <img [src]="image_src" alt="" class="img-ele img-fluid">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="card">
+            <div class="card-title">
+              <button type="button" class="btn btn-sm btn-success" (click)="openNewVideForm()">{{'add_new_video' | translate}}</button>
+            </div>
+            <div class="table-responsive">
+            <table class="table">
+              <tr>
+                <th>#</th>
+                <th>{{'title' | translate}}</th>
+                <th>{{'image' | translate}}</th>
+                <th>{{'video' | translate}}</th>
+                <th>{{'action' | translate}}</th>
+              </tr>
+              <tr *ngFor="let item of course_items; let i = index">
+                <td>{{i+1}}</td>
+                <td>{{item.title}}</td>
+                <td>
+                  <ng-container *ngIf="item.image">
+                    <a data-fancybox href="{{item.image_url}}">{{'image' | translate}}</a>
+                  </ng-container>
+                  <div class="upload-btn-wrapper" matTooltipClass="primary-tooltip" matTooltip="Upload Image">
+                    <i class="mdi mdi-cloud-upload"></i>
+                    <input type="file" (change)="onChangeItemImage($event, item.item_id, i)" accept="image/png,image/jpeg" />
+                  </div>
+                </td>
+                <td>
+                  <ng-container *ngIf="item.file_name">
+                    <a data-fancybox href="{{item.file_url}}">{{'video' | translate}}</a>
+                  </ng-container>
+                  <div class="upload-btn-wrapper" matTooltipClass="primary-tooltip" matTooltip="Upload Video">
+                    <i class="mdi mdi-cloud-upload"></i>
+                    <input type="file" (change)="onChangeItemVideo($event, item.item_id, i)" accept="video/mp4" />
+                  </div>
+                </td>
+                <td>
+                  <i class="mdi mdi-pencil mdi-18px text-info cp" matTooltipClass="primary-tooltip" matTooltip="Edit"
+                    (click)="openUpdateVideForm(item.item_id, i)"></i>
+                  <i class="mdi mdi-delete mdi-18px text-danger cp" matTooltipClass="primary-tooltip" matTooltip="Delete"
+                    (click)="onDeleteVideo(item.item_id, i)"></i>
+                </td>
+              </tr>
+            </table>
+            </div>
+        </div>
+      </div>
+      <hr>
+      <div class="form-row">
+        <div class="form-group col-md-6 my-auto text-left">
+          {{'fields_marked_with_star_is_required' | translate}}
+        </div>
+        <div class="form-group col-md-6 my-auto text-right">
+          <button type="submit" [disabled]="updateFormLoader" class="btn theme-btn mx-auto">
+            <span [ngClass]="{'spinner-border spinner-border-sm':updateFormLoader}"></span> {{'update' | translate}}
+          </button>
+        </div>
+      </div>
+    </form>
+ </div>
+</div>
+
+
+<div class="modal fade actionModal" id="addNewVideoFormModal" tabindex="-1" role="dialog" aria-labelledby="addNewVideoFormModal" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':addNewVideoFormLoader}">
+      <div class="modal-header">
+        <h4 class="modal-title">{{'add_new_video' | translate}}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="addNewVideoForm" (ngSubmit)="onSubmitAddNewVideoForm()" #ngaddnewvideoform="ngForm">
+        <div class="modal-body">
+          <div class="container">
+            <div class="form-group">
+              <label>{{'title' | translate}} <span class="symbol required"></span></label>
+              <input type="text" class="form-control" placeholder="{{'enter_video_title' | translate}}" formControlName="title">
+              <div class="invalid-feedback" *ngIf="addNewVideoForm.controls.title.invalid &&
+                (addNewVideoForm.controls.title.dirty || addNewVideoForm.controls.title.touched || ngaddnewvideoform.submitted)"
+              >
+                <div *ngIf="addNewVideoForm.controls.title.errors.required">{{'this_field_is_required' | translate}}</div>
+                <div *ngIf="addNewVideoForm.controls.title.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                <div *ngIf="addNewVideoForm.controls.title.errors.maxlength">{{'maximum_100_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>{{'description' | translate}} <span class="symbol required"></span></label>
+              <textarea class="form-control" placeholder="{{'enter_description' | translate}}" formControlName="description"></textarea>
+              <div class="invalid-feedback" *ngIf="addNewVideoForm.controls.description.invalid &&
+                (addNewVideoForm.controls.description.dirty || addNewVideoForm.controls.description.touched || ngaddnewvideoform.submitted)"
+              >
+                <div *ngIf="addNewVideoForm.controls.description.errors.required">{{'this_field_is_required' | translate}}</div>
+                <div *ngIf="addNewVideoForm.controls.description.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                <div *ngIf="addNewVideoForm.controls.description.errors.maxlength">{{'maximum_250_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <div class="container">
+            <div class="form-row">
+              <div class="form-group col-md-6 my-auto text-left">
+                {{'fields_marked_with_star_is_required' | translate}}
+              </div>
+              <div class="form-group col-md-6 my-auto text-right">
+                <button type="submit" [disabled]="addNewVideoFormLoader" class="btn theme-btn mx-auto">
+                  <span [ngClass]="{'spinner-border spinner-border-sm':addNewVideoFormLoader}"></span> {{'add' | translate}}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="updateVideoFormModal" tabindex="-1" role="dialog" aria-labelledby="updateVideoFormModal" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':updateVideoFormLoader}">
+      <div class="modal-header">
+        <h4 class="modal-title">{{'update_video' | translate}}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="updateVideoForm" (ngSubmit)="onSubmitUpdateVideoForm()" #ngupdatevideoform="ngForm">
+        <div class="modal-body">
+          <div class="container">
+            <div class="form-group">
+              <label>{{'title' | translate}} <span class="symbol required"></span></label>
+              <input type="text" class="form-control" placeholder="{{'enter_video_title' | translate}}" formControlName="title">
+              <div class="invalid-feedback" *ngIf="updateVideoForm.controls.title.invalid &&
+                (updateVideoForm.controls.title.dirty || updateVideoForm.controls.title.touched || ngupdatevideoform.submitted)"
+              >
+                <div *ngIf="updateVideoForm.controls.title.errors.required">{{'this_field_is_required' | translate}}</div>
+                <div *ngIf="updateVideoForm.controls.title.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                <div *ngIf="updateVideoForm.controls.title.errors.maxlength">{{'maximum_100_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>{{'description' | translate}} <span class="symbol required"></span></label>
+              <textarea class="form-control" placeholder="{{'enter_description' | translate}}" formControlName="description"></textarea>
+              <div class="invalid-feedback" *ngIf="updateVideoForm.controls.description.invalid &&
+                (updateVideoForm.controls.description.dirty || updateVideoForm.controls.description.touched || ngupdatevideoform.submitted)"
+              >
+                <div *ngIf="updateVideoForm.controls.description.errors.required">{{'this_field_is_required' | translate}}</div>
+                <div *ngIf="updateVideoForm.controls.description.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                <div *ngIf="updateVideoForm.controls.description.errors.maxlength">{{'maximum_250_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <div class="container">
+            <div class="form-row">
+              <div class="form-group col-md-6 my-auto text-left">
+                {{'fields_marked_with_star_is_required' | translate}}
+              </div>
+              <div class="form-group col-md-6 my-auto text-right">
+                <button type="submit" [disabled]="updateVideoFormLoader" class="btn theme-btn mx-auto">
+                  <span [ngClass]="{'spinner-border spinner-border-sm':updateVideoFormLoader}"></span> {{'update' | translate}}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

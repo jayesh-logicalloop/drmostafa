@@ -1,0 +1,200 @@
+<div class="page-header">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-9">
+        <h2 class="page-title">F.A.Q.</h2>
+      </div>
+      <div class="col-sm-3 text-right">
+        <button type="button" class="btn theme-btn" (click)="onManageCrud('', 'Create')">
+          <i class="mdi mdi-plus-circle mr-1"></i> Add FAQ
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body p-2 table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Title</th>
+              <th>Detail</th>
+              <th>Order</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody [ngClass]="{'csspinner load1':dataLoader}">
+            <tr *ngFor="let item of faqs ; let i = index">
+              <th>{{i+1}}</th>
+              <td class="text-pre-wrap text-break-all">{{item.faq | slice:0:25}}</td>
+              <td class="text-pre-wrap text-break-all">{{item.faq_answer | slice:0:50}}</td>
+              <td>{{item.sort_order}}</td>
+              <td>{{item.status}}</td>
+              <td>
+                <div class="icon-block">
+                  <a class="cp" (click)="onManageCrud(item.id, 'Update', i)">
+                    <i class="mdi mdi-pencil b-gry" aria-hidden="true"></i>
+                  </a>
+                  <a class="cp" (click)="deleteFAQ(item.id)">
+                    <i class="mdi mdi-delete b-brown"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="CrudModal" tabindex="-1" role="dialog" aria-labelledby="CrudModal" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':addFormLoader}">
+      <div class="modal-header">
+        <h4 class="modal-title">Add FAQ</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="addForm" (ngSubmit)="onSubmitCrudForm()" #ngaddform="ngForm">
+        <div class="modal-body">
+          <div class="container">
+            <div class="form-group">
+              <label for="faq">FAQ <span class="symbol required"></span></label>
+              <input type="text" class="form-control" id="faq" placeholder="Enter FAQ"
+                [formGroup]="addForm" formControlName="faq">
+              <div class="invalid-feedback" *ngIf="addForm.controls.faq.invalid && (addForm.controls.faq.dirty ||
+                addForm.controls.faq.touched || ngaddform.submitted)"
+              >
+                <div *ngIf="addForm.controls.faq.errors.required">{{'this_field_is_required' | translate}}</div>
+                <div *ngIf="addForm.controls.faq.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                <div *ngIf="addForm.controls.faq.errors.maxlength">{{'maximum_200_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="faq_answer"> FAQ Answer <span class="symbol required"></span></label>
+              <textarea rows="4" type="text" class="form-control" id="faq_answer" placeholder="Enter FAQ Answer"
+                [formGroup]="addForm" formControlName="faq_answer"> </textarea>
+              <div class="invalid-feedback" *ngIf="addForm.controls.faq_answer.invalid &&
+                (addForm.controls.faq_answer.dirty || addForm.controls.faq_answer.touched || ngaddform.submitted)"
+              >
+                <div *ngIf="addForm.controls.faq_answer.errors.required">{{'this_field_is_required' | translate}}</div>
+                <div *ngIf="addForm.controls.faq_answer.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                <div *ngIf="addForm.controls.faq_answer.errors.maxlength">{{'maximum_1000_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="sort_order">Sort Order</label>
+                  <input type="text" class="form-control strict_integer" id="sort_order" placeholder="Order"
+                    [formGroup]="addForm" formControlName="sort_order">
+                  <div class="invalid-feedback" *ngIf="addForm.controls.sort_order.invalid &&
+                    (addForm.controls.sort_order.dirty || addForm.controls.sort_order.touched || ngaddform.submitted)"
+                  >
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="status">Status <span class="symbol required"></span></label>
+                <select formControlName="status" class="form-control" id="status" [formGroup]="addForm">
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                </select>
+                <div class="invalid-feedback" *ngIf="addForm.controls.status.invalid && (addForm.controls.status.dirty ||
+                  addForm.controls.status.touched || ngaddform.submitted)"
+                >
+                  <div *ngIf="addForm.controls.status.errors.required">{{'this_field_is_required' | translate}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="submit" class="btn theme-btn mx-auto">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="CrudModalUpdate" tabindex="-1" role="dialog" aria-labelledby="CrudModalUpdate" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':updateFormLoader}">
+      <div class="modal-header">
+        <h4 class="modal-title"> Update FAQ</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="updateForm" (ngSubmit)="onSubmitCrudUpdateForm()" #ngupdateform="ngForm">
+        <div class="modal-body">
+          <div class="container">
+            <div class="form-group">
+              <label>FAQ <span class="symbol required"></span></label>
+              <input type="text" class="form-control" placeholder="Enter FAQ" [formGroup]="updateForm"
+                formControlName="faq">
+              <div class="invalid-feedback" *ngIf="updateForm.controls.faq.invalid &&
+                (updateForm.controls.faq.dirty || updateForm.controls.faq.touched || ngupdateform.submitted)"
+              >
+                <div *ngIf="updateForm.controls.faq.errors.required">{{'this_field_is_required' | translate}}</div>
+                <div *ngIf="updateForm.controls.faq.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                <div *ngIf="updateForm.controls.faq.errors.maxlength">{{'maximum_200_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>FAQ Answer <span class="symbol required"></span></label>
+              <textarea rows="6" type="text" class="form-control" placeholder="Enter FAQ Answer"
+                [formGroup]="updateForm" formControlName="faq_answer"> </textarea>
+              <div class="invalid-feedback" *ngIf="updateForm.controls.faq_answer.invalid &&
+                (updateForm.controls.faq_answer.dirty || updateForm.controls.faq_answer.touched ||
+                ngupdateform.submitted)"
+              >
+                <div *ngIf="updateForm.controls.faq_answer.errors.required">{{'this_field_is_required' | translate}}</div>
+                <div *ngIf="updateForm.controls.faq_answer.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                <div *ngIf="updateForm.controls.faq_answer.errors.maxlength">{{'maximum_1000_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label>Sort Order</label>
+                  <input type="text" class="form-control strict_integer" placeholder="Order"
+                    [formGroup]="updateForm" formControlName="sort_order">
+                  <div class="invalid-feedback" *ngIf="updateForm.controls.sort_order.invalid &&
+                    (updateForm.controls.sort_order.dirty || updateForm.controls.sort_order.touched ||
+                    ngaddform.submitted)"
+                  >
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-md-6">
+                <label>Status <span class="symbol required"></span></label>
+                <select formControlName="status" class="form-control" [formGroup]="updateForm">
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                </select>
+                <div class="invalid-feedback" *ngIf="updateForm.controls.status.invalid &&
+                  (updateForm.controls.status.dirty || updateForm.controls.status.touched ||
+                  ngupdateform.submitted)"
+                >
+                  <div *ngIf="updateForm.controls.status.errors.required">{{'this_field_is_required' | translate}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="submit" class="btn theme-btn mx-auto">Update</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,112 @@
+.treeview {
+	list-style: outside none none;
+	position: relative;
+}
+.treeview::before {
+	border-left: 1px solid #000000;
+	content: "";
+	display: block;
+	height: 100%;
+	left: 0;
+	position: absolute;
+}
+.treeview > li::before {
+	border-top: 1px solid #000000;
+	content: "";
+	display: block;
+	left: -40px;
+	position: absolute;
+	top: 10px;
+	width: 20px;
+}
+.treeview > li {
+	position: relative;
+}
+.treeview ul {
+	list-style: outside none none;
+	position: relative;
+}
+.treeview > li > ul > li::before {
+	border-top: 1px solid #000000;
+	content: "";
+	display: block;
+	left: -40px;
+	position: absolute;
+	top: 9px;
+	width: 20px;
+}
+.treeview > li > ul > li {
+	position: relative;
+}
+.treeview::before {
+	border-left: 1px solid #000000;
+	content: "";
+	display: block;
+	height: 100%;
+	left: 14px;
+	position: absolute;
+}
+.treeview > li::before {
+	border-top: 1px solid #000000;
+	content: "";
+	display: block;
+	left: -25px;
+	position: absolute;
+	top: 10px;
+	width: 20px;
+}
+.treeview > li > ul > li::before {
+	border-top: 1px solid #000000;
+	content: "";
+	display: block;
+	left: -25px;
+	position: absolute;
+	top: 9px;
+	width: 20px;
+}
+.treeview > li > ul::before {
+	border-left: 1px solid #000000;
+	content: "";
+	display: block;
+	height: 100%;
+	left: 15px;
+	position: absolute;
+	top: 0;
+}
+.treeview > li > ul {
+	position: relative;
+}
+.treeview > li a.plus{margin:0 10px 0 5px;}
+.treeview span {
+	font-size: 16px;
+}
+.treeview > li > ul.treeview_actions::before {
+	border-left: 0;
+	top: -12px;
+}
+.treeview > li > ul.treeview_actions li::before {
+	display: none;
+}
+
+.treeview_actions {
+	border: 1px dotted #000;
+	margin: 10px 0 20px 45px;
+	padding: 10px 0;
+	width: 300px;
+	position: relative;
+}
+.treeview_actions::before {
+	background: rgba(0, 0, 0, 0);
+	content: "";
+	display: block;
+	height: 25px;
+	left: 13px;
+	position: absolute;
+	top: -12px;
+	width: 23px;
+}
+.treeview_actions > li {
+	display: inline-block;
+	margin: 0 0 0 14px;
+	width: 45%;
+}

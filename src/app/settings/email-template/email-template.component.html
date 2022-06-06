@@ -1,0 +1,193 @@
+<div class="page-header">
+  <div class="col-sm-12 px-0 px-sm-2">
+    <div class="d-flex">
+      <div class="mr-auto">
+        <h2 class="page-title mt-22">{{'email_templates' | translate}} </h2>
+      </div>
+      <div class="p-2">
+        <button type="button" class="btn theme-btn" (click)="openForm()" data-toggle="modal"
+          data-target="#createEmailTemplate">
+          <i class="mdi mdi-plus-circle mr-1"></i> {{'add' | translate}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row" [ngClass]="{'csspinner load1':dataLoader}">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body p-2 table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>{{'name' | translate}}</th>
+              <th>{{'subject' | translate}}</th>
+              <th>{{'action' | translate}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of templateData; let i = index">
+              <th>{{i+1}}</th>
+              <td>{{item.template_code}}</td>
+              <td>{{item.subject}}</td>
+              <td>
+                <div class="icon-block">
+                  <a class="cp" (click)="onClickEditBtn(item.template_id, i)"><i class="mdi mdi-pencil b-gry"
+                      aria-hidden="true"></i></a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="createEmailTemplate" tabindex="-1" role="dialog" aria-labelledby="createEmailTemplate" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':emailTemplateFormLoader}">
+      <div class="modal-header">
+        <h4 class="modal-title">{{'add_email_template' | translate}}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="emailTemplateForm" (ngSubmit)="onSubmitAddForm()" #ngaddform="ngForm">
+        <div class="modal-body">
+          <div class="container">
+            <div class="form-group">
+              <label>{{'name' | translate}} <span class="symbol required"></span></label>
+              <input type="text" class="form-control" placeholder="{{'enter_name' | translate}}" formControlName="template_code">
+              <div class="invalid-feedback" *ngIf="emailTemplateForm.controls.template_code.invalid &&
+                (emailTemplateForm.controls.template_code.dirty || emailTemplateForm.controls.template_code.touched || ngaddform.submitted)"
+              >
+                <div *ngIf="emailTemplateForm.controls.template_code.errors.required">{{'this_field_is_required' | translate}}</div>
+                <div *ngIf="emailTemplateForm.controls.template_code.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                <div *ngIf="emailTemplateForm.controls.template_code.errors.maxlength">{{'maximum_200_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>{{'instruction' | translate}}</label>
+              <input type="text" class="form-control" placeholder="{{'enter_instruction' | translate}}" formControlName="instruction">
+              <div class="invalid-feedback" *ngIf="emailTemplateForm.controls.instruction.invalid &&
+                (emailTemplateForm.controls.instruction.dirty || emailTemplateForm.controls.instruction.touched || ngaddform.submitted)"
+              >
+                <div *ngIf="emailTemplateForm.controls.instruction.errors.required">{{'minimum_2_characters_required' | translate}}</div>
+                <div *ngIf="emailTemplateForm.controls.instruction.errors.required">{{'maximum_200_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>{{'subject' | translate}} <span class="symbol required"></span></label>
+              <input type="text" class="form-control" placeholder="{{'enter_subject' | translate}}" formControlName="subject">
+              <div class="invalid-feedback" *ngIf="emailTemplateForm.controls.subject.invalid &&
+                (emailTemplateForm.controls.subject.dirty || emailTemplateForm.controls.subject.touched || ngaddform.submitted)"
+              >
+                <div *ngIf="emailTemplateForm.controls.subject.errors.required">{{'this_field_is_required' | translate}}</div>
+                <div *ngIf="emailTemplateForm.controls.subject.errors.required">{{'minimum_2_characters_required' | translate}}</div>
+                <div *ngIf="emailTemplateForm.controls.subject.errors.required">{{'maximum_200_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>{{'body' | translate}} <span class="symbol required"></span></label>
+              <ckeditor formControlName="body" [config]="editorConfig"></ckeditor>
+              <div class="invalid-feedback" *ngIf="emailTemplateForm.controls.body.invalid &&
+                (emailTemplateForm.controls.body.dirty || emailTemplateForm.controls.body.touched || ngaddform.submitted)">
+                <div *ngIf="emailTemplateForm.controls.body.errors.required">{{'this_field_is_required' | translate}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <div class="container">
+            <div class="form-row">
+              <div class="form-group col-md-6 my-auto text-left">
+                {{'fields_marked_with_star_is_required' | translate}}
+              </div>
+              <div class="form-group col-md-6 my-auto text-right">
+                <button type="submit" [disabled]="emailTemplateFormLoader" class="btn theme-btn mx-auto">
+                  <span [ngClass]="{'spinner-border spinner-border-sm':emailTemplateFormLoader}"></span> {{'save' | translate}}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="updateEmailTemplate" tabindex="-1" role="dialog" aria-labelledby="updateEmailTemplate" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':emailTemplateFormLoader}">
+      <div class="modal-header">
+        <h4 class="modal-title">Update Email Template</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="emailTemplateForm" (ngSubmit)="onSubmitUpdateForm()" #ngupdateform="ngForm">
+        <div class="modal-body">
+          <div class="container">
+            <div class="form-group">
+              <label>{{'name' | translate}} <span class="symbol required"></span></label>
+              <input type="text" class="form-control" placeholder="{{'enter_name' | translate}}" formControlName="template_code" readonly>
+              <div class="invalid-feedback" *ngIf="emailTemplateForm.controls.template_code.invalid &&
+                (emailTemplateForm.controls.template_code.dirty || emailTemplateForm.controls.template_code.touched || ngupdateform.submitted)"
+              >
+                <div *ngIf="emailTemplateForm.controls.template_code.errors.required">{{'this_field_is_required' | translate}}</div>
+                <div *ngIf="emailTemplateForm.controls.template_code.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                <div *ngIf="emailTemplateForm.controls.template_code.errors.maxlength">{{'maximum_200_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>{{'instruction' | translate}}</label>
+              <input type="text" class="form-control" placeholder="{{'enter_instruction' | translate}}" formControlName="instruction">
+              <div class="invalid-feedback" *ngIf="emailTemplateForm.controls.instruction.invalid &&
+                (emailTemplateForm.controls.instruction.dirty || emailTemplateForm.controls.instruction.touched || ngupdateform.submitted)"
+              >
+                <div *ngIf="emailTemplateForm.controls.instruction.errors.required">{{'minimum_2_characters_required' | translate}}</div>
+                <div *ngIf="emailTemplateForm.controls.instruction.errors.required">{{'maximum_200_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>{{'subject' | translate}} <span class="symbol required"></span></label>
+              <input type="text" class="form-control" placeholder="{{'enter_subject' | translate}}" formControlName="subject">
+              <div class="invalid-feedback" *ngIf="emailTemplateForm.controls.subject.invalid &&
+                (emailTemplateForm.controls.subject.dirty || emailTemplateForm.controls.subject.touched || ngupdateform.submitted)"
+              >
+                <div *ngIf="emailTemplateForm.controls.subject.errors.required">{{'this_field_is_required' | translate}}</div>
+                <div *ngIf="emailTemplateForm.controls.subject.errors.required">{{'minimum_2_characters_required' | translate}}</div>
+                <div *ngIf="emailTemplateForm.controls.subject.errors.required">{{'maximum_200_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>{{'body' | translate}} <span class="symbol required"></span></label>
+              <ckeditor formControlName="body" [config]="editorConfig"></ckeditor>
+              <div class="invalid-feedback" *ngIf="emailTemplateForm.controls.body.invalid &&
+                (emailTemplateForm.controls.body.dirty || emailTemplateForm.controls.body.touched || ngupdateform.submitted)">
+                <div *ngIf="emailTemplateForm.controls.body.errors.required">{{'this_field_is_required' | translate}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <div class="container">
+            <div class="form-row">
+              <div class="form-group col-md-6 my-auto text-left">
+                {{'fields_marked_with_star_is_required' | translate}}
+              </div>
+              <div class="form-group col-md-6 my-auto text-right">
+                <button type="submit" [disabled]="emailTemplateFormLoader" class="btn theme-btn mx-auto">
+                  <span [ngClass]="{'spinner-border spinner-border-sm':emailTemplateFormLoader}"></span> {{'Update' | translate}}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,201 @@
+<div class="page-header">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-3">
+        <h2 class="page-title txt-arabic">{{'manage_administrators' | translate}}</h2>
+      </div>
+      <div class="col-sm-6 py-2 py-sm-0">
+        <div class="search-field">
+          <form class="d-flex align-items-center">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend bg-transparent">
+                <i class="input-group-text border-0 mdi mdi-magnify"></i>
+              </div>
+              <input type="text" #searchEle class="form-control bg-transparent border-0" placeholder="{{'search_by_name' | translate}}">
+              <div class="input-group-append bg-transparent" *ngIf="search.length > 0">
+                <i class="cp input-group-text border-0 mr-3" title="{{'clear_search' | translate}}" (click)="clearSearch()">×</i>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="col-sm-3 text-right-1">
+        <button type="button" class="btn theme-btn" (click)="openAddForm()">
+          <i class="mdi mdi-plus-circle mr-1"></i> {{'add_admin' | translate}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body p-2 table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>{{'type' | translate}}</th>
+              <th>{{'name' | translate}}</th>
+              <th>{{'email' | translate}}</th>
+              <th>{{'phone_number' | translate}}</th>
+              <th>{{'status' | translate}}</th>
+              <th>{{'action' | translate}}</th>
+            </tr>
+          </thead>
+          <tbody [ngClass]="{'csspinner load1': dataLoader}">
+            <ng-container *ngIf="totalItems">
+              <tr
+                *ngFor="let item of admins | paginate: {itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems}; let i = index">
+                <td>{{i+1}}</td>
+                <td>{{item.group_name}} </td>
+                <td>{{item.first_name}} {{item.last_name}} </td>
+                <td>{{item.email}}</td>
+                <td>{{item.mobile_number}}</td>
+                <td>{{item.status}}</td>
+                <td>
+                  <div class="icon-block">
+                    <a class="cp" (click)="openUpdateForm(item)" matTooltip="{{'update' | translate}}" matTooltipClass="primary-tooltip" matTooltipPosition="above">
+                      <i class="mdi mdi-pencil b-gry" aria-hidden="true"></i>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+            <ng-container *ngIf="totalItems == 0">
+              <tr>
+                <td colspan="7">
+                  <div class="alert alert-danger text-center">{{'no_data_found' | translate}}</div>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer p-2" *ngIf="admins.length">
+        <div class="row">
+          <div class="col-sm-12 mt-3 text-center">
+            <pagination-controls (pageChange)="pageChanged($event)" autoHide="true" responsive="true">
+            </pagination-controls>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="addFormModal" tabindex="-1" role="dialog" aria-labelledby="addFormModal" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1': ''}">
+      <div class="modal-header">
+        <h4 class="modal-title">{{'add_admin' | translate}}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="addForm" (ngSubmit)="onSubmitAddForm()" #ngaddform="ngForm">
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group col-md-12">
+              <label>{{'type' | translate}} <span class="symbol required"></span></label>
+              <select class="form-control" formControlName="group_id">
+                <option value="">Select</option>
+                <option value="8">Manager</option>
+                <option value="9">Nurse</option>
+                <option value="10">Receptionist</option>
+                <option value="11">Support</option>
+                <option value="12">Other</option>
+              </select>
+              <div class="invalid-feedback" *ngIf="addForm.controls.group_id.invalid && 
+              (addForm.controls.group_id.dirty || addForm.controls.group_id.touched || ngaddform.submitted)">
+                <div *ngIf="addForm.controls.group_id.errors.required">{{'this_field_is_required' | translate}}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label>{{'first_name' | translate}} <span class="symbol required"></span></label>
+              <input type="text" class="form-control" placeholder="{{'enter_first_name' | translate}}" formControlName="first_name">
+              <div class="invalid-feedback" *ngIf="addForm.controls.first_name.invalid &&
+                (addForm.controls.first_name.dirty || addForm.controls.first_name.touched || ngaddform.submitted )">
+                <div *ngIf="addForm.controls.first_name.errors.required">{{'this_field_is_required' | translate}}</div>
+                <div *ngIf="addForm.controls.first_name.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                <div *ngIf="addForm.controls.first_name.errors.maxlength">{{'maximum_50_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+            <div class="form-group col-md-6">
+              <label>{{'last_name' | translate}} <span class="symbol required"></span></label>
+              <input type="text" class="form-control" placeholder="{{'enter_last_name' | translate}}" formControlName="last_name">
+              <div class="invalid-feedback" *ngIf="addForm.controls.last_name.invalid &&
+                (addForm.controls.last_name.dirty || addForm.controls.last_name.touched || ngaddform.submitted)">
+                <div *ngIf="addForm.controls.last_name.errors.required">{{'this_field_is_required' | translate}}</div>
+                <div *ngIf="addForm.controls.last_name.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                <div *ngIf="addForm.controls.last_name.errors.maxlength">{{'maximum_50_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label>{{'email' | translate}} <span class="symbol required"></span></label>
+              <input type="text" class="form-control" placeholder="{{'enter_email' | translate}}" formControlName="email">
+              <div class="invalid-feedback" *ngIf="addForm.controls.email.invalid &&
+                (addForm.controls.email.dirty || addForm.controls.email.touched || ngaddform.submitted)">
+                <div *ngIf="addForm.controls.email.errors.required">{{'this_field_is_required' | translate}}</div>
+                <div *ngIf="addForm.controls.email.errors.maxlength">{{'maximum_100_characters_allowed' | translate}}</div>
+                <div *ngIf="addForm.controls.email.errors.email || addForm.controls.email.errors.pattern">{{'valid_email_is_required' | translate}}</div>
+              </div>
+            </div>
+            <div class="form-group col-md-6">
+              <label>{{'mobile_number' | translate}} <span class="symbol required"></span></label>
+              <input type="text" class="form-control" placeholder="{{'mobile_number' | translate}}" formControlName="mobile_number">
+              <div class="invalid-feedback"
+                *ngIf="addForm.controls.mobile_number.invalid &&
+                (addForm.controls.mobile_number.dirty || addForm.controls.mobile_number.touched || ngaddform.submitted)">
+                <div *ngIf="addForm.controls.mobile_number.errors.required">{{'this_field_is_required' | translate}}</div>
+                <div *ngIf="addForm.controls.mobile_number.errors.minlength">{{'minimum_6_characters_required' | translate}}</div>
+                <div *ngIf="addForm.controls.mobile_number.errors.maxlength">{{'maximum_100_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label>{{'status' | translate}} <span class="symbol required"></span></label>
+              <select class="form-control" formControlName="status">
+                <option value="">Select</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+              <div class="invalid-feedback" *ngIf="addForm.controls.status.invalid && 
+              (addForm.controls.status.dirty || addForm.controls.status.touched || ngaddform.submitted)">
+                <div *ngIf="addForm.controls.status.errors.required">{{'this_field_is_required' | translate}}</div>
+              </div>
+            </div>
+            <div class="form-group col-md-6" [ngClass]="{'d-none':this.id!=''}">
+              <label>{{'password' | translate}} <span class="symbol required"></span></label>
+              <input type="text" class="form-control" placeholder="{{'enter_password' | translate}}" formControlName="password">
+              <div class="invalid-feedback" *ngIf="addForm.controls.password.invalid &&
+                (addForm.controls.password.dirty || addForm.controls.password.touched || ngaddform.submitted)">
+                <div *ngIf="addForm.controls.password.errors.required">{{'this_field_is_required' | translate}}</div>
+                <div *ngIf="addForm.controls.password.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                <div *ngIf="addForm.controls.password.errors.maxlength">{{'maximum_50_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer border-0 d-block">
+            <div class="form-row">
+              <div class="col-md-6 col-5 my-auto text-left">{{'fields_marked_with_star_is_required' | translate}}</div>
+              <div class="col-md-6 col-7 my-auto text-right">
+                <button type="submit" [disabled]="addFormLoader" class="btn theme-btn mx-auto">
+                  <span [ngClass]="{'spinner-border spinner-border-sm':addFormLoader}"></span> {{'submit' | translate}}
+                </button>
+              </div>
+            </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

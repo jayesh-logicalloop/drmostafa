@@ -1,0 +1,130 @@
+<div class="page-header">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-12">
+        <h2 class="page-title">{{'update_profile' | translate}}</h2>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row" [ngClass]="{'csspinner load1':showLoader}">
+  <div class="col-md-4">
+    <div class="edit-pfrl-img-sec text-right">
+      <div class="A-profile">
+        <img [src]="profile_image_src" alt="" class="rounded-circle" />
+        <button type="button" class="btn btn-rounded btn-icon bg-Astral" (click)="fileInput.click()">
+          <i class="mdi mdi-camera"></i>
+          <input #fileInput type="file" (change)="onChangeProfileImage($event)" style="display:none;" accept="image/*" />
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-8 intro-sec">
+    <div class="card">
+      <div class="card-body p-3">
+        <form [formGroup]="updateProfileForm" (ngSubmit)="onSubmitUpdateProfileForm()" #ngupdateprofileform="ngForm">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label>{{'first_name' | translate}} <span class="symbol required"></span></label>
+            <input type="text" class="form-control" placeholder="{{'enter_first_name' | translate}}" formControlName="first_name">
+            <div class="invalid-feedback" *ngIf="updateProfileForm.controls.first_name.invalid &&
+              (updateProfileForm.controls.first_name.dirty || updateProfileForm.controls.first_name.touched || ngupdateprofileform.submitted)"
+            >
+              <div *ngIf="updateProfileForm.controls.first_name.errors.required">{{'this_field_is_required' | translate}}</div>
+              <div *ngIf="updateProfileForm.controls.first_name.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+              <div *ngIf="updateProfileForm.controls.first_name.errors.maxlength">{{'maximum_50_characters_allowed' | translate}}</div>
+            </div>
+          </div>
+          <div class="form-group col-md-6">
+            <label>{{'last_name' | translate}} <span class="symbol required"></span></label>
+            <input type="text" class="form-control" placeholder="{{'enter_last_name' | translate}}" formControlName="last_name">
+            <div class="invalid-feedback"  *ngIf="updateProfileForm.controls.last_name.invalid &&
+              (updateProfileForm.controls.last_name.dirty || updateProfileForm.controls.last_name.touched || ngupdateprofileform.submitted)"
+            >
+              <div *ngIf="updateProfileForm.controls.last_name.errors.required">{{'this_field_is_required' | translate}}</div>
+              <div *ngIf="updateProfileForm.controls.last_name.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+              <div *ngIf="updateProfileForm.controls.last_name.errors.maxlength">{{'maximum_50_characters_allowed' | translate}}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label>{{'email' | translate}} <span class="symbol required"></span></label>
+            <input type="text" class="form-control" placeholder="{{'enter_email' | translate}}" formControlName="email">
+            <div class="invalid-feedback" *ngIf="updateProfileForm.controls.email.invalid &&
+              (updateProfileForm.controls.email.dirty || updateProfileForm.controls.email.touched || ngupdateprofileform.submitted)"
+            >
+              <div *ngIf="updateProfileForm.controls.email.errors.required">{{'this_field_is_required' | translate}}</div>
+              <div *ngIf="updateProfileForm.controls.email.errors.email || updateProfileForm.controls.email.errors.pattern">
+                {{'valid_email_is_required' | translate}}
+              </div>
+              <div *ngIf="updateProfileForm.controls.email.errors.maxlength">{{'maximum_100_characters_allowed' | translate}}</div>
+            </div>
+          </div>
+          <div class="form-group col-md-6">
+            <label>{{'mobile_number' | translate}} <span class="symbol required"></span></label>
+            <input type="text" class="form-control strict_integer" placeholder="{{'enter_mobile_number' | translate}}" formControlName="mobile_number">
+            <div class="invalid-feedback" *ngIf="updateProfileForm.controls.mobile_number.invalid &&
+              (updateProfileForm.controls.mobile_number.dirty || updateProfileForm.controls.mobile_number.touched || ngupdateprofileform.submitted)"
+            >
+              <div *ngIf="updateProfileForm.controls.mobile_number.errors.required">{{'this_field_is_required' | translate}}</div>
+              <div *ngIf="updateProfileForm.controls.mobile_number.errors.minlength">{{'minimum_10_characters_required' | translate}}</div>
+              <div *ngIf="updateProfileForm.controls.mobile_number.errors.maxlength">{{'maximum_15_characters_allowed' | translate}}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label>{{'gender' | translate}} <span class="symbol required"></span></label>
+            <select class="form-control" formControlName="gender">
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+            <div class="invalid-feedback" *ngIf="updateProfileForm.controls.gender.invalid &&
+              (updateProfileForm.controls.gender.dirty || updateProfileForm.controls.gender.touched || ngupdateprofileform.submitted)"
+            >
+              <div *ngIf="updateProfileForm.controls.gender.errors.required">{{'this_field_is_required' | translate}}</div>
+            </div>
+          </div>
+          <div class="form-group col-md-6">
+            <label>{{'dob' | translate}} <small>(Format: D/M/Y)</small> <span class="symbol required"></span></label>
+            <input [matDatepicker]="userDOBDatePicker" (click)="userDOBDatePicker.open()" [max]="maxDobDate" 
+              class="form-control" placeholder="{{'dob' | translate}}" formControlName="dob"
+            >
+            <mat-datepicker-toggle [for]="userDOBDatePicker" class="mat-dt-pic" *ngIf="userType != 'Doctor'"></mat-datepicker-toggle>
+            <mat-datepicker #userDOBDatePicker></mat-datepicker>
+            <div class="invalid-feedback" *ngIf="updateProfileForm.controls.dob.invalid &&
+              (updateProfileForm.controls.dob.dirty || updateProfileForm.controls.dob.touched || ngupdateprofileform.submitted)"
+            >
+              <div *ngIf="updateProfileForm.controls.dob.errors.required">{{'this_field_is_required' | translate}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>{{'introduction' | translate}}</label>
+          <textarea class="form-control" rows="4" formControlName="introduction"></textarea>
+          <div class="invalid-feedback" *ngIf="updateProfileForm.controls.introduction.invalid &&
+            (updateProfileForm.controls.introduction.dirty || updateProfileForm.controls.introduction.touched || ngupdateprofileform.submitted)"
+          >
+            <div *ngIf="updateProfileForm.controls.introduction.errors.maxlength">{{'maximum_1000_characters_allowed' | translate}}</div>
+          </div>
+        </div>
+        <hr>
+        <div class="form-row">
+          <div class="form-group col-md-6 my-auto text-left">
+            {{'fields_marked_with_star_is_required' | translate}}
+          </div>
+          <div class="form-group col-md-6 my-auto text-right">
+            <button type="submit" [disabled]="showLoader" class="btn theme-btn mx-auto">
+              <span [ngClass]="{'spinner-border spinner-border-sm':showLoader}"></span> {{'update' | translate}}
+            </button>
+          </div>
+        </div>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>

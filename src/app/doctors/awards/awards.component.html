@@ -1,0 +1,191 @@
+<div class="card">
+  <div class="card-body p-2 table-responsive">
+    <div class="card-title">
+      <button type="button" class="btn theme-btn btn-sm float-right" (click)="openAddAwardFormModal()">
+        <i class="mdi mdi-plus-circle mr-1"></i> {{'add_award' | translate}}
+      </button>
+      <h3>{{'awards' | translate}}</h3>
+    </div>
+    <table class="table table-hover">
+      <thead>
+        <th>{{'name' | translate}}</th>
+        <th>{{'image' | translate}}</th>
+        <th>{{'action' | translate}}</th>
+      </thead>
+      <tbody [ngClass]="{'csspinner load1':dataLoader}">
+        <ng-container *ngIf="total">
+          <tr *ngFor="let item of userAwardData; let i = index; let even = even; let odd = odd" [ngClass]="{odd: odd, even: even}">
+            <td>{{item.name}}</td>
+            <td>
+              <a data-fancybox [attr.data-caption]="item.name" [href]="item.image_url">
+                <img [src]="item.image_url" class="img-fluid" style="height: 35px; width:35px;">
+              </a>
+            </td>
+            <td>
+              <div class="icon-block">
+                <a class="cp" (click)="openUpdateAwardModal(item.id, i)">
+                  <i class="mdi mdi-pencil b-gry" aria-hidden="true"></i>
+                </a>
+                <a class="cp" (click)="onDeleteAward(item.id, i)">
+                  <i class="mdi mdi-delete b-brown"></i></a>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+        <ng-container *ngIf="total == 0">
+          <tr>
+            <td colspan="5">
+              <div class="alert alert-danger text-center">{{'no_data_found' | translate}}</div>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="addAwardModal" tabindex="-1" role="dialog" aria-labelledby="addAwardModal"
+  aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':awardFormLoader}">
+      <div class="modal-header">
+        <h4 class="modal-title">{{'add_award' | translate}}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="addAwardForm" (ngSubmit)="onSubmitAddAwardForm()" #ngaddawardform="ngForm">
+        <div class="modal-body">
+          <div class="container">
+            <div class="form-group">
+              <label>{{'name' | translate}} <span class="symbol required"></span></label>
+              <input type="text" class="form-control" placeholder="{{'enter_name' | translate}}" formControlName="name">
+              <div class="invalid-feedback" *ngIf="addAwardForm.controls.name.invalid &&
+                (addAwardForm.controls.name.dirty || addAwardForm.controls.name.touched || ngaddawardform.submitted)"
+              >
+                <div *ngIf="addAwardForm.controls.name.errors.required">{{'this_field_is_required' | translate}}</div>
+                <div *ngIf="addAwardForm.controls.name.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                <div *ngIf="addAwardForm.controls.name.errors.maxlength">{{'maximum_200_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>{{'image' | translate}} <small class="text-danger">({{'only_jpg_png_files_allowed' | translate}}, {{'file_size_should_not_be_greater_than_2_mb' | translate}})</small></label>
+              <div class="custom-file">
+                <input #ngaddawardfileinput type="file" (change)="onChangeAwardImage($event)" accept="image/*" class="custom-file-input">
+                <label class="custom-file-label" for="customFile">{{'choose_image' | translate}}</label>
+              </div>
+              <div class="form-row mt-2 mb-2" *ngIf="awardFilesB64Src">
+                <div class="border border-dark p-1 ml-2 mr-2 img-item">
+                  <button type="button" class="btn btn-outline-secondary btn-rounded btn-icon img-delete">
+                    <i class="mdi mdi-delete mdi-18px" (click)="removeFile()"></i>
+                  </button>
+                  <img [src]="awardFilesB64Src" alt="image" class="img-ele img-fluid">
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>{{'description' | translate}}</label>
+              <textarea class="form-control" formControlName="description"></textarea>
+              <div class="invalid-feedback" *ngIf="addAwardForm.controls.description.invalid &&
+                (addAwardForm.controls.description.dirty || addAwardForm.controls.description.touched || ngaddawardform.submitted)"
+              >
+                <div *ngIf="addAwardForm.controls.description.errors.maxlength">{{'maximum_250_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <div class="container">
+            <div class="form-row">
+              <div class="form-group col-md-6 my-auto text-left">
+                {{'fields_marked_with_star_is_required' | translate}}
+              </div>
+              <div class="form-group col-md-6 my-auto text-right">
+                <button type="submit" [disabled]="awardFormLoader" class="btn theme-btn mx-auto">
+                  <span [ngClass]="{'spinner-border spinner-border-sm':awardFormLoader}"></span> {{'add' | translate}}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="updateAwardModal" tabindex="-1" role="dialog" aria-labelledby="updateAwardModal"
+  aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':awardFormLoader}">
+      <div class="modal-header">
+        <h4 class="modal-title">{{'update_award' | translate}}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="updateAwardForm" (ngSubmit)="onSubmitUpdateAwardForm()" #ngupdateawardform="ngForm">
+        <div class="modal-body">
+          <div class="container">
+            <div class="form-group">
+              <label>{{'name' | translate}} <span class="symbol required"></span></label>
+              <input type="text" class="form-control" placeholder="{{'enter_name' | translate}}" formControlName="name">
+              <div class="invalid-feedback" *ngIf="updateAwardForm.controls.name.invalid &&
+                (updateAwardForm.controls.name.dirty || updateAwardForm.controls.name.touched || ngupdateawardform.submitted)"
+              >
+                <div *ngIf="updateAwardForm.controls.name.errors.required">{{'this_field_is_required' | translate}}</div>
+                <div *ngIf="updateAwardForm.controls.name.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                <div *ngIf="updateAwardForm.controls.name.errors.maxlength">{{'maximum_200_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>{{'image' | translate}} <small class="text-danger">({{'only_jpg_png_files_allowed' | translate}}, {{'file_size_should_not_be_greater_than_2_mb' | translate}})</small></label>
+              <div class="custom-file">
+                <input #ngupdateawardfileinput type="file" (change)="onChangeAwardImage($event)" accept="image/*" class="custom-file-input">
+                <label class="custom-file-label" for="customFile">{{'choose_image' | translate}}</label>
+              </div>
+              <div class="form-row mt-2 mb-2" *ngIf="image_url">
+                <div class="border border-dark p-1 ml-2 mr-2 img-item">
+                  <button type="button" class="btn btn-outline-secondary btn-rounded btn-icon img-delete">
+                    <i class="mdi mdi-delete mdi-18px" (click)="deleteImage()"></i>
+                  </button>
+                  <img [src]="image_url" alt="image" class="img-ele img-fluid">
+                </div>
+              </div>
+              <div class="form-row mt-2 mb-2" *ngIf="awardFilesB64Src">
+                <div class="border border-dark p-1 ml-2 mr-2 img-item">
+                  <button type="button" class="btn btn-outline-secondary btn-rounded btn-icon img-delete">
+                    <i class="mdi mdi-delete mdi-18px" (click)="deleteImage()"></i>
+                  </button>
+                  <img [src]="awardFilesB64Src" alt="image" class="img-ele img-fluid">
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>{{'description' | translate}}</label>
+              <textarea class="form-control" formControlName="description"></textarea>
+              <div class="invalid-feedback" *ngIf="updateAwardForm.controls.description.invalid &&
+                (updateAwardForm.controls.description.dirty || updateAwardForm.controls.description.touched || ngupdateawardform.submitted)"
+              >
+                <div *ngIf="updateAwardForm.controls.description.errors.maxlength">{{'maximum_250_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <div class="container">
+            <div class="form-row">
+              <div class="form-group col-md-6 my-auto text-left">
+                {{'fields_marked_with_star_is_required' | translate}}
+              </div>
+              <div class="form-group col-md-6 my-auto text-right">
+                <button type="submit" [disabled]="awardFormLoader" class="btn theme-btn mx-auto">
+                  <span [ngClass]="{'spinner-border spinner-border-sm':awardFormLoader}"></span> {{'update' | translate}}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,109 @@
+<div class="page-header">
+  <div class="col-sm-12">
+    <div class="d-flex">
+      <div class="mr-auto mt-22">
+        <h2 class="page-title">{{'feeds' | translate}}</h2>
+      </div>
+      <div class="p-2">
+        <button type="button" class="btn theme-btn" (click)="openAddForm()">
+          <i class="mdi mdi-plus-circle"></i> {{'add_feed' | translate}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body p-2 table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>{{'feed' | translate}}</th>
+              <th>{{'date_created' | translate}}</th>
+              <th>{{'action' | translate}}</th>
+            </tr>
+          </thead>
+          <tbody [ngClass]="{'csspinner load1':dataLoader}">
+            <ng-container *ngIf="feeds.length">
+              <tr *ngFor="let feed of feeds | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }; let i = index">
+                <th>{{itemsPerPage *(currentPage-1)+i+1}}</th>
+                <td class="text-pre-wrap text-break-all">{{feed.feed}}</td>
+                <td>{{feed.created_date_formatted}}</td>
+                <td>
+                  <div class="icon-block">
+                    <!-- <a class="cp" (click)="openUpdateForm(feeds.id, i)" matTooltip="Edit" matTooltipClass="primary-tooltip" title="Edit">
+                      <i class="mdi mdi-pencil b-gry" aria-hidden="true"></i>
+                    </a> -->
+
+                    <a class="cp" (click)="onDeleteFeed(feed.id)" matTooltip="Delete" matTooltipClass="primary-tooltip" title="Delete">
+                      <i class="mdi mdi-delete b-brown" aria-hidden="true"></i>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+            <tr *ngIf="!feeds.length">
+              <td colspan="8">
+                <div class="alert alert-danger text-center">{{'no_data_found' | translate}}</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row" *ngIf="feeds.length">
+  <div class="col-sm-12 mt-3 text-center">
+    <pagination-controls (pageChange)="pageChanged($event)" autoHide="true" responsive="true">></pagination-controls>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="addUpdateFormModal" tabindex="-1" role="dialog" aria-labelledby="addUpdateFormModal" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':addUpdateFormLoader}">
+      <div class="modal-header">
+        <h4 class="modal-title">{{'feed' | translate}}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="addUpdateForm" (ngSubmit)="onSubmitAddUpdateForm()" #ng_add_update_form="ngForm">
+        <div class="modal-body">
+          <div class="container">
+            <div class="form-row">
+              <div class="form-group col-md-12">
+                <label>{{'feed' | translate}} <span class="symbol required"></span></label>
+                <textarea class="form-control" formControlName="feed"></textarea>
+                <div class="invalid-feedback" *ngIf="addUpdateForm.controls.feed.invalid &&
+                  (addUpdateForm.controls.feed.dirty || addUpdateForm.controls.feed.touched || ng_add_update_form.submitted)"
+                >
+                  <div *ngIf="addUpdateForm.controls.feed.errors.required">{{'this_field_is_required' | translate}}</div>
+                  <div *ngIf="addUpdateForm.controls.feed.errors.maxlength">{{'maximum_500_characters_allowed' | translate}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <div class="container">
+            <div class="form-row">
+              <div class="form-group col-md-6 my-auto txt-arabic">
+                {{'fields_marked_with_star_is_required' | translate}}
+              </div>
+              <div class="form-group col-md-6 my-auto text-right-1">
+                <button type="submit" [disabled]="addUpdateFormLoader" class="btn theme-btn mx-auto">
+                  <span [ngClass]="{'spinner-border spinner-border-sm':addUpdateFormLoader}"></span> {{'save' | translate}}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

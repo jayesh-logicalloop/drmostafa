@@ -1,0 +1,143 @@
+<div class="page-header">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-9">
+        <h2 class="page-title">Manage Sliders</h2>
+      </div>
+      <div class="col-sm-3 text-right">
+        <button type="button" class="btn theme-btn" (click)="onManageCrud('', 'Create')">
+          <i class="mdi mdi-plus-circle mr-1"></i> Add Slider
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body p-2 table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Image</th>
+              <th>Slider For</th>
+              <th>Order</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody [ngClass]="{'csspinner load1':dataLoader}">
+            <tr *ngFor="let item of crudData; let i = index">
+              <th>{{i+1}}</th>
+              <td><img width="100px" height="100px" [src]="item.file_url"></td>
+              <td>{{item.slider_for}}</td>
+              <td>{{item.sort_order}}</td>
+              <td>
+                <div class="icon-block">
+                  <a class="cp" (click)="onManageCrud(item.slider_id, 'Update', i)">
+                    <i class="mdi mdi-pencil b-gry" aria-hidden="true"></i>
+                  </a>
+                  <a class="cp" (click)="deleteCrudData(item.slider_id, i)">
+                    <i class="mdi mdi-delete b-brown"></i>
+                  </a>
+                </div>
+              </td>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer p-2">
+        <div class="row" *ngIf="this.crudData.length">
+          <div class="col-sm-12 mt-3 text-center">
+            <pagination-controls (pageChange)="paginate($event)" autoHide="true"
+              responsive="true"></pagination-controls>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="CrudModal" tabindex="-1" role="dialog" aria-labelledby="CrudModal" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white">
+      <div class="modal-header">
+        <h4 class="modal-title">{{currentAction}} Speciality</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="crudForm" (ngSubmit)="onSubmitCrudForm()" #mycrudform="ngForm"
+        [ngClass]="{'csspinner load1':crudFormLoader}"
+      >
+        <div class="modal-body">
+          <div class="container">
+            <div class="form-group">
+              <label for="image">Image <span class="symbol required"></span></label>
+              <div class="text-danger mb-2">
+                <div><small class="text-danger">{{'only_jpg_png_files_allowed' | translate}}</small></div>
+                <div><small class="text-danger">{{'file_size_should_not_be_greater_than_2_mb' | translate}}</small></div>
+              </div>
+              <div class="custom-file">
+                <input #myfileInput type="file" id="image" (change)="onFileInput($event)" accept="image/*"
+                  class="custom-file-input">
+                <label class="custom-file-label" for="customFile">{{'choose_image' | translate}}</label>
+              </div>
+              <div class="invalid-feedback" *ngIf="crudForm.controls.file.invalid &&
+                (crudForm.controls.file.dirty || crudForm.controls.file.touched || mycrudform.submitted)"
+              >
+                <div *ngIf="crudForm.controls.file.errors.required">{{'this_field_is_required' | translate}}</div>
+              </div>
+              <div class="form-row" *ngIf="imageSrc">
+                <div class="border border-dark p-1 m-3 img-item">
+                  <img [src]="imageSrc" alt="image" class="img-ele img-fluid">
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label for="slider_for">Slider For <span class="symbol required"></span></label>
+                  <select formControlName="slider_for" class="form-control" id="slider_for"
+                    [formGroup]="crudForm">
+                    <option value="Doctor">Doctor</option>
+                    <option value="Patient">Patient</option>
+                  </select>
+                  <div class="invalid-feedback" *ngIf="crudForm.controls.slider_for.invalid &&
+                    (crudForm.controls.slider_for.dirty || crudForm.controls.slider_for.touched || mycrudform.submitted)"
+                  >
+                    <div *ngIf="crudForm.controls.slider_for.errors.required">{{'this_field_is_required' | translate}}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <label for="order">Order</label>
+                <input type="text" class="form-control strict_integer" id="order" [formGroup]="crudForm" formControlName="sort_order">
+              </div>
+              <div class="form-group col-md-4">
+                <label for="status">Status <span class="symbol required"></span></label>
+                <select id="status" class="form-control" [formGroup]="crudForm" formControlName="status">
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                </select>
+                <div class="invalid-feedback" *ngIf="crudForm.controls.status.invalid &&
+                  (crudForm.controls.status.dirty || crudForm.controls.status.touched || mycrudform.submitted)"
+                >
+                  <div *ngIf="crudForm.controls.status.errors.required">{{'this_field_is_required' | translate}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="submit" class="btn theme-btn mx-auto">
+            <ng-template [ngIf]="this.currentAction=='Create'">Save</ng-template>
+            <ng-template [ngIf]="this.currentAction=='Update'">Update</ng-template>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+

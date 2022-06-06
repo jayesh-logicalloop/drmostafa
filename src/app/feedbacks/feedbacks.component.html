@@ -1,0 +1,83 @@
+<div class="page-header">
+	<h3 class="page-title">{{'feedback' | translate}}</h3>
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item">
+				<div class="popover__wrapper">
+				  <button type="button" class="btn theme-btn popover__title text" (click)="togglePopover()">
+					  <i class="mdi mdi-filter-variant btn-icon-prepend"></i> {{'filter' | translate}}
+				  </button>
+				  <form [formGroup]="searchForm" (ngSubmit)="onSubmitSearchForm()">
+					<div class="popover__content" [ngClass]="{'active':popoverToggle}">
+					  <div class="filter-popover">
+						  <div class="cp float-right text-Astral" (click)="clearFilter()">{{'clear_filter' | translate}}</div>
+              <h5 class="text-Astral">{{'filter_by' | translate}}</h5>
+              <div class="form-row mt-3" *ngIf="userType=='Super Admin'">
+                <div class="form-group col-md-6">
+                  <select class="form-control" [formGroup]="searchForm" formControlName="approved_status">
+                    <option value="">Select</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Approved">Approved</option>
+                    <option value="Declined">Declined</option>
+                  </select>
+                </div>
+              </div>
+						  <div class="search-field">
+                <div class="input-group input-group-sm">
+                  <div class="input-group-prepend bg-transparent">
+                  <i class="input-group-text border-0 mdi mdi-magnify"></i>
+                  </div>
+                  <input type="text" [formGroup]="searchForm" formControlName="search" class="form-control bg-transparent border-0" placeholder="{{'search_by_name' | translate}}">
+                </div>
+						  </div>
+					  </div>
+					  <div class="ratings">
+              <div class="cp rating-star" (click)="changeRating(1)" [ngClass]="{'active':activeRating==1}">
+                <i class="mdi mdi-star mdi-24px"></i>
+                <span>1.0</span>
+              </div>
+              <div class="cp rating-star" (click)="changeRating(2)" [ngClass]="{'active':activeRating==2}">
+                <i class="mdi mdi-star mdi-24px"></i>
+                <span>2.0</span>
+              </div>
+              <div class="cp rating-star" (click)="changeRating(3)" [ngClass]="{'active':activeRating==3}">
+                <i class="mdi mdi-star mdi-24px"></i>
+                <span>3.0</span>
+              </div>
+              <div class="cp rating-star" (click)="changeRating(4)" [ngClass]="{'active':activeRating==4}">
+                <i class="mdi mdi-star mdi-24px"></i>
+                <span>4.0</span>
+              </div>
+              <div class="cp rating-star" (click)="changeRating(5)" [ngClass]="{'active':activeRating==5}">
+                <i class="mdi mdi-star mdi-24px"></i>
+                <span>5.0</span>
+              </div>
+					  </div>
+					  <!-- <h5>Date:</h5> -->
+						<div class="form-row mt-3">
+						  <div class="form-group col-md-6">
+                <label>{{'from_date' | translate}}</label>
+                <input [matDatepicker]="myDatepickerSearchFrom" class="form-control" placeholder="{{'from_date' | translate}}" formControlName="from_date">
+                <mat-datepicker-toggle [for]="myDatepickerSearchFrom" class="mat-dt-pic"></mat-datepicker-toggle>
+                <mat-datepicker #myDatepickerSearchFrom></mat-datepicker>
+						  </div>
+						  <div class="form-group col-md-6">
+                <label for="to_date">{{'to_date' | translate}}</label>
+                <input [matDatepicker]="myDatepickerSearchTo" class="form-control" placeholder="{{'to_date' | translate}}"
+                  formControlName="to_date">
+                <mat-datepicker-toggle [for]="myDatepickerSearchTo" class="mat-dt-pic"></mat-datepicker-toggle>
+                <mat-datepicker #myDatepickerSearchTo></mat-datepicker>
+						  </div>
+						</div>
+					  <div class="apply-cancel">
+              <button type="submit" class="btn theme-btn">{{'apply' | translate}}</button>&nbsp;
+              <button type="button" class="btn btn-brown" (click)="togglePopover()">{{'cancel' | translate}}</button>
+					  </div>
+					</div>
+				  </form>
+				</div>
+			</li>
+		</ol>
+	</nav>
+</div>
+<app-feedback-card [approved_status]="approved_status" [search]="search" [rating]="rating" [from_date]="from_date" [to_date]="to_date" ></app-feedback-card>

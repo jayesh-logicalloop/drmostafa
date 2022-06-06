@@ -1,0 +1,62 @@
+<div class="page-header">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-9">
+        <h2 class="page-title">{{'appointment_price' | translate}}</h2>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body p-2 table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>{{'price' | translate}}</th>
+            </tr>
+          </thead>
+          <tbody [ngClass]="{'csspinner load1':dataLoader}">
+            <ng-container *ngIf="appointmentPriceList.length">
+              <tr *ngFor="let announcement of appointmentPriceList | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }; let i = index">
+                <th>{{itemsPerPage *(currentPage-1)+i+1}}</th>
+                <td>{{announcement.type}}</td>
+                <td class="text-pre-wrap text-break-all">
+                  <ng-template [ngIf]="announcement.type=='Text'">{{announcement.title}}</ng-template>
+                  <ng-template [ngIf]="announcement.type=='Image'">
+                    <a data-fancybox [href]="announcement.image_url">
+                      <img [src]="announcement.image_url" style="height: 35px; width:35px;">
+                    </a>
+                  </ng-template>
+                </td>
+                <td class="text-pre-wrap text-break-all">{{announcement.description}}</td>
+                <td>{{announcement.created_date_formatted}}</td>
+                <td>
+                  <div class="icon-block">
+                    <a class="cp" matTooltip="Edit" matTooltipClass="primary-tooltip" title="Edit">
+                      <i class="mdi mdi-pencil b-gry" aria-hidden="true"></i>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+            <tr *ngIf="!appointmentPriceList.length">
+              <td colspan="8">
+                <div class="alert alert-danger text-center">{{'no_data_found' | translate}}</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row" *ngIf="appointmentPriceList.length">
+  <div class="col-sm-12 mt-3 text-center">
+    <pagination-controls (pageChange)="pageChanged($event)" autoHide="true" responsive="true">></pagination-controls>
+  </div>
+</div>

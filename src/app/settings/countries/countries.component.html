@@ -1,0 +1,234 @@
+<div class="page-header">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-9">
+        <h2 class="page-title">Countries</h2>
+      </div>
+      <div class="col-sm-3 text-right">
+        <button type="button" class="btn theme-btn" (click)="onManageCrud()">
+          <i class="mdi mdi-plus-circle mr-1"></i> Add Country
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body p-2 table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Code</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of crudData | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }; let i = index">
+              <th>{{i+1}}</th>
+              <td>{{item.country_name}}</td>
+              <td>{{item.country_code}}</td>
+              <td>{{item.status}}</td>
+              <td>
+                <div class="icon-block">
+                  <a class="cp" (click)="onEditCountry(item.country_id)">
+                    <i class="mdi mdi-pencil b-gry" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer p-2">
+        <div class="row" *ngIf="crudData.length">
+          <div class="col-sm-12 mt-3 text-center">
+            <pagination-controls (pageChange)="pageChanged($event)" autoHide="true" responsive="true">>
+            </pagination-controls>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="CrudModal" tabindex="-1" role="dialog" aria-labelledby="CrudModal" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':crudFormAction}">
+      <div class="modal-header">
+        <h4 class="modal-title"> {{ currentAction }} Country</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="crudForm" (ngSubmit)="onSubmitCrudForm()" #myform="ngForm">
+        <div class="modal-body">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="edit-pfrl-img-sec">
+
+                  <div class="form-group">
+                    <label for="country_name"> Country Name</label>
+                    <input type="text" class="form-control" id="country_name" placeholder="Enter Country Name"
+                      [formGroup]="crudForm" formControlName="country_name">
+                    <div *ngIf="crudForm.controls.country_name.invalid &&
+                                            (crudForm.controls.country_name.dirty ||
+                                            crudForm.controls.country_name.touched || myform.submitted)"
+                      class="invalid-feedback">
+                      <div *ngIf="crudForm.controls.country_name.errors.required">
+                        {{'this_field_is_required' | translate}}
+                      </div>
+                      <div *ngIf="crudForm.controls.country_name.errors.minlength">
+                        {{'minimum_2_characters_required' | translate}}
+                      </div>
+                      <div *ngIf="crudForm.controls.country_name.errors.maxlength">
+                        {{'maximum_100_characters_allowed' | translate}}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="country_code"> Country Code</label>
+                    <input type="text" class="form-control" id="country_code" placeholder="Enter Country Code"
+                      [formGroup]="crudForm" formControlName="country_code">
+                    <div *ngIf="crudForm.controls.country_code.invalid &&
+                                            (crudForm.controls.country_code.dirty ||
+                                            crudForm.controls.country_code.touched || myform.submitted)"
+                      class="invalid-feedback">
+                      <div *ngIf="crudForm.controls.country_code.errors.required">
+                        {{'this_field_is_required' | translate}}
+                      </div>
+                      <div *ngIf="crudForm.controls.country_code.errors.minlength">
+                        {{'minimum_2_characters_required' | translate}}
+                      </div>
+                      <div *ngIf="crudForm.controls.country_code.errors.maxlength">
+                        {{'maximum_100_characters_allowed' | translate}}
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <div class="form-group">
+                    <label for="status">Status</label>
+                    <select formControlName="status" class="form-control" id="status" [formGroup]="crudForm">
+                      <option value="Active">Active</option>
+                      <option value="Inactive">Inactive</option>
+                    </select>
+                    <div *ngIf="crudForm.controls.status.invalid &&
+                                        (crudForm.controls.status.dirty ||
+                                        crudForm.controls.status.touched || myform.submitted)"
+                      class="invalid-feedback">
+                      <div *ngIf="crudForm.controls.status.errors.required">
+                        {{'this_field_is_required' | translate}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="submit" [disabled]="crudFormAction" class="btn theme-btn mx-auto">
+            <span [ngClass]="{'spinner-border spinner-border-sm':crudFormAction}"></span> Save
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="CrudModalUpdate" tabindex="-1" role="dialog" aria-labelledby="CrudModalUpdate" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':crudFormAction}">
+      <div class="modal-header">
+        <h4 class="modal-title"> {{ currentAction }} Country</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="crudFormUpdate" (ngSubmit)="onSubmitCrudFormUpdate()" #myform="ngForm">
+        <div class="modal-body">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="edit-pfrl-img-sec">
+
+                  <div class="form-group">
+                    <label for="country_name"> Country Name</label>
+                    <input type="text" class="form-control" id="country_name" placeholder="Enter Country Name"
+                      [formGroup]="crudFormUpdate" formControlName="country_name">
+                    <div *ngIf="crudFormUpdate.controls.country_name.invalid &&
+                                            (crudFormUpdate.controls.country_name.dirty ||
+                                            crudFormUpdate.controls.country_name.touched || myform.submitted)"
+                      class="invalid-feedback">
+                      <div *ngIf="crudFormUpdate.controls.country_name.errors.required">
+                        {{'this_field_is_required' | translate}}
+                      </div>
+                      <div *ngIf="crudFormUpdate.controls.country_name.errors.minlength">
+                        {{'minimum_2_characters_required' | translate}}
+                      </div>
+                      <div *ngIf="crudFormUpdate.controls.country_name.errors.maxlength">
+                        {{'maximum_100_characters_allowed' | translate}}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="country_code"> Country Code</label>
+                    <input type="text" class="form-control" id="country_code" placeholder="Enter Country Code"
+                      [formGroup]="crudFormUpdate" formControlName="country_code">
+                    <div *ngIf="crudFormUpdate.controls.country_code.invalid &&
+                                            (crudFormUpdate.controls.country_code.dirty ||
+                                            crudFormUpdate.controls.country_code.touched || myform.submitted)"
+                      class="invalid-feedback">
+                      <div *ngIf="crudFormUpdate.controls.country_code.errors.required">
+                        {{'this_field_is_required' | translate}}
+                      </div>
+                      <div *ngIf="crudFormUpdate.controls.country_code.errors.minlength">
+                        {{'minimum_2_characters_required' | translate}}
+                      </div>
+                      <div *ngIf="crudFormUpdate.controls.country_code.errors.maxlength">
+                        {{'maximum_100_characters_allowed' | translate}}
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <div class="form-group">
+                    <label for="status">Status</label>
+                    <select formControlName="status" class="form-control" id="status" [formGroup]="crudFormUpdate">
+                      <option value="Active">Active</option>
+                      <option value="Inactive">Inactive</option>
+                    </select>
+                    <div *ngIf="crudFormUpdate.controls.status.invalid &&
+                                        (crudFormUpdate.controls.status.dirty ||
+                                        crudFormUpdate.controls.status.touched || myform.submitted)"
+                      class="invalid-feedback">
+                      <div *ngIf="crudFormUpdate.controls.status.errors.required">
+                        {{'this_field_is_required' | translate}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="submit" [disabled]="crudFormUpdateAction" class="btn theme-btn mx-auto">
+            <span [ngClass]="{'spinner-border spinner-border-sm':crudFormUpdateAction}"></span> Save
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

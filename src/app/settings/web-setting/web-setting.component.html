@@ -1,0 +1,173 @@
+<div class="page-header">
+  <div class="col-sm-12 px-0 px-sm-2">
+    <div class="d-flex">
+      <div class="mr-auto">
+        <h2 class="page-title txt-arabic mt-22">{{'web_settings' | translate}}</h2>
+      </div>
+      <div class="p-2">
+        <button type="button" class="btn theme-btn" (click)="openAddForm()">
+          <i class="mdi mdi-plus-circle mr-1"></i> {{'add_settings' | translate}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row" [ngClass]="{'csspinner load1':dataLoader}">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body p-2 table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>{{'name' | translate}}</th>
+              <th>{{'value' | translate}}</th>
+              <th>{{'description' | translate}}</th>
+              <th>{{'action' | translate}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of settings; let i = index">
+              <th>{{i+1}}</th>
+              <td>{{item.name | uppercase}}</td>
+              <td class="text-pre-wrap text-break-all">{{item.value}}</td>
+              <td class="text-pre-wrap text-break-all">{{item.description}}</td>
+              <td>
+                <div class="icon-block text-right">
+                  <a class="cp" (click)="openUpdateForm(item.setting_id, i)">
+                    <i class="mdi mdi-pencil b-gry" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="addFormModal" tabindex="-1" role="dialog" aria-labelledby="addFormModal" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':webSettingFormAction}">
+      <div class="modal-header">
+        <h4 class="modal-title">{{'add_settings' | translate}}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="webSettingForm" (ngSubmit)="onSubmitAddForm()" #ngaddform="ngForm">
+        <div class="modal-body">
+          <div class="container">
+            <div class="form-group">
+              <label>{{'name' | translate}} <span class="symbol required"></span></label>
+              <input type="text" class="form-control" placeholder="{{'enter_name' | translate}}" formControlName="name">
+              <div class="invalid-feedback" *ngIf="webSettingForm.controls.name.invalid &&
+                (webSettingForm.controls.name.dirty || webSettingForm.controls.name.touched || ngaddform.submitted)"
+              >
+                <div *ngIf="webSettingForm.controls.name.errors.required">{{'this_field_is_required' | translate}}</div>
+                <div *ngIf="webSettingForm.controls.name.errors.maxlength">{{'maximum_50_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>{{'value' | translate}} <span class="symbol required"></span></label>
+              <input type="text" class="form-control" placeholder="{{'enter_value' | translate}}" formControlName="value">
+              <div class="invalid-feedback" *ngIf="webSettingForm.controls.value.invalid &&
+                (webSettingForm.controls.value.dirty || webSettingForm.controls.value.touched || ngaddform.submitted)"
+              >
+                <div *ngIf="webSettingForm.controls.value.errors.required">{{'this_field_is_required' | translate}}</div>
+                <div *ngIf="webSettingForm.controls.value.errors.maxlength">{{'maximum_250_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>{{'description' | translate}}</label>
+              <textarea type="text" class="form-control" placeholder="{{'enter_description' | translate}}" formControlName="description"></textarea>
+              <div class="invalid-feedback" *ngIf="webSettingForm.controls.description.invalid &&
+                (webSettingForm.controls.description.dirty || webSettingForm.controls.description.touched || ngaddform.submitted)"
+              >
+                <div *ngIf="webSettingForm.controls.description.errors.maxlength">{{'maximum_250_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <div class="container">
+            <div class="form-row">
+              <div class="form-group col-md-6 my-auto text-left">
+                {{'fields_marked_with_star_is_required' | translate}}
+              </div>
+              <div class="form-group col-md-6 my-auto text-right">
+                <button type="submit" [disabled]="webSettingFormAction" class="btn theme-btn mx-auto">
+                  <span [ngClass]="{'spinner-border spinner-border-sm':webSettingFormAction}"></span> {{'save' | translate}}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="updateFormModal" tabindex="-1" role="dialog" aria-labelledby="updateFormModal" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':webSettingFormAction}">
+      <div class="modal-header">
+        <h4 class="modal-title">{{'update_setting' | translate}}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="webSettingForm" (ngSubmit)="onSubmitupdateForm()" #ngupdateform="ngForm">
+        <div class="modal-body">
+          <div class="container">
+            <div class="form-group">
+              <label>{{'name' | translate}} <span class="symbol required"></span></label>
+              <input type="text" class="form-control" placeholder="{{'enter_name' | translate}}" formControlName="name" readonly>
+              <div class="invalid-feedback" *ngIf="webSettingForm.controls.name.invalid &&
+                (webSettingForm.controls.name.dirty || webSettingForm.controls.name.touched || ngupdateform.submitted)"
+              >
+                <div *ngIf="webSettingForm.controls.name.errors.required">{{'this_field_is_required' | translate}}</div>
+                <div *ngIf="webSettingForm.controls.name.errors.maxlength">{{'maximum_50_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>{{'value' | translate}} <span class="symbol required"></span></label>
+              <input type="text" class="form-control" placeholder="{{'enter_value' | translate}}" formControlName="value">
+              <div class="invalid-feedback" *ngIf="webSettingForm.controls.value.invalid &&
+                (webSettingForm.controls.value.dirty || webSettingForm.controls.value.touched || ngupdateform.submitted)"
+              >
+                <div *ngIf="webSettingForm.controls.value.errors.required">{{'this_field_is_required' | translate}}</div>
+                <div *ngIf="webSettingForm.controls.value.errors.maxlength">{{'maximum_250_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>{{'description' | translate}}</label>
+              <textarea type="text" class="form-control" placeholder="{{'enter_description' | translate}}" formControlName="description"></textarea>
+              <div class="invalid-feedback" *ngIf="webSettingForm.controls.description.invalid &&
+                (webSettingForm.controls.description.dirty || webSettingForm.controls.description.touched || ngupdateform.submitted)"
+              >
+                <div *ngIf="webSettingForm.controls.description.errors.maxlength">{{'maximum_250_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <div class="container">
+            <div class="form-row">
+              <div class="form-group col-md-6 my-auto text-left">
+                {{'fields_marked_with_star_is_required' | translate}}
+              </div>
+              <div class="form-group col-md-6 my-auto text-right">
+                <button type="submit" [disabled]="webSettingFormAction" class="btn theme-btn mx-auto">
+                  <span [ngClass]="{'spinner-border spinner-border-sm':webSettingFormAction}"></span> {{'update' | translate}}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

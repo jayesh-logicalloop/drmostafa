@@ -1,0 +1,150 @@
+<div class="card">
+  <div class="card-title p-3">
+    <h2>
+      <span *ngIf="session_id === '0'"> {{'add_session' | translate}}</span>
+      <span *ngIf="session_id != '0'"> {{'update_session' | translate}} </span>
+    </h2>
+    <a routerLink="/session"><i class="mdi mdi-arrow-left-bold-circle"></i> {{'back_to_sessions' | translate}}</a>
+  </div>
+  <div class="card-body p-3">
+    <form [formGroup]="updateForm" (ngSubmit)="onSubmitUpdateForm()" #ngupdateForm="ngForm" [ngClass]="{'csspinner load1': dataLoader || updateFormLoader}">
+      <div class="form-row">
+        <div class="form-group col-md-10">
+          <label>{{'name' | translate}} <span class="symbol required"></span></label>
+          <input type="text" class="form-control" placeholder="{{'enter_session_name' | translate}}" formControlName="name">
+          <div class="invalid-feedback" *ngIf="updateForm.controls.name.invalid &&
+            (updateForm.controls.name.dirty || updateForm.controls.name.touched || ngupdateForm.submitted)"
+          >
+            <div *ngIf="updateForm.controls.name.errors.required">{{'this_field_is_required' | translate}}</div>
+            <div *ngIf="updateForm.controls.name.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+            <div *ngIf="updateForm.controls.name.errors.maxlength">{{'maximum_100_characters_allowed' | translate}}</div>
+          </div>
+        </div>
+        <div class="form-group col-md-2">
+          <label>{{'status' | translate}} <span class="symbol required"></span></label>
+          <select class="form-control" formControlName="status">
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+          <div class="invalid-feedback" *ngIf="updateForm.controls.status.invalid &&
+            (updateForm.controls.status.dirty || updateForm.controls.status.touched || ngupdateForm.submitted)"
+          >
+            <div *ngIf="updateForm.controls.status.errors.required">{{'this_field_is_required' | translate}}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <label>{{'author' | translate}} <span class="symbol required"></span></label>
+          <input type="text" class="form-control" placeholder="{{'author' | translate}}" formControlName="author">
+          <div class="invalid-feedback" *ngIf="updateForm.controls.author.invalid &&
+            (updateForm.controls.author.dirty || updateForm.controls.author.touched || ngupdateForm.submitted)"
+          >
+            <div *ngIf="updateForm.controls.author.errors.required">{{'this_field_is_required' | translate}}</div>
+          </div>
+        </div>
+        <div class="form-group col-md-4">
+          <label>{{'duration' | translate}} (hh:mm) <span class="symbol required"></span></label>
+          <input type="text" class="form-control" placeholder="{{'duration' | translate}}" formControlName="duration">
+          <div class="invalid-feedback" *ngIf="updateForm.controls.duration.invalid &&
+            (updateForm.controls.duration.dirty || updateForm.controls.duration.touched || ngupdateForm.submitted)"
+          >
+            <div *ngIf="updateForm.controls.duration.errors.required">{{'this_field_is_required' | translate}}</div>
+          </div>
+        </div>
+        <div class="form-group col-md-4">
+          <label>{{'session_time' | translate}} <span class="symbol required"></span><small> (m/d/y h:m:s am/pm)</small></label>
+          <input class="form-control" matInput [ngxMatDatetimePicker]="session_time_picker" placeholder="{{'enter_session_time' | translate}}" formControlName="session_time">
+          <mat-datepicker-toggle matSuffix [for]="session_time_picker" class="mat-dt-pic"></mat-datepicker-toggle>
+          <ngx-mat-datetime-picker #session_time_picker [touchUi]="true" [showSeconds]="false" [enableMeridian]="true"></ngx-mat-datetime-picker>
+          <div class="invalid-feedback" *ngIf="updateForm.controls.session_time.invalid &&
+            (updateForm.controls.session_time.dirty || updateForm.controls.session_time.touched || ngupdateForm.submitted)"
+          >
+            <div *ngIf="updateForm.controls.session_time.errors.required">{{'this_field_is_required' | translate}}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <label>{{'url' | translate}} <span class="symbol required"></span></label>
+          <input type="text" class="form-control" placeholder="{{'enter_url' | translate}}" formControlName="url">
+          <div class="invalid-feedback" *ngIf="updateForm.controls.url.invalid &&
+            (updateForm.controls.url.dirty || updateForm.controls.url.touched || ngupdateForm.submitted)"
+          >
+            <div *ngIf="updateForm.controls.url.errors.required">{{'this_field_is_required' | translate}}</div>
+            <div *ngIf="updateForm.controls.url.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+            <div *ngIf="updateForm.controls.url.errors.maxlength">{{'maximum_250_characters_allowed' | translate}}</div>
+          </div>
+        </div>
+        <div class="form-group col-md-4">
+          <label>{{'price' | translate}} <span class="symbol required"></span></label>
+          <input type="text" class="form-control strict_numeric" placeholder="{{'enter_price' | translate}}" formControlName="price">
+          <div class="invalid-feedback" *ngIf="updateForm.controls.price.invalid &&
+            (updateForm.controls.price.dirty || updateForm.controls.price.touched || ngupdateForm.submitted)"
+          >
+            <div *ngIf="updateForm.controls.price.errors.required">{{'this_field_is_required' | translate}}</div>
+          </div>
+        </div>
+        <div class="form-group col-md-4" style="display: none;">
+          <label>{{'offer_price' | translate}}</label>
+          <input type="text" class="form-control strict_numeric" placeholder="{{'enter_offer_price' | translate}}" formControlName="offer_price">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label>{{'image' | translate}} <span class="symbol required"></span>
+            <div class="text-danger">
+              <div><small>{{'only_jpg_png_files_allowed' | translate}}</small></div>
+              <div><small>{{'file_size_should_not_be_greater_than_500_kb' | translate}}</small></div>
+            </div>
+          </label>
+          <div class="custom-file">
+            <input #ngimagefileinput type="file" (change)="onChangeImage($event)" accept="image/*" class="custom-file-input">
+            <label class="custom-file-label" for="customFile">{{'choose_image' | translate}}</label>
+          </div>
+          <div class="invalid-feedback" *ngIf="updateForm.controls.image.invalid &&
+            (updateForm.controls.image.dirty || updateForm.controls.image.touched || ngupdateForm.submitted)"
+          >
+            <div *ngIf="updateForm.controls.image.errors.required">{{'image_is_required' | translate}}</div>
+          </div>
+        </div>
+        <div class="form-group col-sm-6 text-center" *ngIf="image_src">
+          <div class="img-item">
+            <!-- <button type="button" class="btn btn-outline-secondary btn-rounded btn-icon img-delete"
+              matTooltip="Remove Image" matTooltipClass="primary tooltip"
+            >
+              <i class="mdi mdi-delete mdi-18px" (click)="removeImage()"></i>
+            </button> -->
+            <img [src]="image_src" alt="" class="img-ele img-fluid">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>{{'description' | translate}} <span class="symbol required"></span></label>
+        <textarea class="form-control" placeholder="{{'enter_description' | translate}}" formControlName="description"></textarea>
+        <div class="invalid-feedback" *ngIf="updateForm.controls.description.invalid &&
+          (updateForm.controls.description.dirty || updateForm.controls.description.touched || ngupdateForm.submitted)"
+        >
+          <div *ngIf="updateForm.controls.description.errors.required">{{'this_field_is_required' | translate}}</div>
+          <div *ngIf="updateForm.controls.description.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+          <div *ngIf="updateForm.controls.description.errors.maxlength">{{'maximum_250_characters_allowed' | translate}}</div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-6 my-auto text-left">
+          {{'fields_marked_with_star_is_required' | translate}}
+        </div>
+        <div class="form-group col-md-6 my-auto text-right">
+          <button type="submit" [disabled]="updateFormLoader" class="btn theme-btn mx-auto">
+            <span [ngClass]="{'spinner-border spinner-border-sm':updateFormLoader}"></span> {{'update' | translate}}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

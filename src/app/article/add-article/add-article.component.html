@@ -1,0 +1,133 @@
+
+<div class="row mb-3">
+  <div class="col-sm-3">
+    <h2 class="page-title">
+      <i class="mdi mdi-arrow-left-bold-circle cp" title="Go back" *ngIf="userType == 'Super Admin'" routerLink="/articles"></i>
+      <i class="mdi mdi-arrow-left-bold-circle cp" title="Go back" *ngIf="userType != 'Super Admin'" routerLink="/healthfeeds"></i>
+      {{'create_article' | translate}}
+    </h2>
+  </div>
+</div>
+
+<form [formGroup]="addForm" (ngSubmit)="onSubmitAddForm()" #ngmyform="ngForm"[ngClass]="{'csspinner load1':addFormLoader}">
+  <div class="form-group">
+    <label for="title">{{'title' | translate}} <span class="symbol required"></span></label>
+    <input type="text" class="form-control" id="title" placeholder="{{'enter_title' | translate}}"
+      formControlName="title">
+    <div class="invalid-feedback" *ngIf="addForm.controls.title.invalid &&
+    (addForm.controls.title.dirty || addForm.controls.title.touched || ngmyform.submitted)">
+      <div *ngIf="addForm.controls.title.errors.required">{{'this_field_is_required' | translate}}</div>
+      <div *ngIf="addForm.controls.title.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+      <div *ngIf="addForm.controls.title.errors.maxlength">{{'maximum_150_characters_allowed' | translate}}</div>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-4">
+      <label>{{'category' | translate}} <span class="symbol required"></span></label>
+      <select formControlName="category_id" class="form-control" (change)="selectSubCat($event.target.value)">
+        <option value="">Select Category</option>
+        <option *ngFor="let category of articleCategories" [value]="category.category_id">{{category.category_name}} </option>
+      </select>
+      <div class="invalid-feedback" *ngIf="addForm.controls.category_id.invalid &&
+        (addForm.controls.category_id.dirty || addForm.controls.category_id.touched || ngmyform.submitted)"
+      >
+        <div *ngIf="addForm.controls.category_id.errors.required">{{'this_field_is_required' | translate}}</div>
+      </div>
+    </div>
+    <div class="form-group col-md-4">
+      <label for="sub_category_id">{{'sub_category' | translate}} <span class="symbol required"></span></label>
+      <select formControlName="sub_category_id" class="form-control" id="sub_category_id">
+        <option value="">Select Sub Category</option>
+        <option *ngFor="let subcategory of articleSubCategories" [value]="subcategory.category_id">
+          {{subcategory.category_name}}
+        </option>
+      </select>
+      <div class="invalid-feedback" *ngIf="addForm.controls.sub_category_id.invalid &&
+        (addForm.controls.sub_category_id.dirty || addForm.controls.sub_category_id.touched || ngmyform.submitted)">
+        <div *ngIf="addForm.controls.sub_category_id.errors.required">{{'this_field_is_required' | translate}}</div>
+      </div>
+    </div>
+    <div class="form-group col-md-4">
+      <label for="status">{{'status' | translate}} <span class="symbol required"></span></label>
+      <select formControlName="status" class="form-control" id="status">
+        <option value="Published">Publish</option>
+        <option value="Unpublished">Unpublish</option>
+      </select>
+      <div class="invalid-feedback" *ngIf="addForm.controls.status.invalid &&
+        (addForm.controls.status.dirty || addForm.controls.status.touched || ngmyform.submitted)"
+      >
+        <div *ngIf="addForm.controls.status.errors.required">{{'this_field_is_required' | translate}}</div>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="customFile">{{'image' | translate}} <span class="symbol required"></span></label>
+    <div class="custom-file">
+      <input #ngfileInput type="file" (change)="onFileInput($event)" accept="image/*"
+        class="custom-file-input">
+      <label class="custom-file-label" for="customFile">{{'choose_image' | translate}}</label>
+    </div>
+    <div class="invalid-feedback" *ngIf="addForm.controls.image.invalid &&
+      (addForm.controls.image.dirty || addForm.controls.image.touched || ngmyform.submitted)">
+      <div *ngIf="addForm.controls.image.errors.required">{{'this_field_is_required' | translate}}</div>
+    </div>
+  </div>
+  <div class="form-row" *ngIf="imageSrc">
+    <div class="form-group">
+      <img [src]="imageSrc" alt="image" class="img-fluid" style="height: 200px; width: 200px;">
+    </div>
+  </div>
+  <div class="form-group">
+    <label>{{'content' | translate}} <span class="symbol required"></span></label>
+    <ckeditor formControlName="content" [config]="editorConfig"></ckeditor>
+    <div class="invalid-feedback" *ngIf="addForm.controls.content.invalid &&
+      (addForm.controls.content.dirty || addForm.controls.content.touched || ngmyform.submitted)"
+    >
+      <div *ngIf="addForm.controls.content.errors.required">{{'this_field_is_required' | translate}}</div>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-{{this.userType == 'Super Admin' ? 9 : 12 }}">
+      <label for="tags">{{'tags' | translate}} <small>({{'press_enter_to_add_new_tag' | translate}})</small></label>
+      <ng-select2 [data]="select2Data" formControlName="tags" [options]="select2Options" [placeholder]="'Select Or Enter Tags'">
+      </ng-select2>
+    </div>
+    <div class="form-group col-md-3" *ngIf="this.userType == 'Super Admin'">
+      <label>{{'is_approved' | translate}} <span class="symbol required"></span></label>
+      <select formControlName="is_approved" class="form-control">
+        <option value="Pending">Pending</option>
+        <option value="Approved">Approved</option>
+        <option value="Decline">Decline</option>
+      </select>
+      <div class="invalid-feedback" *ngIf="addForm.controls.is_approved.invalid &&
+        (addForm.controls.is_approved.dirty || addForm.controls.is_approved.touched || ngmyform.submitted)">
+        <div *ngIf="addForm.controls.is_approved.errors.required">{{'this_field_is_required' | translate}}</div>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="meta_tag">{{'meta_tag' | translate}}</label>
+    <input type="text" class="form-control" id="meta_tag" placeholder="{{'enter_meta_tag' | translate}}" formControlName="meta_tag">
+    <div class="invalid-feedback" *ngIf="addForm.controls.meta_tag.invalid &&
+      (addForm.controls.meta_tag.dirty || addForm.controls.meta_tag.touched || ngmyform.submitted)"
+    >
+      <div *ngIf="addForm.controls.meta_tag.errors.maxlength">{{'maximum_100_characters_allowed' | translate}}</div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label>{{'meta_description' | translate}}</label>
+    <textarea type="text" class="form-control" placeholder="{{'enter_meta_description' | translate}}" formControlName="meta_description"></textarea>
+    <div class="invalid-feedback" *ngIf="addForm.controls.meta_description.invalid &&
+      (addForm.controls.meta_description.dirty || addForm.controls.meta_description.touched || ngmyform.submitted)"
+    >
+      <div *ngIf="addForm.controls.meta_description.errors.maxlength">{{'maximum_250_characters_allowed' | translate}}</div>
+    </div>
+  </div>
+  <div class="form-group text-center">
+    <button type="submit" [disabled]="addFormLoader" class="btn theme-btn mx-auto">
+      <span [ngClass]="{'spinner-border spinner-border-sm':addFormLoader}"></span> {{'save' | translate}}
+    </button>
+  </div>
+</form>
+
+

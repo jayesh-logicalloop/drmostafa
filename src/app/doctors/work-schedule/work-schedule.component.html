@@ -1,0 +1,258 @@
+<div class="card">
+  <div class="card-body p-2">
+    <div class="card-title">
+      <a class="cp mr-3 float-right" matTooltip="{{'add_work_schedule' | translate}}" 
+        matTooltipClass="primary-tooltip" (click)="openAddWorkScheduleForm()"
+      >
+        <i class="mdi mdi-plus-circle-outline mdi-24px"></i>
+      </a>
+      <h3>{{'work_schedule' | translate}}</h3>
+    </div>
+
+    <div class="form-row mb-3">
+      <div class="col-md-12 mb-3 border p-3 available" *ngIf="dailySchedules.length>0">
+        <h5>{{'daily_work_schedule' | translate}}</h5>
+        <div class="mt-3" *ngFor="let row of dailySchedules">
+          <p>{{'clinic_name' | translate}}:- <strong> {{row.clinic_name}} </strong> </p>
+          <div *ngFor="let items of row.work_schedule" class="mt-1">
+            <span>
+              <i class="cp mdi mdi-calendar-clock mt-2"></i> {{items.title}}
+              <i class="cp text-danger mdi mdi-delete mdi-18px" (click)="deleteWorkSchedule(row.clinic_id, 'item_name', items.title)"
+                matTooltipClass="primary-tooltip" matTooltip="{{'delete_all_schedule_for' | translate}} {{items.title}}"
+              ></i>
+            </span>
+            <section *ngFor=" let item of items.data">
+              <span>{{item.from_time}} - {{item.to_time}} Slots <i class="cp text-danger mdi mdi-delete mdi-18px" matTooltipClass="primary-tooltip" matTooltip="{{'delete_this_slot' | translate}}" (click)="deleteWorkSchedule(row.clinic_id, 'item', item.schedule_id)"></i></span><br>
+              <span *ngFor="let slot of item.slots" class="badge badge-pill badge-secondary m-1">
+                {{slot.from_time}} - {{slot.to_time}}
+              </span>
+            </section>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12 mb-3 border p-3 unavailable" *ngIf="specificSchedules.length>0">
+        <h5>{{'ocassional_schedule' | translate}}</h5>
+        <div class="mt-3" *ngFor="let row of specificSchedules">
+          <p>{{'clinic_name' | translate}}:- <strong> {{row.clinic_name}} </strong> </p>
+          <div *ngFor="let items of row.work_schedule" class="mt-1">
+            <div *ngIf="items.type=='Partial Available'">
+              <span>
+                <i class="cp mdi mdi-calendar-clock mt-2"></i> {{items.title}}: {{'partial_available' | translate}}
+                <i class="cp text-danger mdi mdi-delete mdi-18px" matTooltipClass="primary-tooltip" matTooltip="{{'delete_this_slot' | translate}}" (click)="deleteWorkSchedule(row.clinic_id, 'item', items.schedule_id)"></i>
+              </span>
+              <div class="mt-1">{{'reason' | translate}}: {{items.reason}}</div>
+              <section *ngFor=" let item of items.data">
+                <span>{{item.from_time}} - {{item.to_time}} Slots <i class="cp text-danger mdi mdi-delete mdi-18px" matTooltipClass="primary-tooltip" matTooltip="{{'delete_this_slot' | translate}}" (click)="deleteWorkSchedule(row.clinic_id, 'item', item.schedule_id)"></i></span><br>
+                <span *ngFor="let slot of item.slots" class="badge badge-pill badge-secondary m-1">
+                  {{slot.from_time}} - {{slot.to_time}}
+                </span>
+              </section>
+            </div>
+            <div *ngIf="items.type=='Unavailable'">
+              <span>
+                <i class="cp mdi mdi-calendar-clock mt-2"></i> {{items.title}}: Unavailable
+                <i class="cp text-danger mdi mdi-delete mdi-18px" matTooltipClass="primary-tooltip" matTooltip="{{'delete_this_slot' | translate}}" (click)="deleteWorkSchedule(row.clinic_id, 'item', items.schedule_id)" ></i></span><br>
+              <span class="p-1">{{'reason' | translate}}: {{items.reason}}</span>
+            </div>
+          </div>
+          <br>
+        </div>
+      </div>
+      <div class="col-md-12 pr-1" *ngIf="!specificSchedules.length && !dailySchedules.length">
+        <div class="alert alert-danger">{{'no_data_found' | translate}}.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade actionModal" id="addWorkScheduleModal" tabindex="-1" role="dialog" data-backdrop="static">
+  <div class="modal-dialog" role="document">
+    <form [formGroup]="workScheduleForm" (ngSubmit)="onSubmitWorkScheduleForm()" #myavailabilityform="ngForm">
+      <div class="modal-content bg-white" [ngClass]="{'csspinner load1':workScheduleFormLoader}">
+        <div class="modal-header">
+          <h5 class="modal-title">{{'add_work_schedule' | translate}}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="container">
+            <div class="form-group row">
+              <div class="col-md-4">
+                <select class="form-control" formControlName="clinic_id">
+                  <option value="">{{'select_clinic_hospital' | translate}}</option>
+                  <option *ngFor="let clinic of userClinics" [value]="clinic.clinic_id">{{clinic.clinic_name}}
+                  </option>
+                </select>
+                <div class="invalid-feedback" *ngIf="workScheduleForm.controls.clinic_id.invalid &&
+                  (workScheduleForm.controls.clinic_id.dirty || workScheduleForm.controls.clinic_id.touched || myavailabilityform.submitted)"
+                >
+                  <div *ngIf="workScheduleForm.controls.clinic_id.errors.required">{{'this_field_is_required' | translate}}</div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-check">
+                  <label class="form-check-label cp" for="for_daily" (click)="onChangeScheduleType('Daily')">
+                    <input type="radio" id="for_daily" class="form-check-input" value="Daily" formControlName="schedule_type">
+                      {{'daily_schedule' | translate}} <i class="input-helper"></i></label>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-check">
+                  <label class="form-check-label cp" for="for_ocassional" (click)="onChangeScheduleType('Specific')">
+                    <input type="radio" id="for_ocassional" class="form-check-input" value="Specific" formControlName="schedule_type">
+                      {{'ocassional_schedule' | translate}} <i class="input-helper"></i></label>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row" *ngIf="workScheduleForm.value.schedule_type=='Daily'">
+              <div class="col-md-2 form-inline">
+                <label>{{'days' | translate}}</label>
+              </div>
+              <div class="col-md-10 form-inline">
+                <ng-container formArrayName="days" *ngFor="let day of workScheduleForm.get('days')['controls']; let i = index;">
+                  <div class="form-check form-check-inline" [formGroupName]="i">
+                    <label class="form-check-label cp" [for]="weekDays[i]">
+                      <input type="checkbox" [id]="weekDays[i]" class="form-check-input" [value]="weekDays[i]" formControlName="available">
+                        {{weekDays[i]}} <i class="input-helper"></i>
+                    </label>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+            <div class="form-group row" *ngIf="workScheduleForm.value.schedule_type=='Specific'">
+              <div class="col-md-4">
+                <mat-form-field>
+                  <mat-label>{{'from_date' | translate}}</mat-label>
+                  <input formControlName="from_date" matInput [matDatepicker]="fdDatePicker" autocomplete="off" (click)="fdDatePicker.open()"
+                    [min]="minAllowedDate"
+                  >
+                  <mat-datepicker-toggle matSuffix [for]="fdDatePicker"></mat-datepicker-toggle>
+                  <mat-datepicker #fdDatePicker></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <mat-form-field>
+                  <mat-label>{{'to_date' | translate}}</mat-label>
+                  <input formControlName="to_date" matInput [matDatepicker]="tdDatePicker" autocomplete="off" (click)="tdDatePicker.open()"
+                    [min]="minAllowedDate"
+                  >
+                  <mat-datepicker-toggle matSuffix [for]="tdDatePicker"></mat-datepicker-toggle>
+                  <mat-datepicker #tdDatePicker></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <select class="form-control status" formControlName="availability_type">
+                  <option value="Unavailable">Unavailable</option>
+                  <option value="Partial Available">Partial Available</option>
+                </select>
+              </div>
+            </div>
+            <ng-container *ngIf="workScheduleForm.value.schedule_type=='Daily' || workScheduleForm.value.availability_type=='Partial Available'">
+              <div class="form-group row">
+                <div class="col-md-2 form-inline">
+                  <label>{{'morning' | translate}}</label>
+                </div>
+                <div class="col-md-10">
+                  <ngx-slider [(value)]="mrMinValue" [(highValue)]="mrMaxValue" [options]="mrOptions"></ngx-slider>
+                </div>
+                <!-- <ng-container formGroupName="morning">
+                  <div class="form-group mr-2 mb-2">
+                    <input type="text" class="form-control" placeholder="From Time" autocomplete="off"
+                      formControlName="from_time" [ngxTimepicker]="mr_from_time" min="06:00 am" max="11:59 am">
+                    <ngx-material-timepicker #mr_from_time></ngx-material-timepicker>
+                  </div>
+                  <div class="form-group mr-2 mb-2">
+                    <input type="text" class="form-control" placeholder="To Time" autocomplete="off"
+                      formControlName="to_time" [ngxTimepicker]="mr_to_time" min="06:00 am" max="11:59 am">
+                    <ngx-material-timepicker #mr_to_time></ngx-material-timepicker>
+                  </div>
+                </ng-container> -->
+              </div>
+              <div class="form-group row">
+                <div class="col-md-2 form-inline">
+                  <label>{{'afternoon' | translate}}</label>
+                </div>
+                <div class="col-md-10">
+                  <ngx-slider [(value)]="afMinValue" [(highValue)]="afMaxValue" [options]="afOptions"></ngx-slider>
+                </div>
+                <!-- <ng-container formGroupName="afternoon">
+                  <div class="form-group mr-2 mb-2">
+                    <input type="text" class="form-control" placeholder="From Time" autocomplete="off"
+                      formControlName="from_time" [ngxTimepicker]="af_from_time" min="12:00 pm" max="04:59 pm">
+                    <ngx-material-timepicker #af_from_time></ngx-material-timepicker>
+                  </div>
+                  <div class="form-group mr-2 mb-2">
+                    <input type="text" class="form-control" placeholder="To Time" autocomplete="off"
+                      formControlName="to_time" [ngxTimepicker]="af_to_time" min="12:00 pm" max="04:59 pm">
+                    <ngx-material-timepicker #af_to_time></ngx-material-timepicker>
+                  </div>
+                </ng-container> -->
+              </div>
+              <div class="form-group row">
+                <div class="col-md-2 form-inline">
+                  <label>{{'evening' | translate}}</label>
+                </div>
+                <div class="col-md-10">
+                  <ngx-slider [(value)]="evMinValue" [(highValue)]="evMaxValue" [options]="evOptions"></ngx-slider>
+                </div>
+                <!-- <ng-container formGroupName="evening">
+                  <div class="form-group mr-2 mb-2">
+                    <input type="text" class="form-control" placeholder="From Time" autocomplete="off"
+                      formControlName="from_time" [ngxTimepicker]="ev_from_time" min="05:00 pm" max="07:59 pm">
+                    <ngx-material-timepicker #ev_from_time></ngx-material-timepicker>
+                  </div>
+                  <div class="form-group mr-2 mb-2">
+                    <input type="text" class="form-control" placeholder="To Time" autocomplete="off"
+                      formControlName="to_time" [ngxTimepicker]="ev_to_time" min="05:00 pm" max="07:59 pm">
+                    <ngx-material-timepicker #ev_to_time></ngx-material-timepicker>
+                  </div>
+                </ng-container> -->
+              </div>
+              <div class="form-group row">
+                <div class="col-md-2 form-inline">
+                  <label>{{'night' | translate}}</label>
+                </div>
+                <div class="col-md-10">
+                  <ngx-slider [(value)]="ngMinValue" [(highValue)]="ngMaxValue" [options]="ngOptions"></ngx-slider>
+                </div>
+                <!-- <ng-container formGroupName="night">
+                  <div class="form-group mr-2 mb-2">
+                    <input type="text" class="form-control" placeholder="From Time" autocomplete="off"
+                      formControlName="from_time" [ngxTimepicker]="n_from_time" min="08:00 pm" max="05:59 pm">
+                    <ngx-material-timepicker #n_from_time></ngx-material-timepicker>
+                  </div>
+                  <div class="form-group mr-2 mb-2">
+                    <input type="text" class="form-control" placeholder="To Time" autocomplete="off"
+                      formControlName="to_time" [ngxTimepicker]="n_to_time" min="08:00 pm" max="05:59 pm">
+                    <ngx-material-timepicker #n_to_time></ngx-material-timepicker>
+                  </div>
+                </ng-container> -->
+              </div>
+            </ng-container>
+
+            <div class="form-group" *ngIf="workScheduleForm.value.schedule_type=='Specific'">
+              <input type="text" class="form-control reason" formControlName="reason" placeholder="Reason">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="container">
+            <div class="form-row">
+              <div class="form-group col-md-6 my-auto text-left">
+                {{'fields_marked_with_star_is_required' | translate}}
+              </div>
+              <div class="form-group col-md-6 my-auto text-right">
+                <button type="submit" [disabled]="workScheduleFormLoader" class="btn theme-btn">
+                  <span [ngClass]="{'spinner-border spinner-border-sm':workScheduleFormLoader}"></span> {{'save' | translate}}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+

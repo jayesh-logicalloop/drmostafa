@@ -1,0 +1,168 @@
+<nav class="sidebar sidebar-offcanvas" id="sidebar" *ngIf="isloggedInObservable$ | async as isloggedInObservable">
+  <ul class="nav">
+    <li class="nav-item cp" routerLink="/dashboard" routerLinkActive="active">
+      <a class="nav-link"><i class="mdi mdi-view-dashboard menu-icon mdi-24px"></i><span class="menu-title">{{'dashboard' | translate}}</span></a>
+    </li>
+    <!-- {{ menus | json }} -->
+    <ng-template [ngIf]="menus.length">
+      <ng-container *ngFor="let menu of menus">
+        <li class="nav-item cp" routerLinkActive="active">
+          <a class="nav-link" *ngIf="menu.items.length==0" [routerLink]="menu.menu_url">
+            <i class="{{menu.icon_class}} menu-icon mdi-24px"></i><span class="menu-title">{{menu.menu_alias | translate}}</span>
+          </a>
+          <a *ngIf="menu.items.length>0" class="nav-link" data-toggle="collapse" href="#{{menu.menu_alias}}" 
+            aria-expanded="false" [attr.aria-controls]="menu.menu_alias"
+          >
+            <i class="{{menu.icon_class}} menu-icon mdi-24px"></i>
+            <span class="menu-title">{{menu.menu_alias | translate}}</span>
+            <i class="menu-arrow"></i>
+          </a>
+
+          <div *ngIf="menu.items.length>0" class="collapse" [id]="menu.menu_alias">
+              <ul class="nav flex-column sub-menu">
+                <ng-container *ngFor="let subitem of menu.items">
+                  <li dir="rtl" class="nav-item cp"
+                    [routerLink]="subitem.menu_url" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+                  >
+                    <a class="nav-link" [routerLink]="subitem.menu_url"><span class="menu-title">{{subitem.menu_alias | translate}}</span></a>
+                  </li>
+                </ng-container>
+              </ul>
+          </div>
+        </li>
+      </ng-container>
+    </ng-template>
+
+    <!-- 
+    <li class="nav-item cp" routerLink="/dashboard" routerLinkActive="active">
+      <a class="nav-link"><i class="mdi mdi-view-dashboard menu-icon mdi-24px"></i><span class="menu-title">{{'dashboard' | translate}}</span></a>
+    </li>
+
+    <li class="nav-item cp" routerLink="/patients" routerLinkActive="active"
+      *ngIf="userType == 'Super Admin' || userType == 'Clinic' || userType == 'Doctor'"
+    >
+      <a class="nav-link"><i class="mdi mdi-account-multiple menu-icon mdi-24px"></i><span class="menu-title">{{'patients' | translate}}</span></a>
+    </li>
+
+    <li class="nav-item cp" routerLink="/my-establishments" routerLinkActive="active" *ngIf="created_by == 0 && userType == 'Doctor'">
+      <a class="nav-link"><i class="mdi mdi-hospital-marker menu-icon mdi-24px"></i><span class="menu-title">{{'clinics_hospitals' | translate}}</span></a>
+    </li>
+
+    <li class="nav-item cp" routerLink="/appointments" routerLinkActive="active">
+      <a class="nav-link"><i class="mdi mdi-calendar-clock menu-icon mdi-24px"></i><span class="menu-title">{{'appointments' | translate}}</span></a>
+    </li>
+
+    <li class="nav-item cp" routerLink="/feedbacks" routerLinkActive="active"
+      *ngIf="userType == 'Super Admin' || userType == 'Patient' || userType == 'Doctor'">
+      <a class="nav-link"><i class="mdi mdi-comment-text menu-icon mdi-24px"></i><span class="menu-title">{{'feedback' | translate}}</span></a>
+    </li>
+
+    <li class="nav-item cp" routerLink="/notifications" routerLinkActive="active"
+      *ngIf="userType == 'Super Admin' || userType == 'Doctor' || userType == 'Patient'"
+    >
+      <a class="nav-link"><i class="mdi mdi-bell menu-icon mdi-24px"></i><span class="menu-title">{{'notification' | translate}}</span></a>
+    </li>
+
+    <li class="nav-item cp" routerLink="/orders" routerLinkActive="active">
+      <a class="nav-link"><i class="mdi mdi-comment-text menu-icon mdi-24px"></i><span class="menu-title">{{'orders' | translate}}</span></a>
+    </li>
+
+    <li class="nav-item cp" routerLink="/announcements" routerLinkActive="active">
+      <a class="nav-link"><i class="mdi mdi-comment-text menu-icon mdi-24px"></i><span class="menu-title">{{'announcements' | translate}}</span></a>
+    </li>
+
+    <li class="nav-item cp" routerLink="/feeds" routerLinkActive="active">
+      <a class="nav-link"><i class="mdi mdi-comment-text menu-icon mdi-24px"></i><span class="menu-title">{{'feeds' | translate}}</span></a>
+    </li>
+
+    <li class="nav-item cp" routerLink="/books" routerLinkActive="active" *ngIf="userType == 'Doctor'">
+      <a class="nav-link"><i class="mdi mdi-book-open-variant menu-icon mdi-24px"></i><span class="menu-title">{{'books' | translate}}</span></a>
+    </li>
+
+    <li class="nav-item cp" routerLink="/courses" routerLinkActive="active" *ngIf="userType == 'Doctor'">
+      <a class="nav-link"><i class="mdi mdi-book-minus menu-icon mdi-24px"></i><span class="menu-title">{{'courses' | translate}}</span></a>
+    </li>
+
+    <li class="nav-item cp" routerLink="/sessions" routerLinkActive="active" *ngIf="userType == 'Doctor'">
+      <a class="nav-link"><i class="mdi mdi-message-video menu-icon mdi-24px"></i><span class="menu-title">{{'live_courses' | translate}}</span></a>
+    </li>
+
+    <li class="nav-item cp" routerLink="/coupons" routerLinkActive="active" *ngIf="userType == 'Doctor'">
+      <a class="nav-link"><i class="mdi mdi-coin menu-icon mdi-24px"></i><span class="menu-title">{{'coupons' | translate}}</span></a>
+    </li>
+
+    <li class="nav-item cp" routerLinkActive="active" *ngIf="userType == 'Super Admin' || userType == 'Doctor'">
+      <a class="nav-link" data-toggle="collapse" href="#articles" aria-expanded="false" aria-controls="articles">
+        <i class="mdi mdi-note-multiple-outline menu-icon mdi-24px"></i>
+        <span class="menu-title">{{'articles' | translate}}</span>
+        <i class="menu-arrow"></i>
+      </a>
+      <div class="collapse" id="articles">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item cp" routerLink="/healthfeeds/categories" routerLinkActive="active"
+            [routerLinkActiveOptions]="{exact: true}" *ngIf="userType == 'Super Admin' || userType == 'Doctor'">
+            <a class="nav-link" routerLink="/healthfeeds/categories"><span class="menu-title">{{'categories' | translate}}</span></a>
+          </li>
+          <li class="nav-item cp" routerLink="/articles" routerLinkActive="active"
+            [routerLinkActiveOptions]="{exact: true}" *ngIf="userType == 'Super Admin' || userType == 'Doctor'">
+            <a class="nav-link" routerLink="/articles">
+              <span class="menu-title">{{'articles' | translate}}</span>
+            </a>
+          </li>
+          <li class="nav-item cp" routerLink="/healthfeeds" routerLinkActive="active"
+            [routerLinkActiveOptions]="{exact: true}" *ngIf="userType == 'Super Admin' || userType == 'Doctor'">
+            <a class="nav-link" routerLink="/healthfeeds"><span class="menu-title">{{'healthfeeds' | translate}}</span></a>
+          </li>
+        </ul>
+      </div>
+    </li>
+
+    <li class="nav-item cp" routerLinkActive="active" *ngIf="userType == 'Super Admin' || userType == 'Doctor'">
+      <a class="nav-link" data-toggle="collapse" href="#settings" aria-expanded="false" aria-controls="settings">
+        <i class="mdi mdi-settings menu-icon mdi-24px"></i><span class="menu-title">{{'settings' | translate}}</span><i class="menu-arrow"></i>
+      </a>
+      <div class="collapse" id="settings">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item cp" routerLink="/settings/web-settings" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <a class="nav-link"><span class="menu-title">{{'web_settings' | translate}}</span></a>
+          </li>
+          <li class="nav-item cp" routerLink="/settings/email-templates" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <a class="nav-link"><span class="menu-title">{{'email_templates' | translate}}</span></a>
+          </li>
+          <li class="nav-item cp" routerLink="/settings/walkthrough" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <a class="nav-link"><span class="menu-title">{{'walkthrough' | translate}}</span></a>
+          </li>
+        </ul>
+      </div>
+    </li>
+
+    <li class="nav-item cp" routerLinkActive="active" *ngIf="userType == 'Super Admin' || userType == 'Developer' || userType == 'Doctor'">
+      <a class="nav-link" data-toggle="collapse" href="#administration" aria-expanded="false" aria-controls="administration">
+        <i class="mdi mdi-lock-open menu-icon mdi-24px"></i><span class="menu-title">{{'administration' | translate}}</span><i class="menu-arrow"></i>
+      </a>
+      <div class="collapse" id="administration">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item cp" routerLink="/administration/administrators" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <a class="nav-link"><span class="menu-title">{{'administrators' | translate}}</span></a>          
+          </li>
+          <li class="nav-item cp" routerLink="/administration/pagemenus" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <a class="nav-link"><span class="menu-title">Menus</span></a>
+          </li>
+          <li class="nav-item cp" routerLink="/administration/permissions" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <a class="nav-link"><span class="menu-title">{{'permissions' | translate}}</span></a>
+          </li>
+        </ul>
+      </div>
+    </li>  
+
+    <li class="nav-item cp" routerLink="/contact-us" routerLinkActive="active" *ngIf="userType == 'Super Admin' || userType == 'Doctor'">
+      <a class="nav-link"><i class="mdi mdi-contacts menu-icon mdi-24px"></i><span class="menu-title">{{'contact_us' | translate}}</span></a>
+    </li>
+    -->
+
+    <li class="nav-item cp" (click)="onLogout()">
+      <a class="nav-link"><i class="mdi mdi-logout menu-icon mdi-24px"></i><span class="menu-title">{{'logout' | translate}}</span></a>
+    </li>
+  </ul>
+</nav>
+<!-- END: SIDEBAR -->

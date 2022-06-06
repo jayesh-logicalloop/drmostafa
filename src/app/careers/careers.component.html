@@ -1,0 +1,117 @@
+<div class="page-header">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-3">
+        <h2 class="page-title">Career</h2>
+      </div>
+
+      <div class="col-sm-6">
+        <div class="search-field">
+          <form class="d-flex align-items-center">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend bg-transparent">
+                <i class="input-group-text border-0 mdi mdi-magnify"></i>
+              </div>
+              <input type="text" #searchTerm class="form-control bg-transparent border-0" placeholder="{{'search_by_name' | translate}}">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body p-2 table-responsive">
+        <table class="table table-hover" [ngClass]="{'csspinner load1':appLoader}">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Full Name</th>
+              <th>Email</th>
+              <th>{{'mobile_number' | translate}}</th>
+              <th>For Department</th>
+              <th>Applied Date</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let item of careerData | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }; let i = index">
+              <td>{{i+1}}</td>
+              <td>{{item.full_name}}</td>
+              <td>{{item.email}}</td>
+              <td>{{item.mobile_number}}</td>
+              <td>{{item.department}}</td>
+              <td>{{item.created_date|date:'MMM d, y, h:mm a'}}</td>
+              <td>
+                <div class="icon-block">
+                  <a title="Edit" (click)="viewCareers(item)">
+                    <i class="cp mdi mdi-eye b-gry" aria-hidden="true"></i>
+                  </a>
+                  <a title="Delete" (click)="onDeleteCareer(item.id,i)">
+                    <i class="cp mdi mdi-delete b-brown"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer p-2">
+        <div class="row" *ngIf="careerData.length">
+          <div class="col-sm-12 mt-3 text-center">
+            <pagination-controls (pageChange)="pageChanged($event)" autoHide="true" responsive="true">></pagination-controls>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="viewModal"
+  aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':addFormAction}">
+      <div class="modal-header">
+        <h4 class="modal-title"> View Career </h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <div class="row">
+
+            <div class="col-md-6">
+              <h4 class="text-pre-wrap">{{careerDetail.full_name}}</h4>
+              <p class="text-pre-wrap">{{careerDetail.email}}</p>
+              <p> {{careerDetail.gender}} </p>
+              <p class="text-pre-wrap">{{careerDetail.mobile_number}}</p>
+            </div>
+
+            <div class="col-md-6 my-auto">
+              <p> <strong class="">For Department:</strong> {{careerDetail.department}}</p>
+              <p> <strong class="">Apply Date time :</strong> {{careerDetail.created_date|date:'MMM d, y, h:mm a'}} </p>
+            </div>
+          </div>
+          <br>
+          <div class="row mt-3">
+            <div class="col-md-12" *ngIf="careerDetail.message">
+              <h3>Message</h3>
+              <p> {{careerDetail.message}} </p>
+            </div>
+            <div class="col-md-12" *ngIf="careerDetail.file.length > 0">
+              <h3>Attachment <a target="_blank" download class="pull-right" href="/{{careerDetail.file_path}}"> <i class="mdi mdi-download"></i> </a></h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

@@ -1,0 +1,187 @@
+<div class="card">
+  <div class="card-body p-2 table-responsive">
+    <div class="card-title mb-5">
+      <button type="button" class="btn theme-btn btn-sm float-right" (click)="openAddEducationFormModal()">
+        <i class="mdi mdi-plus-circle mr-1"></i> {{'add_qualification' | translate}}
+      </button>
+      <h3>{{'qualification' | translate}}</h3>
+    </div>
+    <table class="table table-hover">
+      <thead>
+        <th>{{'degree' | translate}}</th>
+        <th>{{'university' | translate}}</th>
+        <th>{{'completed_in' | translate}}</th>
+        <th>{{'action' | translate}}</th>
+      </thead>
+      <tbody [ngClass]="{'csspinner load1':dataLoader}">
+        <ng-container *ngIf="total">
+          <tr *ngFor="let item of userEducationData; let i = index; let even = even; let odd = odd" [ngClass]="{ odd: odd, even: even }">
+            <td>{{item.degree}}</td>
+            <td>{{item.university}}</td>
+            <td>{{item.year}}</td>
+            <td>
+              <div class="icon-block">
+                <a class="cp" (click)="openUpdateEducationModal(item.id, i)">
+                  <i class="mdi mdi-pencil b-gry" aria-hidden="true"></i>
+                </a>
+                <a class="cp" (click)="onDeleteEducation(item.id, i)">
+                  <i class="mdi mdi-delete b-brown"></i></a>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+        <ng-container *ngIf="total == 0">
+          <tr>
+            <td colspan="5">
+              <div class="alert alert-danger text-center">{{'no_data_found' | translate}}</div>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="addEducationModal" tabindex="-1" role="dialog" aria-labelledby="addEducationModal"
+  aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':educationFormLoader}">
+      <div class="modal-header">
+        <h4 class="modal-title">{{'add_qualification' | translate}}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="addEducationForm" (ngSubmit)="onSubmitAddEducationForm()" #ngaddeduform="ngForm">
+        <div class="modal-body">
+          <div class="container">
+            <div class="form-group">
+              <label>{{'degree' | translate}} <span class="symbol required"></span></label>
+              <input type="text" class="form-control" placeholder="{{'degree' | translate}}" formControlName="degree">
+              <div class="invalid-feedback" *ngIf="addEducationForm.controls.degree.invalid &&
+                (addEducationForm.controls.degree.dirty || addEducationForm.controls.degree.touched || ngaddeduform.submitted)"
+              >
+                <div *ngIf="addEducationForm.controls.degree.errors.required">{{'this_field_is_required' | translate}}</div>
+                <div *ngIf="addEducationForm.controls.degree.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                <div *ngIf="addEducationForm.controls.degree.errors.maxlength">{{'maximum_50_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>{{'university' | translate}} <span class="symbol required"></span></label>
+                <input type="text" class="form-control" placeholder="{{'university' | translate}}" formControlName="university">
+                <div class="invalid-feedback" *ngIf="addEducationForm.controls.university.invalid &&
+                  (addEducationForm.controls.university.dirty || addEducationForm.controls.university.touched || ngaddeduform.submitted)"
+                >
+                  <div *ngIf="addEducationForm.controls.university.errors.required">{{'this_field_is_required' | translate}}</div>
+                  <div *ngIf="addEducationForm.controls.university.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                  <div *ngIf="addEducationForm.controls.university.errors.maxlength">{{'maximum_200_characters_allowed' | translate}}</div>
+                </div>
+              </div>
+              <div class="form-group col-md-6">
+                <label>{{'completed_in' | translate}} <span class="symbol required"></span></label>
+                <select class="form-control" formControlName="year">
+                  <option value="">Year</option>
+                  <option *ngFor="let year of years" [value]="year">{{year}}</option>
+                </select>
+                <div class="invalid-feedback" *ngIf="addEducationForm.controls.year.invalid && (addEducationForm.controls.year.dirty ||
+                  addEducationForm.controls.year.touched || ngaddeduform.submitted)"
+                >
+                  <div *ngIf="addEducationForm.controls.year.errors.required">{{'this_field_is_required' | translate}}</div>
+                  <div *ngIf="addEducationForm.controls.year.errors.minlength">{{'minimum_4_characters_required' | translate}}</div>
+                  <div *ngIf="addEducationForm.controls.year.errors.maxlength">{{'maximum_4_characters_allowed' | translate}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <div class="container">
+            <div class="form-row">
+              <div class="form-group col-md-6 my-auto text-left">
+                {{'fields_marked_with_star_is_required' | translate}}
+              </div>
+              <div class="form-group col-md-6 my-auto text-right">
+                <button type="submit" [disabled]="educationFormLoader" class="btn theme-btn mx-auto">
+                  <span [ngClass]="{'spinner-border spinner-border-sm':educationFormLoader}"></span> {{'add' | translate}}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="updateEducationModal" tabindex="-1" role="dialog" aria-labelledby="updateEducationModal"
+  aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':educationFormLoader}">
+      <div class="modal-header">
+        <h4 class="modal-title">{{'update_qualification' | translate}}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="updateEducationForm" (ngSubmit)="onSubmitUpdateEducationForm()" #ngupdateeduform="ngForm">
+        <div class="modal-body">
+          <div class="container">
+            <div class="form-group">
+              <label>{{'degree' | translate}} <span class="symbol required"></span></label>
+              <input type="text" class="form-control" placeholder="{{'degree' | translate}}" formControlName="degree">
+              <div class="invalid-feedback" *ngIf="updateEducationForm.controls.degree.invalid &&
+                (updateEducationForm.controls.degree.dirty || updateEducationForm.controls.degree.touched || ngupdateeduform.submitted)"
+              >
+                <div *ngIf="updateEducationForm.controls.degree.errors.required">{{'this_field_is_required' | translate}}</div>
+                <div *ngIf="updateEducationForm.controls.degree.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                <div *ngIf="updateEducationForm.controls.degree.errors.maxlength">{{'maximum_200_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>{{'university' | translate}}<span class="symbol required"></span></label>
+                <input type="text" class="form-control" placeholder="{{'university' | translate}}" formControlName="university">
+                <div class="invalid-feedback" *ngIf="updateEducationForm.controls.university.invalid &&
+                  (updateEducationForm.controls.university.dirty || updateEducationForm.controls.university.touched || ngupdateeduform.submitted)"
+                >
+                  <div *ngIf="updateEducationForm.controls.university.errors.required">{{'this_field_is_required' | translate}}</div>
+                  <div *ngIf="updateEducationForm.controls.university.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                  <div *ngIf="updateEducationForm.controls.university.errors.maxlength">{{'maximum_200_characters_allowed' | translate}}</div>
+                </div>
+              </div>
+              <div class="form-group col-md-6">
+                <label>{{'completed_in' | translate}} <span class="symbol required"></span></label>
+                <select class="form-control" formControlName="year">
+                  <option value="">Year</option>
+                  <option *ngFor="let year of years" [value]="year">{{year}}</option>
+                </select>
+                <div class="invalid-feedback" *ngIf="updateEducationForm.controls.year.invalid &&
+                  (updateEducationForm.controls.year.dirty || updateEducationForm.controls.year.touched || ngupdateeduform.submitted)"
+                >
+                  <div *ngIf="updateEducationForm.controls.year.errors.required">{{'this_field_is_required' | translate}}</div>
+                  <div *ngIf="updateEducationForm.controls.year.errors.minlength">{{'minimum_4_characters_required' | translate}}</div>
+                  <div *ngIf="updateEducationForm.controls.year.errors.maxlength">{{'maximum_4_characters_allowed' | translate}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <div class="container">
+            <div class="form-row">
+              <div class="form-group col-md-6 my-auto text-left">
+                {{'fields_marked_with_star_is_required' | translate}}
+              </div>
+              <div class="form-group col-md-6 my-auto text-right">
+                <button type="submit" [disabled]="educationFormLoader" class="btn theme-btn mx-auto">
+                  <span [ngClass]="{'spinner-border spinner-border-sm':educationFormLoader}"></span> {{'update' | translate}}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

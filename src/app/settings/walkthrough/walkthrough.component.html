@@ -1,0 +1,168 @@
+<div class="page-header">
+  <div class="col-sm-12 px-0 px-sm-2">
+    <div class="d-flex">
+      <div class="mr-auto">
+        <h2 class="page-title mt-22">{{'walkthrough_screens' | translate}}</h2>
+      </div>
+      <div class="">
+        <button type="button" class="btn theme-btn" (click)="openAddForm()">
+          <i class="mdi mdi-plus-circle"></i> {{'add_walkthrough' | translate}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body p-2 table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>{{'title' | translate}}</th>
+              <th>{{'image' | translate}}</th>
+              <th>{{'description' | translate}}</th>
+              <th>{{'order' | translate}}</th>
+              <th>{{'action' | translate}}</th>
+            </tr>
+          </thead>
+          <tbody [ngClass]="{'csspinner load1':dataLoader}">
+            <ng-container *ngIf="wtData.length">
+              <tr *ngFor="let walkthrough of wtData | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }; let i = index">
+                <th>{{itemsPerPage *(currentPage-1)+i+1}}</th>
+                <td class="text-pre-wrap text-break-all">{{walkthrough.title}}</td>
+                <td>
+                    <a *ngIf="walkthrough.image_url" data-fancybox [href]="walkthrough.image_url">
+                      <img [src]="walkthrough.image_url" style="height: 35px; width:35px;">
+                    </a>
+                </td>
+                <td class="text-pre-wrap text-break-all">{{walkthrough.description}}</td>
+                <td>{{walkthrough.sort_order}}</td>
+                <td>
+                  <div class="icon-block">
+                    <a class="cp" (click)="openUpdateForm(walkthrough.id, i)" matTooltip="Edit" matTooltipClass="primary-tooltip" title="Edit">
+                      <i class="mdi mdi-pencil b-gry" aria-hidden="true"></i>
+                    </a>
+
+                    <a class="cp" (click)="onDeleteWTData(walkthrough.id)" matTooltip="Delete" matTooltipClass="primary-tooltip" title="Delete">
+                      <i class="mdi mdi-delete b-brown" aria-hidden="true"></i>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+            <tr *ngIf="!wtData.length">
+              <td colspan="8">
+                <div class="alert alert-danger text-center">{{'no_data_found' | translate}}</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row" *ngIf="wtData.length">
+  <div class="col-sm-12 mt-3 text-center">
+    <pagination-controls (pageChange)="pageChanged($event)" autoHide="true" responsive="true">></pagination-controls>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="addUpdateFormModal" tabindex="-1" role="dialog" aria-labelledby="addUpdateFormModal" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':addUpdateFormLoader}">
+      <div class="modal-header">
+        <h4 class="modal-title">{{'walkthrough' | translate}}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="addUpdateForm" (ngSubmit)="onSubmitAddUpdateForm()" #ng_add_update_form="ngForm">
+        <div class="modal-body">
+          <div class="container">
+            <div class="form-row">
+              <div class="form-group col-md-8">
+                <label>{{'title' | translate}} <span class="symbol required"></span></label>
+                <input type="text" class="form-control" placeholder="{{'enter_title' | translate}}" formControlName="title">
+                <div class="invalid-feedback" *ngIf="addUpdateForm.controls.title.invalid &&
+                  (addUpdateForm.controls.title.dirty || addUpdateForm.controls.title.touched || ng_add_update_form.submitted)"
+                >
+                  <div *ngIf="addUpdateForm.controls.title.errors.required">{{'this_field_is_required' | translate}}</div>
+                  <div *ngIf="addUpdateForm.controls.title.errors.maxlength">{{'maximum_100_characters_allowed' | translate}}</div>
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <label>{{'order' | translate}}</label>
+                <input type="text" class="form-control strict_integer" placeholder="{{'enter_order' | translate}}" formControlName="sort_order">
+                <div class="invalid-feedback" *ngIf="addUpdateForm.controls.sort_order.invalid &&
+                  (addUpdateForm.controls.sort_order.dirty || addUpdateForm.controls.sort_order.touched || ng_add_update_form.submitted)"
+                >
+                  <div *ngIf="addUpdateForm.controls.sort_order.errors.required">{{'this_field_is_required' | translate}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-12">
+                <label>{{'description' | translate}} <span class="symbol required"></span></label>
+                <textarea class="form-control" formControlName="description"></textarea>
+                <div class="invalid-feedback" *ngIf="addUpdateForm.controls.description.invalid &&
+                  (addUpdateForm.controls.description.dirty || addUpdateForm.controls.description.touched || ng_add_update_form.submitted)"
+                >
+                  <div *ngIf="addUpdateForm.controls.description.errors.required">{{'this_field_is_required' | translate}}</div>
+                  <div *ngIf="addUpdateForm.controls.description.errors.maxlength">{{'maximum_250_characters_allowed' | translate}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>{{'image' | translate}} <span class="symbol required"></span>
+                  <div class="text-danger">
+                    <div><small>{{'only_jpg_png_files_allowed' | translate}}</small></div>
+                    <div><small>{{'file_size_should_not_be_greater_than_2_mb' | translate}}</small></div>
+                  </div>
+                </label>
+                <div class="custom-file">
+                  <input #ng_image_input type="file" (change)="onChangeImage($event)" accept="image/*" class="custom-file-input">
+                  <label class="custom-file-label" for="customFile">{{'choose_image' | translate}}</label>
+                </div>
+                <div class="invalid-feedback" *ngIf="addUpdateForm.controls.image.invalid &&
+                  (addUpdateForm.controls.image.dirty || addUpdateForm.controls.image.touched || ng_add_update_form.submitted)"
+                >
+                  <div *ngIf="addUpdateForm.controls.image.errors.required">{{'this_field_is_required' | translate}}</div>
+                </div>
+              </div>
+              <div class="form-group col-md-6 text-center" *ngIf="imageSrc">
+                <div class="img-item">
+                  <button *ngIf="!id" type="button" class="btn btn-outline-secondary btn-rounded btn-icon img-delete">
+                    <i class="mdi mdi-delete mdi-18px" (click)="clearImage()"></i>
+                  </button>
+                  <button *ngIf="this.id" type="button" class="btn btn-outline-secondary btn-rounded btn-icon img-delete">
+                    <i class="mdi mdi-delete mdi-18px" (click)="deleteMedia()"></i>
+                  </button>
+                  <img [src]="imageSrc" alt="image" class="img-ele img-fluid">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <div class="container">
+            <div class="form-row">
+              <div class="form-group col-md-6 my-auto text-left">
+                {{'fields_marked_with_star_is_required' | translate}}
+              </div>
+              <div class="form-group col-md-6 my-auto text-right">
+                <button type="submit" [disabled]="addUpdateFormLoader" class="btn theme-btn mx-auto">
+                  <span [ngClass]="{'spinner-border spinner-border-sm':addUpdateFormLoader}"></span> {{'save' | translate}}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

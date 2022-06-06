@@ -1,0 +1,42 @@
+<div class="card">
+  <div class="card-title">
+    <h3>{{'doctors' | translate}}</h3>
+  </div>
+  <div class="card-body p-2 table-responsive" [ngClass]="{'csspinner load1':doctorsDataLoader}">
+    <table class="table table-hover">
+      <thead>
+        <tr class="text-center">
+          <th>{{'name' | translate}}</th>
+          <th>{{'email' | translate}}</th>
+          <th>{{'mobile' | translate}}</th>
+          <th>{{'status' | translate}}</th>
+          <th>{{'action' | translate}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngIf="doctors.length">
+          <tr class="text-center" *ngFor="let doctor of doctors; let i = index;">
+            <td>{{doctor.full_name}}</td>
+            <td>{{doctor.email}}</td>
+            <td>{{doctor.mobile_number}}</td>
+            <td>{{doctor.account_status}}</td>
+            <td>
+              <div class="icon-block">
+                <a class="cp" matTooltip="View Detail" matTooltipClass="primary-tooltip"
+                  routerLink="/doctors/update/{{doctor.user_id}}"
+                >
+                  <i class="mdi mdi-eye b-blue" aria-hidden="true"></i>
+                </a>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+        <ng-container *ngIf="!doctors.length">
+          <tr>
+            <td colspan="5"><div class="alert alert-danger">{{'no_data_found' | translate}}</div></td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</div>

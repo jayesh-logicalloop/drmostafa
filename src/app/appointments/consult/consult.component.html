@@ -1,0 +1,544 @@
+<div class="page-header">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-3">
+        <h2 class="page-title">{{'consultation' | translate}}</h2>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="col-md-12 mb-3 text-center">
+      <button type="button" class="btn btn-success btn-rounded btn-icon mr-2" (click)="startVideoCall()"
+        matTooltipClass="primary-tooltip" matTooltip="{{'start_video_call' | translate}}"
+      >
+        <i class="mdi mdi-video cp mdi-24px"></i>
+      </button>
+      <!-- <button type="button" class="btn btn-success btn-rounded btn-icon mr-2" (click)="startAudioCall()"
+        matTooltipClass="primary-tooltip" matTooltip="Start Audio Call"
+      >
+        <i class="mdi mdi-headset cp mdi-24px"></i>
+      </button> -->
+      <button type="button" class="btn btn-danger btn-rounded btn-icon mr-2" (click)="leaveVideoCall()"
+        matTooltipClass="primary-tooltip" matTooltip="{{'stop_call' | translate}}"
+      >
+        <i class="mdi mdi-phone-hangup cp mdi-24px"></i>
+      </button>
+    </div>
+    <div class="remote-containers" [ngClass]="{'fullscreen':fullscreen}">
+      <div class="remotes">
+        <div class="controls d-flex">
+          <div class="fs-controls" [ngClass]="{'d-none':!fullscreen}">
+            <i class="mdi mdi-fullscreen-exit mdi-24px cp" (click)="fullscreenOnOff(false)"
+              matTooltipClass="primary-tooltip" matTooltip="{{'exit_fullscreen' | translate}}"
+            ></i>
+          </div>
+          <div class="nofs-controls" [ngClass]="{'d-none':fullscreen}">
+            <i class="mdi mdi-fullscreen mdi-24px cp" (click)="fullscreenOnOff(true)"
+              matTooltipClass="primary-tooltip" matTooltip="{{'fullscreen' | translate}}"
+            ></i>
+          </div>
+        </div>
+        <div *ngFor="let callId of remoteCalls" [id]="callId" class="remote"></div>
+      </div>
+      <div [id]="localCallId" class="local"></div>
+    </div>
+  </div>
+  <div class="col-md-6" [ngClass]="{'d-none':fullscreen}">
+    <div class="row">
+      <div class="col-md-12 mt-1">
+        <h5>{{'chat' | translate}}</h5>
+        <ol #scrollMe class="discussion border border-secondary p-2">
+          <ng-container *ngFor="let chat of messages">
+            <li class="" [ngClass]="{'self': (chat.sender == 'Self'), 'other': (chat.sender == 'Other')}">
+              <div class="avatar">
+                <img [src]="chat.sender_image" class="rounded-circle mr-1" alt="" width="30" height="30">
+              </div>
+              <div class="messages">
+                <p *ngIf="chat.message_type == 'Text'">{{chat.message}}</p>
+                <p *ngIf="chat.message_type == 'Voice'">
+                  <audio controls>
+                    <source [src]="chat.message" type="audio/ogg">
+                    <source [src]="chat.message" type="audio/mpeg">
+                    Your browser does not support the audio tag.
+                  </audio>
+                </p>
+                <!--
+                <p>
+                  <a data-fancybox [attr.data-caption]="chat.text" [href]="chat.image_url">
+                    <img *ngIf="chat.image_url" [src]="chat.image_url" style="height: 150ox; width:150px;">
+                  </a>
+                </p>
+                -->
+                <small>{{chat.created_date}}</small>
+              </div>
+            </li>
+          </ng-container>
+        </ol>
+        <div class="flex-grow-0 mt-3 border-top" [ngClass]="{'csspinner load1':chatFormLoader}">
+          <form [formGroup]="chatForm" (ngSubmit)="onSendMessage()">
+            <div class="form-group">
+              <div class="input-group">
+                <input type="text" formControlName="message" class="form-control" placeholder="{{'type_your_message' | translate}}">
+                <div class="input-group-append">
+                  <button class="btn btn-sm btn-gradient-primary" [disabled]="!chatForm.value.message.length" type="submit">{{'send' | translate}}</button>
+                </div>
+              </div>
+            </div>
+            <div class="form-group text-right">
+              <!-- <i matTooltipClass="primary-tooltip" matTooltip="Share health record"
+                (click)="openShareHealthRecordModal()" class="mdi mdi-attachment mdi-24px cp"></i> -->
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-9 text-right">
+                &nbsp;
+                <audio controls="" *ngIf="url">
+                  <source [src]="sanitize(url)" type="audio/wav">
+                </audio>
+              </div>
+              <div class="col-sm-3 text-right">
+                <button class="btn btn-light px-2" (click)="initiateRecording()"
+                  *ngIf="!recording" matTooltipClass="primary-tooltip" matTooltip="{{'record_audio_message' | translate}}">
+                    <i class="mdi mdi-microphone mdi-24px cp"></i>
+                </button>
+                <button class="btn btn-light px-2" (click)="sendAudioMessage()"
+                  *ngIf="!recording && url" matTooltipClass="primary-tooltip" matTooltip="{{'send_audio_message' | translate}}">
+                    <i class="mdi mdi-send mdi-24px cp"></i>
+                </button>
+                <button class="btn btn-light px-2" (click)="stopRecording()"
+                  *ngIf="recording" matTooltipClass="primary-tooltip" matTooltip="{{'start_recording' | translate}}">
+                    <i class="mdi mdi mdi-microphone-off mdi-24px cp"></i>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-3" [ngClass]="{'d-none':fullscreen}" *ngIf="attachments.length > 0">
+  <div class="col-md-12">
+    <h5>{{'reports' | translate}}</h5>
+    <div class="mr-3 mt-1" style="display: inline-block; position:relative;" *ngFor="let item of attachments; let i = index;">
+      <a data-fancybox [attr.data-caption]="item.name" [href]="item.file_url">
+        <span class="badge badge-info">{{item.file_title}}</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-3" [ngClass]="{'d-none':fullscreen}" *ngIf="userType=='Doctor'">
+  <div class="col-md-12">
+    <h5>{{'write_prescription' | translate}}</h5>
+    <form class="ap-prescription-fm" [formGroup]="prescriptionForm" (ngSubmit)="onSubmitPrescriptionForm()" #ngprescriptionform="ngForm"
+      [ngClass]="{'csspinner load1':prescriptionFormLoader}">
+      <ckeditor formControlName="item_name" [config]="editorConfig"></ckeditor>
+      <div class="form-group col-md-1 mt-2">
+        <button *ngIf="!editButton" type="submit" title="{{'add_prescription' | translate}}" class="btn btn-success btn-sm">{{'add' | translate}}</button>
+        <button *ngIf="editButton" (click)="onSubmitPrescriptionUpdateForm()" type="button" title="Update Prescription" class="btn btn-success btn-sm">
+          {{'update' | translate}}
+        </button>
+      </div>
+      <!-- <div class="form-row">
+        <div class="form-group col-md-3">
+          <select class="form-control p-2" formControlName="prescription_type">
+            <option value="Medicine">Medicine</option>
+            <option value="Lab">Lab Test</option>
+            <option value="Imaging">Imaging Test</option>
+            <option value="Recommend">Recommendation</option>
+          </select>
+          <div class="invalid-feedback" *ngIf="prescriptionForm.controls.prescription_type.invalid &&
+            (prescriptionForm.controls.prescription_type.dirty ||
+            prescriptionForm.controls.prescription_type.touched || ngprescriptionform.submitted)"
+          >
+            <div *ngIf="prescriptionForm.controls.prescription_type.errors.required">{{'this_field_is_required' | translate}}</div>
+          </div>
+        </div>
+        <div class="form-group col-md-8">
+          <input type="text" class="form-control p-2" formControlName="prescribe_note" class="form-control"
+            placeholder="eg. Write Lab Test, Imaging Test, Any Recommandation or Instruction/Note">
+          <div class="invalid-feedback" *ngIf="prescriptionForm.controls.prescribe_note.invalid &&
+            (prescriptionForm.controls.prescribe_note.dirty ||
+            prescriptionForm.controls.prescribe_note.touched || ngprescriptionform.submitted)"
+          >
+            <div *ngIf="prescriptionForm.controls.prescribe_note.errors.required">{{'this_field_is_required' | translate}}</div>
+            <div *ngIf="prescriptionForm.controls.prescribe_note.errors.maxlength">{{'maximum_1000_characters_allowed' | translate}}</div>
+          </div>
+        </div>
+        <div class="form-group col-md-1 mt-2" *ngIf="prescriptionForm.value.prescription_type != 'Medicine'">
+          <button *ngIf="!editButton" type="submit" title="{{'add_prescription' | translate}}" class="btn btn-success btn-sm">{{'add' | translate}}</button>
+          <button *ngIf="editButton" (click)="onSubmitPrescriptionUpdateForm()" type="button" title="Update Prescription" class="btn btn-success btn-sm">
+            {{'update' | translate}}
+          </button>
+        </div>
+      </div>
+      <div class="form-row">
+        <ng-container *ngIf="prescriptionForm.value.prescription_type == 'Medicine'">
+          <div class="form-group col-md-3">
+            <ng-select2 [data]="drugsSelect2Data" [options]="drugsSelect2Options" placeholder="{{'select_drug' | translate}}" formControlName="item_name"></ng-select2>
+            <div class="invalid-feedback" *ngIf="prescriptionForm.controls.item_name.invalid &&
+              (prescriptionForm.controls.item_name.dirty ||
+              prescriptionForm.controls.item_name.touched || ngprescriptionform.submitted)"
+            >
+              <div *ngIf="prescriptionForm.controls.item_name.errors.required">{{'this_field_is_required' | translate}}</div>
+            </div>
+          </div>
+          <div class="form-group col-md-1">
+            <input type="text" class="form-control p-2 strict_integer" placeholder="{{'dose' | translate}}" formControlName="dosage">
+            <div class="invalid-feedback" *ngIf="prescriptionForm.controls.dosage.invalid &&
+              (prescriptionForm.controls.dosage.dirty || prescriptionForm.controls.dosage.touched || ngprescriptionform.submitted)"
+            >
+              <div *ngIf="prescriptionForm.controls.dosage.errors.required">{{'this_field_is_required' | translate}}</div>
+            </div>
+          </div>
+          <div class="form-group col-md-3">
+            <input class="form-control p-2" placeholder="{{'frequency_eg_twice_in_a_day' | translate}}" formControlName="frequency">
+            <div class="invalid-feedback" *ngIf="prescriptionForm.controls.frequency.invalid &&
+              (prescriptionForm.controls.frequency.dirty ||
+              prescriptionForm.controls.frequency.touched || ngprescriptionform.submitted)"
+            >
+              <div *ngIf="prescriptionForm.controls.frequency.errors.required">{{'this_field_is_required' | translate}}</div>
+            </div>
+          </div>
+          <div class="form-group col-md-2">
+            <select class="form-control p-2" formControlName="intake">
+              <option value="After Food">After Food</option>
+              <option value="Before Food">Before Food</option>
+            </select>
+            <div class="invalid-feedback" *ngIf="prescriptionForm.controls.intake.invalid &&
+              (prescriptionForm.controls.intake.dirty || prescriptionForm.controls.intake.touched || ngprescriptionform.submitted)"
+            >
+              <div *ngIf="prescriptionForm.controls.intake.errors.required">{{'this_field_is_required' | translate}}</div>
+            </div>
+          </div>
+          <div class="form-group col-md-1">
+            <input type="text" class="form-control p-2 strict_integer" placeholder="{{'duration' | translate}}" formControlName="duration">
+            <div class="invalid-feedback" *ngIf="prescriptionForm.controls.duration.invalid &&
+              (prescriptionForm.controls.duration.dirty || prescriptionForm.controls.duration.touched || ngprescriptionform.submitted)"
+            >
+              <div *ngIf="prescriptionForm.controls.duration.errors.required">{{'this_field_is_required' | translate}}</div>
+            </div>
+          </div>
+          <div class="form-group col-md-1">
+            <select class="form-control p-2" formControlName="duration_type">
+              <option value="Day">Day(s)</option>
+              <option value="Week">Week(s)</option>
+              <option value="Month">Month(s)</option>
+              <option value="Year">Year(s)</option>
+            </select>
+            <div class="invalid-feedback" *ngIf="prescriptionForm.controls.duration_type.invalid &&
+              (prescriptionForm.controls.duration_type.dirty ||
+              prescriptionForm.controls.duration_type.touched || ngprescriptionform.submitted)"
+            >
+              <div *ngIf="prescriptionForm.controls.duration_type.errors.required">{{'this_field_is_required' | translate}}</div>
+            </div>
+          </div>
+          <div class="form-group col-md-1 mt-2">
+            <button *ngIf="!editButton" type="submit" title="{{'add_prescription' | translate}}" class="btn btn-success btn-sm">{{'add' | translate}}</button>
+            <button *ngIf="editButton" (click)="onSubmitPrescriptionUpdateForm()" type="button" title="Update Prescription" class="btn btn-success btn-sm">
+              {{'update' | translate}}
+            </button>
+          </div>
+        </ng-container>
+      </div> -->
+    </form>
+  </div>
+</div>
+
+<div class="row" [ngClass]="{'d-none':fullscreen}" *ngIf="prescriptions.Medicine.length || prescriptions.Lab.length || prescriptions.Imaging.length ||
+  prescriptions.Recommend.length"
+>
+  <div class="col-sm-12">
+    <h5>{{'prescriptions' | translate}}</h5>
+    <div class="card">
+      <div class="card-body p-2 table-responsive" *ngIf="prescriptions.Medicine.length">
+        <table class="table table-hover" [ngClass]="{'csspinner load1':dataLoader}">
+          <thead>
+            <tr>
+              <th colspan="7">{{'medicines' | translate}}</th>
+            </tr>
+            <tr>
+              <th>#</th>
+              <th>{{'item' | translate}}</th>
+              <!-- <th>{{'dosage' | translate}}</th>
+              <th>{{'frequency' | translate}}</th>
+              <th>{{'duration' | translate}}</th>
+              <th>{{'intake' | translate}}</th>
+              <th>{{'instruction' | translate}}</th> -->
+              <th class="text-right" *ngIf="userType=='Doctor'">{{'action' | translate}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of prescriptions.Medicine; let i = index">
+              <td>{{i+1}}</td>
+              <td class="text-pre-wrap" [innerHTML]="item.item_name"></td>
+              <!-- <td>{{item.dosage}}</td>
+              <td>{{item.frequency}}</td>
+              <td>{{item.duration  + ' ' + item.duration_type }}</td>
+              <td>{{item.intake}}</td>
+              <td class="text-pre-wrap">{{item.prescribe_note}}</td> -->
+              <td class="text-right" *ngIf="userType=='Doctor'">
+                <div class="icon-block">
+                  <a class="cp" (click)="onDeletePrescription(item)">
+                    <i class="mdi mdi-delete b-brown"></i>
+                  </a>
+                  <a class="cp" (click)="onEditPrescription(item, i)">
+                    <i class="mdi mdi-pencil b-gry"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-body p-2 table-responsive" *ngIf="prescriptions.Lab.length">
+        <table class="table table-hover" [ngClass]="{'csspinner load1':dataLoader}">
+          <thead>
+            <tr>
+              <th colspan="2">{{'lab_test' | translate}}</th>
+            </tr>
+            <tr>
+              <th>#</th>
+              <th>{{'test' | translate}}</th>
+              <th class="text-right" *ngIf="userType=='Doctor'">{{'action' | translate}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of prescriptions.Lab; let i = index">
+              <td>{{i+1}}</td>
+              <td class="text-pre-wrap">{{item.prescribe_note}}</td>
+              <td class="text-right" *ngIf="userType=='Doctor'">
+                <div class="icon-block">
+                  <a class="cp" (click)="onDeletePrescription(item)">
+                    <i class="mdi mdi-delete b-brown"></i>
+                  </a>
+                  <a class="cp" (click)="onEditPrescription(item, i)">
+                    <i class="mdi mdi-pencil b-gry"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-body p-2 table-responsive" *ngIf="prescriptions.Imaging.length">
+        <table class="table table-hover" [ngClass]="{'csspinner load1':dataLoader}">
+          <thead>
+            <tr>
+              <th colspan="2">{{'imaging_test' | translate}}</th>
+            </tr>
+            <tr>
+              <th>#</th>
+              <th>{{'test' | translate}}</th>
+              <th class="text-right" *ngIf="userType=='Doctor'">{{'action' | translate}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of prescriptions.Imaging; let i = index">
+              <td>{{i+1}}</td>
+              <td class="text-pre-wrap">{{item.prescribe_note}}</td>
+              <td class="text-right" *ngIf="userType=='Doctor'">
+                <div class="icon-block">
+                  <a class="cp" (click)="onDeletePrescription(item)">
+                    <i class="mdi mdi-delete b-brown"></i>
+                  </a>
+                  <a class="cp" (click)="onEditPrescription(item, i)">
+                    <i class="mdi mdi-pencil b-gry"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-body p-2 table-responsive" *ngIf="prescriptions.Recommend.length">
+        <table class="table table-hover" [ngClass]="{'csspinner load1':dataLoader}">
+          <thead>
+            <tr>
+              <th colspan="2">{{'recommendation' | translate}}</th>
+            </tr>
+            <tr>
+              <th>#</th>
+              <th>{{'recommendation' | translate}}</th>
+              <th class="text-right" *ngIf="userType=='Doctor'">{{'action' | translate}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of prescriptions.Recommend; let i = index">
+              <td>{{i+1}}</td>
+              <td class="text-pre-wrap">{{item.prescribe_note}}</td>
+              <td class="text-right" *ngIf="userType=='Doctor'">
+                <div class="icon-block">
+                  <a class="cp" (click)="onDeletePrescription(item)">
+                    <i class="mdi mdi-delete b-brown"></i>
+                  </a>
+                  <a class="cp" (click)="onEditPrescription(item, i)">
+                    <i class="mdi mdi-pencil b-gry"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="shareHealthRecordModal" tabindex="-1" role="dialog" aria-labelledby="shareHealthRecordModal" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white">
+      <div class="modal-header">
+        <h4 class="modal-title">{{'share_health_record' | translate}}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="addHealthRecordForm" (ngSubmit)="onSubmitShareHealthRecordForm()"
+        [ngStyle]="{'display':shareHealthRecordAction === '' ? 'block' : 'none'}"
+      >
+        <div class="modal-body">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-12 text-right">
+                <button type="button" class="btn btn-sm theme-btn" (click)="onChooseShareHealthRecordAction('new')">
+                  <i class="mdi mdi-file-import"></i> {{'add_new' | translate}}
+                </button>
+              </div>
+            </div>
+            <table class="table table-responsive">
+              <thead>
+                <tr>
+                  <th>{{'name' | translate}}</th>
+                  <th>{{'record' | translate}}</th>
+                  <th>{{'share' | translate}}</th>
+                </tr>
+              </thead>
+              <tbody formArrayName="records">
+                <tr *ngFor="let hr of recordsFormArray.controls; let i = index">
+                  <td>{{healthRecords[i].name}}</td>
+                  <td><a data-fancybox [attr.data-caption]="healthRecords[i].name" [href]="healthRecords[i].file_url">{{healthRecords[i].name}}</a></td>
+                  <td><label><input type="checkbox" [formControlName]="i"></label></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <div class="container">
+            <div class="form-row">
+              <div class="form-group col-md-12 text-right">
+                <button type="submit" class="btn theme-btn mx-auto">{{'share' | translate}}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <form [formGroup]="addHealthRecordForm" (ngSubmit)="onSubmitAddHealthRecordForm()" #ngaddhealthrecordform="ngForm"
+        [ngStyle]="{'display':shareHealthRecordAction === 'new' ? 'block' : 'none'}"
+      >
+        <div class="modal-body" [ngClass]="{'csspinner load1':addHealthRecordFormLoader}">
+          <div class="form-group">
+            <label class="cp" (click)="onChooseShareHealthRecordAction('')">
+              <i class="mdi mdi-arrow-left-bold-circle"></i> {{'back' | translate}}
+            </label>
+          </div>
+          <div class="form-group">
+            <label>{{'report_name' | translate}} <span class="symbol required"></span></label>
+            <input type="text" class="form-control" placeholder="Enter Report Name, eg. Blood Report, MRI, Prescription" formControlName="name">
+            <div class="invalid-feedback" *ngIf="addHealthRecordForm.controls.name.invalid &&
+                (addHealthRecordForm.controls.name.dirty || addHealthRecordForm.controls.name.touched || ngaddhealthrecordform.submitted)"
+            >
+              <div *ngIf="addHealthRecordForm.controls.name.errors.required">{{'this_field_is_required' | translate}}</div>
+              <div *ngIf="addHealthRecordForm.controls.name.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+              <div *ngIf="addHealthRecordForm.controls.name.errors.maxlength">{{'maximum_200_characters_allowed' | translate}}</div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label>{{'date' | translate}} <small>(Format: D/M/Y)</small> <span class="symbol required"></span></label>
+              <input [matDatepicker]="recordDateDatePicker" class="form-control" [max]="maxDateDob"
+                (click)="recordDateDatePicker.open()" placeholder="Date of report/prescription" formControlName="record_date"
+              >
+              <mat-datepicker #recordDateDatePicker></mat-datepicker>
+              <div class="invalid-feedback" *ngIf="addHealthRecordForm.controls.record_date.invalid &&
+                (addHealthRecordForm.controls.record_date.dirty || addHealthRecordForm.controls.record_date.touched || ngaddhealthrecordform.submitted)"
+              >
+                <div *ngIf="addHealthRecordForm.controls.record_date.errors.required">{{'this_field_is_required' | translate}}</div>
+              </div>
+            </div>
+            <div class="form-group col-md-6">
+              <label>{{'doctor' | translate}}</label>
+              <input type="text" class="form-control" placeholder="Doctor" formControlName="doctor">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="mb-0">{{'record' | translate}} <span class="symbol required"></span></label>
+            <div class="mb-2">
+              <small class="text-danger">{{'only_jpg_png_and_pdf_files_allowed' | translate}}</small><br>
+              <small class="text-danger">{{'file_size_should_not_be_greater_than_5_mb' | translate}}</small><br>
+            </div>
+            <div class="custom-file">
+              <input #ngaddhealthrecordfileinput type="file" (change)="onChangeHealthRecordFile($event)" class="custom-file-input">
+              <label class="custom-file-label">{{'choose_file' | translate}}</label>
+            </div>
+            <div class="invalid-feedback" *ngIf="addHealthRecordForm.controls.file.invalid &&
+              (addHealthRecordForm.controls.file.dirty || addHealthRecordForm.controls.file.touched ||
+              ngaddhealthrecordform.submitted)"
+            >
+              <div *ngIf="addHealthRecordForm.controls.file.errors.required">{{'this_field_is_required' | translate}}</div>
+            </div>
+          </div>
+          <div class="form-group" *ngIf="addHealthRecordFileInput">
+            {{addHealthRecordFileInput.name}} <i class="mdi mdi-close mx-auto my-auto cp text-danger" (click)="removeHealthRecordFile()"></i>
+          </div>
+          <div class="form-group">
+            <label>{{'type' | translate}} <span class="symbol required"></span></label>
+            <div class="form-row">
+              <div class="col-md-4 text-center cp" (click)="onChangeHealthRecordType('Report')">
+                <i class="mdi mdi-playlist-plus mdi-36px" [ngClass]="{'activeReport' : record_type=='Report'}"></i>
+                <p>{{'report' | translate}}</p>
+              </div>
+              <div class="col-md-4 text-center cp" (click)="onChangeHealthRecordType('Prescription')">
+                <i class="mdi mdi-library-plus mdi-36px" [ngClass]="{'activeReport' : record_type=='Prescription'}"></i>
+                <p>{{'prescription' | translate}}</p>
+              </div>
+              <div class="col-md-4 text-center cp" (click)="onChangeHealthRecordType('Other')">
+                <i class="mdi mdi-file-document mdi-36px" [ngClass]="{'activeReport' : record_type=='Other'}"></i>
+                <p>{{'other' | translate}}</p>
+              </div>
+            </div>
+            <div class="invalid-feedback" *ngIf="addHealthRecordForm.controls.record_type.invalid &&
+              (addHealthRecordForm.controls.record_type.dirty || addHealthRecordForm.controls.record_type.touched || ngaddhealthrecordform.submitted)"
+            >
+              <div *ngIf="addHealthRecordForm.controls.record_type.errors.required">{{'this_field_is_required' | translate}}</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>{{'description' | translate}}</label>
+            <textarea class="form-control" formControlName="description"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <div class="container">
+            <div class="form-row">
+              <div class="form-group col-md-6 my-auto text-left">
+                {{'fields_marked_with_star_is_required' | translate}}
+              </div>
+              <div class="form-group col-md-6 my-auto text-right">
+                <button type="submit" [disabled]="addHealthRecordFormLoader" class="btn theme-btn mx-auto">
+                  <span [ngClass]="{'spinner-border spinner-border-sm':addHealthRecordFormLoader}"></span> {{'add' | translate}}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

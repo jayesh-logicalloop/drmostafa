@@ -1,0 +1,208 @@
+<div class="" [ngClass]="{'csspinner load1':loader}">
+  <div class="row" *ngIf="dataReady">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header border-0">
+          <h5 class="card-title mb-0">
+            <i class="mdi mdi-cart"></i> {{'order_detail' | translate}}
+            <button (click)="download_invoice(orderDetail.order_id)" class="btn btn-primary p-1"
+              title="Download Invoice"><i class="mdi mdi-download"></i></button>
+          </h5>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><b>{{'id' | translate}}:</b> {{orderDetail.order_id}}</li>
+          <li class="list-group-item"><b>{{'order_for' | translate}}:</b> {{orderDetail.order_for}}</li>
+          <li class="list-group-item"><b>{{'date' | translate}}:</b> {{orderDetail.order_date_formatted}}</li>
+          <li class="list-group-item"><b>{{'payment_status' | translate}}:</b> {{orderDetail.payment_status}}</li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header border-0">
+          <h5 class="card-title mb-0"><i class="mdi mdi-account"></i>Customer Details</h5>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><b>{{'name' | translate}}:</b> {{orderDetail.user_name}}</li>
+          <li class="list-group-item"><b>{{'email' | translate}}:</b> {{orderDetail.user_email}}</li>
+          <li class="list-group-item"><b>{{'mobile' | translate}}:</b> {{orderDetail.user_mobile_number}}</li>
+          <li class="list-group-item"><b>{{'address' | translate}}:</b> </li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-md-4"></div>
+    <div class="col-md-12 mt-3">
+      <div class="card">
+        <div class="card-body p-2 table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th class="text-left"><b>{{'item' | translate}}</b></th>
+                <th class="text-right"><b>{{'quantity' | translate}}</b></th>
+                <th class="text-right"><b>{{'price' | translate}}</b></th>
+                <th class="text-right"><b>{{'total' | translate}}</b></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of orderDetail.items">
+                <td class="text-left text-pre-wrap">{{item.item_name}}</td>
+                <td class="text-right">{{item.item_qty}}</td>
+                <td class="text-right">{{item.item_amount_formatted}}</td>
+                <td class="text-right">{{item.item_subtotal_formatted}}</td>
+              </tr>
+              <tr *ngFor="let total of orderDetail.total">
+                <td colspan="3" class="text-right">{{total.title}}</td>
+                <td class="text-right">{{total.value_formatted}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-3" *ngIf="dataReady">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header border-0">
+          <h5 class="card-title"><i class="mdi mdi-comment-outline"></i> {{'order_history' | translate}}</h5>
+        </div>
+        <div class="card-body p-2 table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <td class="text-left">{{'date' | translate}}</td>
+                <td class="text-left">{{'comment' | translate}}</td>
+                <td class="text-left">{{'status' | translate}}</td>
+                <td class="text-left">{{'customer_notified' | translate}}</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let orderHistory of orderDetail.status_history">
+                <td class="text-left">{{orderHistory.created_date | date:'LL MMM yyyy hh:mm aa'}}</td>
+                <td class="text-left">{{orderHistory.message}}</td>
+                <td class="text-left">{{orderHistory.status}}</td>
+                <td class="text-left">{{orderHistory.notified}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12" *ngIf="(orderDetail.order_for=='Product' || orderDetail.order_for=='Transfer')"
+      [ngClass]="{'csspinner load1':addFormAction}">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title">{{'add_order_history' | translate}}</h5>
+        </div>
+        <div class="card-body p-2">
+          <form [formGroup]="addForm" (ngSubmit)="onSubmitAddForm()" #myform="ngForm">
+            <div class="form-group">
+              <label for="inputState">{{'update_status' | translate}}</label>
+              <select formControlName="order_status" class="form-control" id="order_status">
+                <option value="">Select Status</option>
+                <option *ngFor="let status of this.statusData" [value]="status.status_code">{{status.status}}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <div class="form-check">
+                <input class="form-check-input ml-0" type="checkbox" id="notify_customer" formControlName="notify_customer">
+                <label class="form-check-label" for="notify_customer">{{'notify_customer' | translate}}</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="input-comment">{{'comment' | translate}}</label>
+              <textarea class="form-control" id="comment" rows="8" formControlName="comment"></textarea>
+              <div class="invalid-feedback"
+                *ngIf="addForm.controls.comment.invalid && (addForm.controls.comment.dirty || addForm.controls.comment.touched || myform.submitted)">
+                <div *ngIf="addForm.controls.comment.errors.required">{{'this_field_is_required' | translate}}</div>
+                <div *ngIf="addForm.controls.comment.errors.maxlength">{{'maximum_1000_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+            <div class="form-group text-center">
+              <button type="submit" [disabled]="addFormAction" class="btn btn-primary"> <span
+                  [ngClass]="{'spinner-border spinner-border-sm':addFormAction}"></span>{{'add_history' | translate}}</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-3" *ngIf="dataReady && orderDetail.order_for=='Chat'">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-header border-0">
+          <h5 class="card-title"><i class="mdi mdi-comment-outline"></i> {{'messages' | translate}}</h5>
+        </div>
+        <div class="card-body p-2 table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th><b>S.No.</b></th>
+                <th><b>Sender</b></th>
+                <th><b>Message</b></th>
+                <th><b>Created At</b></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let message of orderDetail.messages; let i = index;">
+                <td>{{i+1}}</td>
+                <td>{{message.sender_name}}</td>
+                <td class="text-pre-wrap" *ngIf="message.message_type =='Text'">{{message.message}}</td>
+                <td *ngIf="message.message_type =='Voice'">
+                  <audio [src]="message.message" controls ></audio>
+                </td>
+                <td>{{message.created_date}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-3" *ngIf="dataReady && orderDetail.order_for=='Chat'" [ngClass]="{'csspinner load1':addFormAction}">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title">Reply</h5>
+        </div>
+        <div class="card-body p-2" [ngClass]="{'csspinner load1':chatFormLoader}">
+          <form [formGroup]="chatForm" (ngSubmit)="onSendMessage()" #myform="ngForm">
+            <div class="form-row">
+              <div class="form-group col-sm-10">
+                <input type="text" class="form-control" formControlName="message">
+              </div>
+              <div class="form-group col-sm-2">
+                <button type="submit" class="btn btn-primary">{{'reply' | translate}}</button>
+              </div>
+            </div>
+          </form>
+          <div class="form-group row">
+            <div class="form-group col-sm-10 text-right">
+              &nbsp;
+              <audio controls="" *ngIf="url">
+                <source [src]="sanitize(url)" type="audio/wav">
+              </audio>
+            </div>
+            <div class="form-group col-sm-2">
+              <button class="btn btn-light px-2" (click)="initiateRecording()" 
+                *ngIf="!recording" matTooltipClass="primary-tooltip" matTooltip="{{'record_audio_message' | translate}}">
+                  <i class="mdi mdi-microphone mdi-24px cp"></i>
+              </button>
+              <button class="btn btn-light px-2" (click)="sendAudioMessage()" [disabled]="chatFormLoader" 
+                *ngIf="!recording && url" matTooltipClass="primary-tooltip" matTooltip="{{'send_audio_message' | translate}}">
+                  <i class="mdi mdi-send mdi-24px cp"></i>
+              </button>
+              <button class="btn btn-light px-2" (click)="stopRecording()" 
+                *ngIf="recording" matTooltipClass="primary-tooltip" matTooltip="{{'start_recording' | translate}}">
+                  <i class="mdi mdi mdi-microphone-off mdi-24px cp"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,187 @@
+<div class="page-header">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-9">
+        <h2 class="page-title">{{'announcements' | translate}}</h2>
+      </div>
+      <div class="col-sm-3 text-right-1 mt-22">
+        <button type="button" class="btn theme-btn" (click)="openAddForm()">
+          <i class="mdi mdi-plus-circle"></i> {{'add_announcement' | translate}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body p-2 table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>{{'type' | translate}}</th>
+              <th>{{'title' | translate}}</th>
+              <th>{{'description' | translate}}</th>
+              <th>{{'date_created' | translate}}</th>
+              <th>{{'action' | translate}}</th>
+            </tr>
+          </thead>
+          <tbody [ngClass]="{'csspinner load1':dataLoader}"  cdkDropList (cdkDropListDropped)="onDrop($event)">
+            <ng-container *ngIf="announcements.length">
+              <tr cdkDrag cdkDragLockAxis="y" *ngFor="let announcement of announcements | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }; let i = index">
+                <th>
+                  <div class="drag-handle">
+                    <ng-container [ngTemplateOutlet]="dragHandleTmpl">
+                    </ng-container>
+                    {{itemsPerPage *(currentPage-1)+i+1}}
+                  </div>
+                  </th>
+                <td >{{announcement.type}}</td>
+                <td  class="text-pre-wrap text-break-all">
+                  <ng-template [ngIf]="announcement.type=='Text'">{{announcement.title}}</ng-template>
+                  <ng-template [ngIf]="announcement.type=='Image'">
+                    <a data-fancybox [href]="announcement.image_url">
+                      <img [src]="announcement.image_url" style="height: 35px; width:35px;">
+                    </a>
+                  </ng-template>
+                </td>
+                <td  class="text-pre-wrap text-break-all">{{announcement.description}}</td>
+                <td >{{announcement.created_date_formatted}}</td>
+                <td >
+                  <div class="icon-block">
+                    <!-- <a class="cp" (click)="openUpdateForm(announcement.id, i)" matTooltip="Edit" matTooltipClass="primary-tooltip" title="Edit">
+                      <i class="mdi mdi-pencil b-gry" aria-hidden="true"></i>
+                    </a> -->
+
+                    <a class="cp" (click)="onDeleteAnnouncement(announcement.id)" matTooltip="Delete" matTooltipClass="primary-tooltip" title="Delete">
+                      <i class="mdi mdi-delete b-brown" aria-hidden="true"></i>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+            <tr *ngIf="!announcements.length">
+              <td colspan="8">
+                <div class="alert alert-danger text-center">{{'no_data_found' | translate}}</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row" *ngIf="announcements.length">
+  <div class="col-sm-12 mt-3 text-center">
+    <pagination-controls (pageChange)="pageChanged($event)" autoHide="true" responsive="true">></pagination-controls>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="addUpdateFormModal" tabindex="-1" role="dialog" aria-labelledby="addUpdateFormModal" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':addUpdateFormLoader}">
+      <div class="modal-header">
+        <h4 class="modal-title">{{'announcement' | translate}}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="addUpdateForm" (ngSubmit)="onSubmitAddUpdateForm()" #ng_add_update_form="ngForm">
+        <div class="modal-body">
+          <div class="container">
+            <!-- <div class="form-row">
+              <div class="form-group col-md-4">
+                <label>{{'announcement_type' | translate}} <span class="symbol required"></span></label>
+                <select class="form-control" formControlName="type">
+                  <option selected value="Text">Text</option>
+                  <option value="Image">Image</option>
+                </select>
+                <div class="invalid-feedback" *ngIf="addUpdateForm.controls.type.invalid &&
+                  (addUpdateForm.controls.type.dirty || addUpdateForm.controls.type.touched || ng_add_update_form.submitted)"
+                >
+                  <div *ngIf="addUpdateForm.controls.type.errors.required">{{'this_field_is_required' | translate}}</div>
+                </div>
+              </div>
+            </div> -->
+            <!-- <div class="form-row" [ngStyle]="{'display':this.addUpdateForm.value.type == 'Text' ? 'block' : 'none'}"> -->
+              <!-- <div class="form-group col-md-12">
+                <label>{{'title' | translate}} <span class="symbol required"></span></label>
+                <input type="text" class="form-control" placeholder="Enter Title" formControlName="title">
+                <div class="invalid-feedback" *ngIf="addUpdateForm.controls.title.invalid &&
+                  (addUpdateForm.controls.title.dirty || addUpdateForm.controls.title.touched || ng_add_update_form.submitted)"
+                >
+                  <div *ngIf="addUpdateForm.controls.title.errors.required">{{'this_field_is_required' | translate}}</div>
+                  <div *ngIf="addUpdateForm.controls.title.errors.maxlength">{{'maximum_100_characters_allowed' | translate}}</div>
+                </div>
+              </div> -->
+            <!-- </div> -->
+            <!-- <div class="form-row" [ngStyle]="{'display':this.addUpdateForm.value.type == 'Image' ? 'block' : 'none'}"> -->
+              <div class="form-group col-md-6">
+                <label>{{'image' | translate}} <span class="symbol required"></span>
+                  <div class="text-danger">
+                    <div><small>{{'only_jpg_png_files_allowed' | translate}}</small></div>
+                    <div><small>{{'file_size_should_not_be_greater_than_2_mb' | translate}}</small></div>
+                  </div>
+                </label>
+                <div class="custom-file">
+                  <input #ng_image_input type="file" (change)="onChangeImage($event)" accept="image/*" class="custom-file-input">
+                  <label class="custom-file-label" for="customFile">{{'choose_image' | translate}}</label>
+                </div>
+              </div>
+              <div class="form-group col-sm-6 text-center" *ngIf="imageSrc">
+                <div class="img-item">
+                  <button type="button" class="btn btn-outline-secondary btn-rounded btn-icon img-delete">
+                    <i class="mdi mdi-delete mdi-18px" (click)="clearImage()"></i>
+                  </button>
+                  <img [src]="imageSrc" alt="image" class="img-ele img-fluid">
+                </div>
+              </div>
+              <div class="form-group col-md-12">
+                <label>{{'announcement_url' | translate}}</label>
+                <input type="text" class="form-control" placeholder="Enter URL" formControlName="url">
+              </div>
+              <div class="form-group col-md-12">
+                <label>{{'description' | translate}}</label>
+                <textarea class="form-control" formControlName="description"></textarea>
+              </div>
+              <div class="form-group col-md-12">
+                <label>{{'announcement_status' | translate}}</label>
+                <div class="">
+                    <input type="radio" formControlName="status" value="active"> Active
+                    <input type="radio" formControlName="status" value="inactive"> InActive
+                </div>
+              </div>
+            <!-- </div> -->
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <div class="container">
+            <div class="form-row">
+              <div class="form-group col-md-6 my-auto text-left">
+                {{'fields_marked_with_star_is_required' | translate}}
+              </div>
+              <div class="form-group col-md-6 my-auto text-right">
+                <button type="submit" [disabled]="addUpdateFormLoader" class="btn theme-btn mx-auto">
+                  <span [ngClass]="{'spinner-border spinner-border-sm':addUpdateFormLoader}"></span> {{'save' | translate}}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #dragHandleTmpl>
+	<svg class="bi bi-list handle" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+		xmlns="http://www.w3.org/2000/svg">
+		<path fill-rule="evenodd"
+			d="M2.5 11.5A.5.5 0 013 11h10a.5.5 0 010 1H3a.5.5 0 01-.5-.5zm0-4A.5.5 0 013 7h10a.5.5 0 010 1H3a.5.5 0 01-.5-.5zm0-4A.5.5 0 013 3h10a.5.5 0 010 1H3a.5.5 0 01-.5-.5z"
+			clip-rule="evenodd" />
+	</svg>
+</ng-template>

@@ -1,0 +1,912 @@
+{
+	"welcome" : "مرحبا!",
+
+	"please_login_to_web_interface": "يرجى تسجيل الدخول إلى واجهة الويب,",
+
+	"remember_me": " تذكرنى  ",
+
+	"forget_password": "نسيت كلمة المرور ",
+
+	"login": " تسجيل الدخول  ",
+
+	"submit": " إرسال  ",
+
+	"reset_your_password": "اعد ضبط كلمه السر  ",
+
+	"upcoming_appointment": "الموعد القادم ",
+
+	"completed_appointment": " الموعد المكتمل  ",
+
+	"canceled_appointment": "موعد ملغى  ",
+
+	"total_appointment": "إجمالي التعيين  ",
+
+	"calendar": "تقويم  ",
+
+  "dashboard": "لوحة القيادة",
+
+  "patients": "مرضى",
+  
+  "clinics_hospitals": "عيادات / مستشفيات",
+
+  "appointments": "تعيينات",
+
+  "feedback": "تعليق",
+
+  "notification": "تنبيه",
+
+  "orders": "ترتيب",
+
+  "books": "كتب",
+
+  "courses": "الدورات",
+
+  "live_courses": "دورات مباشرة",
+
+  "coupons": "كوبونات",
+
+  "articles": "مقالات",
+
+  "categories": "فئات",
+
+  "healthfeeds": "هيلثفيدز",
+
+  "settings": "إعدادات",
+
+  "web_settings": "إعدادات الويب",
+
+  "email_templates": "قوالب البريد الإلكتروني",
+
+  "contact_us": "اتصل بنا",
+
+  "administration": "الادارة",
+
+  "administrators": "المسؤولين",
+
+  "menu_pages": "صفحات القائمة",
+
+  "permissions": "أذونات",
+
+  "walkthrough": "تجول",
+
+  "feeds": "يغذي",
+
+  "logout": "تسجيل خروج",
+
+  "announcements": "الإعلانات",
+
+  "add_announcement": "اضافة اعلان",
+
+  "type": "يكتب",
+
+  "title": "لقب",
+
+  "description": "وصف",
+
+  "date_created": "تاريخ الإنشاء",
+
+  "action": "عمل",
+
+  "no_data_found": "لاتوجد بيانات",
+
+  "announcement": "إعلان",
+
+  "announcement_type": "نوع الإعلان",
+
+  "this_field_is_required": "هذه الخانة مطلوبه",
+
+  "minimum_2_characters_required": "الحد الأدنى المطلوب 2 حرفًا",
+
+  "minimum_4_characters_required": "الحد الأدنى المطلوب 4 حرفًا",
+
+  "minimum_6_characters_required": "الحد الأدنى المطلوب 6 حرفًا",
+
+  "minimum_8_characters_required": "الحد الأدنى المطلوب 8 حرفًا",
+
+  "minimum_10_characters_required": "الحد الأدنى المطلوب 10 حرفًا",
+
+  "minimum_15_characters_required": "الحد الأدنى المطلوب 15 حرفًا",
+
+  "minimum_20_characters_required": "الحد الأدنى المطلوب 20 حرفًا",
+
+  "maximum_2_characters_allowed": "الحد الأقصى المسموح به هو 2 حرف",
+
+  "maximum_3_characters_allowed": "الحد الأقصى المسموح به هو 3 حرف",
+
+  "maximum_4_characters_allowed": "الحد الأقصى المسموح به هو 4 حرف",
+
+  "maximum_6_characters_allowed": "الحد الأقصى المسموح به هو 6 حرف",
+
+  "maximum_8_characters_allowed": "الحد الأقصى المسموح به هو 8 حرف",
+
+  "maximum_15_characters_allowed": "الحد الأقصى المسموح به هو 15 حرف",
+
+  "maximum_20_characters_allowed": "الحد الأقصى المسموح به هو 20 حرف",
+
+  "maximum_50_characters_allowed": "الحد الأقصى المسموح به هو 50 حرف",
+
+  "maximum_100_characters_allowed": "الحد الأقصى المسموح به هو 100 حرف",
+
+  "maximum_150_characters_allowed": "الحد الأقصى المسموح به هو 150 حرف",
+
+  "maximum_200_characters_allowed": "يسمح بحد أقصى 200 حرف",
+
+  "maximum_250_characters_allowed": "الحد الأقصى المسموح به 250 حرفًا",
+
+  "maximum_500_characters_allowed": "الحد الأقصى المسموح به 500 حرفًا",
+
+  "maximum_1000_characters_allowed": "الحد الأقصى المسموح به هو 1000 حرف",
+
+  "only_jpg_png_files_allowed": "يُسمح فقط بملفات JPG أو PNG",
+
+  "file_size_should_not_be_greater_than_2_mb": "يجب ألا يزيد حجم الملف عن 2 ميغا بايت",
+
+  "choose_image": "اختر صورة",
+
+  "save": "يحفظ",
+
+  "fields_marked_with_star_is_required": "الحقول المشار إليها بعلامة * إجبارية",
+
+  "upcoming": "القادمة",
+
+  "completed": "مكتمل",
+
+  "canceled": "ألغيت",
+
+  "consultation": "التشاور",
+
+  "start_video_call": "ابدأ مكالمة فيديو",
+
+  "stop_call": "وقف الاتصال",
+
+  "exit_fullscreen": "الخروج من وضع ملئ للشاشة",
+
+  "fullscreen": "تكبير الشاشة",
+
+  "chat": "محادثة",
+
+  "send": "إرسال",
+
+  "type_your_message": "اكتب رسالتك",
+
+  "record_audio_message": "سجل رسالة صوتية",
+
+  "send_audio_message": "إرسال رسالة صوتية",
+
+  "start_recording": "ابدأ التسجيل",
+
+  "report": "تقرير",
+
+  "reports": "التقارير",
+
+  "write_prescription": "اكتب وصفة طبية",
+
+  "update": "تحديث",
+
+  "add": "يضيف",
+
+  "add_prescription": "إضافة وصفة طبية",
+
+  "select_drug": "حدد المخدرات",
+  
+  "dose": "جرعة",
+
+  "frequency_eg_twice_in_a_day": "التردد على سبيل المثال. مرتين في اليوم",
+
+  "duration": "مدة",
+
+  "prescription": "روشتة",
+  
+  "prescriptions": "الوصفات الطبية",
+
+  "medicines": "الأدوية",
+
+  "item": "العنصر",
+  
+  "dosage": "الجرعة",
+
+  "frequency": "تكرر",
+
+  "intake": "المدخول",
+  
+  "instruction": "تعليمات",
+
+  "lab_test": "اختبار معمل",
+
+  "imaging_test": "اختبار التصوير",
+  
+  "test": "اختبار",
+
+  "recommendation": "توصية",
+
+  "share_health_record": "مشاركة السجل الصحي",
+  
+  "add_new": "اضف جديد",
+
+  "name": "اسم",
+
+  "record": "سجل",
+  
+  "share": "يشارك",
+
+  "back": "عودة",
+
+  "report_name": "تقرير اسم",
+  
+  "date": "تاريخ",
+
+  "doctor": "طبيب",
+
+  "only_jpg_png_and_pdf_files_allowed": "يُسمح فقط بملفات JPG و PNG و PDF",
+
+  "file_size_should_not_be_greater_than_5_mb": "يجب ألا يزيد حجم الملف عن 5 ميغا بايت",
+  
+  "choose_file": "اختر ملف",
+
+  "other": "آخر",
+
+  "appointment_id": "معرف الموعد",
+
+  "consult": "شاور",
+
+  "download_prescription": "تحميل الوصفة الطبية",
+
+  "notes": "ملاحظات",
+
+  "service": "خدمة",
+
+  "fee": "مصاريف",
+
+  "health_records": "السجلات الصحية",
+
+  "filter": "منقي",
+
+  "clear_filter": "مرشح واضح",
+
+  "filter_by": "مصنف بواسطة",
+
+  "from_date": "من التاريخ",
+	
+  "to_date": "حتى تاريخه",
+
+  "apply": "تطبيق",
+
+  "cancel": "يلغي",
+
+  "pending": "قيد الانتظار",
+
+  "instant": "فوري",
+
+  "past": "ماضي",
+
+  "booked_for": "محجوزة ل",
+
+  "confirm_appointment": "تأكيد الموعد",
+
+  "cancel_appointment": "إلغاء التعيين",
+
+  "reschedule_appointment": "اعادة جدولة الموعد",
+
+  "view_detail": "عرض التفاصيل",
+
+  "no_pending_appointments_found": "لم يتم العثور على مواعيد معلقة",
+
+  "add_report": "إضافة تقرير",
+
+  "no_upcoming_appointments_found": "لم يتم العثور على مواعيد قادمة",
+
+  "consult_now": "استشر الآن",
+
+  "no_instant_appointments_found": "لم يتم العثور على مواعيد فورية",
+
+  "appointment_date": "تاريخ الموعد",
+
+  "time_slot": "فسحة زمنية",
+
+  "select_timeslot": "حدد الفترة الزمنية",
+
+  "reason": "سبب",
+
+  "enter_reason": "أدخل السبب",
+
+  "happy_with": "سعيد مع - مبسوط من",
+
+  "reschedule": "إعادة الجدولة",
+
+  "feedback_provided": "تهانينا ، لقد نجحت في تقديم ملاحظات حول هذا الموعد",
+
+  "rating": "تقييم",
+
+  "please_provide_star_rating": "يرجى تقديم تصنيف النجوم",
+
+  "do_you_want_to_recommend_this_doctor": "هل تريد أن تنصح هذا الطبيب؟",
+
+  "report_provided": "لقد قدمت بالفعل تقريرًا عن هذا الموعد",
+
+	"image": "صورة",
+
+  "add_feed": "إضافة تغذية",
+
+  "feed": "تغذية",
+
+  "update_profile": "تحديث الملف",
+
+  "first_name": "الاسم الأول",
+
+  "enter_first_name": "أدخل الاسم الأول",
+
+  "last_name": "الكنية",
+
+  "enter_last_name": "إدخال اسم آخر",
+
+  "email": "بريد إلكتروني",
+
+  "enter_email": "أدخل البريد الإلكتروني",
+
+  "valid_email_is_required": "مطلوب بريد إلكتروني صالح",
+
+  "mobile_number": "رقم الهاتف المحمول",
+
+  "enter_mobile_number": "أدخل رقم الهاتف المتحرك",
+
+  "gender": "جنس",
+
+  "dob": "تاريخ الولادة",
+
+  "introduction": "مقدمة",
+
+  "back_to_patients": "العودة إلى المرضى",
+
+  "search_by_name_email_or_mobile_number": "البحث بالاسم أو البريد الإلكتروني أو رقم الهاتف المحمول",
+
+  "id": "ID",
+
+  "mobile": "التليفون المحمول",
+
+  "status": "حالة",
+
+  "email_is_verified": "تم التحقق من البريد الإلكتروني",
+
+  "email_is_not_verified": "لم يتم التحقق من البريد الإلكتروني",
+
+  "info": "معلومات",
+
+  "family_members": "أفراد الأسرة",
+
+  "blood_group": "فصيلة الدم",
+
+  "height": "ارتفاع",
+
+  "enter_height_in_cm": "أدخل الارتفاع بالسنتيمتر",
+
+  "weight": "وزن",
+
+  "enter_weight_in_kg": "أدخل الوزن بالكيلو جرام",
+
+  "allergy": "حساسية",
+
+  "medical_history": "تاريخ طبى",
+
+  "email_verification": "تأكيد بواسطة البريد الالكتروني",
+
+  "mobile_verification": "التحقق من الهاتف المحمول",
+
+  "add_members": "إضافة أعضاء",
+
+  "add_health_record": "إضافة سجل صحي",
+
+  "for": "ل",
+
+  "download": "تحميل",
+
+  "delete": "حذف",
+
+  "time": "زمن",
+
+  "enter_report_name": "أدخل اسم التقرير",
+
+  "select_family_member": "حدد عضو العائلة",
+
+  "enter_name": "أدخل الاسم",
+
+  "update_member": "تحديث العضو",
+
+  "are_you_sure": "هل أنت واثق؟",
+
+  "ok": "نعم",
+
+  "add_clinic_hospital": "اضافة عيادة / مستشفى",
+
+  "search_by_name_address_or_postal_code": "البحث بالاسم أو العنوان أو الرمز البريدي",
+
+  "default": "تقصير",
+
+  "self": "الذات",
+
+  "verified": "تم التحقق",
+
+  "address": "عنوان",
+
+  "set_as_default": "تعيين كافتراضي",
+
+  "left": "غادر",
+
+  "back_to_clinics_hospitals": "العودة إلى العيادات / المستشفيات",
+
+  "basic_info": "معلومات أساسية",
+
+  "location": "موقع",
+
+  "documents": "وثائق",
+
+  "gallery": "صالة عرض",
+
+  "services": "خدمات",
+
+  "bank": "بنك",
+
+  "doctors": "الأطباء",
+
+  "phone_number": "رقم الهاتف",
+
+  "work_schedule": "جدول العمل",
+
+  "enter_work_schedule": "جدول العمل",
+
+  "amenities": "وسائل الراحة",
+
+  "press_enter_after_each_amenity": "اضغط على Enter بعد كل وسيلة راحة",
+
+  "country": "دولة",
+
+  "enter_country": "أدخل الدولة",
+
+  "state": "حالة",
+
+  "enter_state": "إدخال الدولة",
+
+  "city": "مدينة",
+
+  "enter_city": "أدخل المدينة",
+
+  "postal_code": "رمز بريدي",
+
+  "enter_postal_code": "أدخل الرمز البريدي",
+
+  "enter_address": "أدخل العنوان",
+
+  "document_is_verified": "تم التحقق من المستند",
+  
+  "choose": "إختر",
+
+  "verification_status": "حالة التحقق",
+
+  "verify": "تحقق",
+
+  "verify_this_doc": "تحقق من هذا المستند",
+
+  "reject": "رفض",
+
+  "reject_this_doc": "ارفض هذا المستند",
+
+  "banks": "البنوك",
+
+  "add_bank": "إضافة بنك",
+
+  "bank_name": "اسم البنك",
+
+  "account_holder_name": "اسم صاحب الحساب",
+
+  "account_number": "رقم حساب",
+
+  "set_default": "الوضع الإفتراضي",
+
+  "choose_service_type": "اختر نوع الخدمة",
+
+  "yes": "نعم",
+
+  "no": "لا",
+
+  "reject_document": "رفض المستند",
+
+  "reason_for_reject": "يرجى تقديم سبب الرفض ، سيتم إرسال هذا بالبريد الإلكتروني إلى المستخدم",
+
+  "request_patient_to_reschedule_appointment": "اطلب من المريض إعادة جدولة الموعد",
+
+  "decline_appointment": "رفض التعيين",
+
+  "no_past_appointments_found": "لم يتم العثور على المواعيد السابقة",
+
+  "search_by_name": "البحث عن طريق الإسم",
+
+  "interested_in": "مهتم ب",
+
+  "message": "رسالة",
+
+  "user_type": "نوع المستخدم",
+
+  "purpose": "غرض",
+
+  "manage_books": "إدارة الكتب",
+
+  "add_book": "أضف كتاب",
+
+  "price": "سعر",
+
+  "offer_price": "سعر العرض",
+
+  "update_book": "تحديث الكتاب",
+
+  "enter_book_name": "أدخل اسم الكتاب",
+
+  "enter_price": "أدخل السعر",
+
+  "enter_offer_price": "أدخل سعر العرض",
+
+  "file_size_should_not_be_greater_than_500_kb": "يجب ألا يزيد حجم الملف عن 500 كيلوبايت",
+
+  "image_is_required": "الصورة مطلوبة",
+
+  "total_pages": "إجمالي الصفحات",
+
+  "enter_total_pages": "أدخل إجمالي الصفحات",
+
+  "author": "مؤلف",
+	
+  "enter_author": "أدخل المؤلف",
+
+  "file": "ملف",
+
+  "only_pdf_files_are_allowed": "يسمح فقط بملفات PDF",
+
+  "ebook_is_required": "الكتاب الإلكتروني مطلوب",
+
+  "enter_description": "أدخل الوصف",
+
+  "manage_courses": "إدارة الدورات",
+
+  "add_course": "أضف دورة",
+
+  "enter_course_name": "أدخل اسم الدورة",
+
+  "update_course": "تحديث الدورة",
+
+  "add_new_video": "أضف فيديو جديد",
+
+  "video": "فيديو",
+
+  "update_video": "تحديث الفيديو",
+
+  "enter_video_title": "أدخل عنوان الفيديو",
+
+  "manage_sessions": "إدارة الجلسات",
+
+  "add_session": "أضف الجلسة",
+
+  "enter_session_name": "أدخل اسم الجلسة",
+
+  "update_session": "جلسة التحديث",
+
+  "session_time": "وقت الجلسة",
+
+  "enter_session_time": "أدخل وقت الجلسة",
+
+  "url": "URL",
+
+  "enter_url": "أدخل عنوان URL للجلسة",
+
+  "manage_coupons": "إدارة القسائم",
+
+  "add_coupon": "أضف عرض",
+
+  "clear_search": "مسح البحث",
+
+  "coupon": "قسيمة",
+
+  "amount": "كمية",
+
+  "start": "بداية",
+
+  "end": "نهاية",
+
+  "coupon_code": "رمز الكوبون",
+
+  "enter_coupon_code": "أدخل رمز القسيمة",
+
+  "update_coupon": "تحديث القسيمة",
+
+  "back_to_coupons": "رجوع إلى القسائم",
+
+  "coupon_for": "قسيمة ل",
+
+  "start_date": "تاريخ البدء",
+
+  "choose_start_date": "اختر تاريخ البدء",
+
+  "end_date": "تاريخ الانتهاء",
+
+  "choose_end_date": "اختر تاريخ الانتهاء",
+
+  "discount_type": "نوع الخصم",
+
+  "discount_amount": "مقدار الخصم",
+
+  "enter_discount_amount": "أدخل مبلغ الخصم",
+
+  "change_password": "تغيير كلمة المرور",
+
+  "update_clinic": "عيادة التحديث",
+
+  "notifications": "إشعارات",
+
+  "see_all_notifications": "اطلع على جميع الإشعارات",
+
+  "no_new_notification": "لا يوجد إشعار جديد",
+
+  "add_settings": "أضف الإعدادات",
+
+  "update_setting": "إعداد التحديث",
+
+  "value": "قيمة",
+
+  "enter_value": "أدخل القيمة",
+
+  "add_email_template": "أضف قالب بريد إلكتروني",
+
+  "subject": "موضوع",
+
+  "enter_subject": "أدخل الموضوع",
+
+  "body": "الجسم",
+
+  "enter_instruction": "أدخل التعليمات",
+
+  "walkthrough_screens": "شاشات تجول",
+  
+  "add_walkthrough": "إضافة تجول",
+
+  "order": "طلب",
+
+  "enter_title": "أدخل العنوان",
+
+  "enter_order": "أدخل الطلب",
+
+  "create_article": "إنشاء مقال",
+
+  "update_article": "تحديث المادة",
+
+  "category": "فئة",
+
+  "sub_category": "تصنيف فرعي",
+
+  "content": "المحتوى",
+
+  "enter_content": "أدخل المحتوى",
+
+  "tags": "العلامات",
+
+  "press_enter_to_add_new_tag": "اضغط على Enter لإضافة علامة جديدة",
+
+  "is_approved": "تمت الموافقة",
+
+  "meta_tag": "علامة متغيرة",
+
+  "enter_meta_tag": "أدخل علامة التعريف",
+
+  "meta_description": "ميتا الوصف",
+
+  "enter_meta_description": "أدخل وصف التعريف",
+
+  "create": "يخلق",
+
+  "approval": "موافقة",
+
+  "manage_menus": "إدارة القائمة",
+
+  "create_menu": "إنشاء قائمة",
+
+  "select_parent": "حدد الأصل",
+
+  "alias": "الاسم المستعار",
+
+  "enter_alias": "أدخل الاسم المستعار",
+
+  "icon_class": "فئة الأيقونة",
+
+  "enter_icon_class": "أدخل فئة الأيقونة",
+
+  "enter_menu_url": "أدخل URL القائمة",
+
+  "menu_api": "قائمة API",
+
+  "enter_menu_api": "أدخل قائمة API",
+
+  "add_category": "إضافة فئة",
+
+  "parent_category": "القسم الرئيسي",
+
+  "update_category": "تحديث الفئة",
+
+  "manage_administrators": "إدارة المسؤولين",
+
+  "add_admin": "إضافة المسؤول",
+
+  "password": "كلمة المرور",
+
+  "enter_password": "أدخل كلمة المرور",
+
+  "manage_permissions": "إدارة الأذونات",
+
+  "autosave_the_choosen_permission": "مربعات اختيار الحفظ التلقائي ، حدد / إلغاء تحديد أي مربع اختيار سيؤدي إلى الحفظ التلقائي للإذن المختار",
+
+  "search_by_order_id_status_name_or_order_for": "ابحث عن طريق معرف الطلب أو الحالة أو الاسم أو الطلب لـ",
+
+  "payment_status": "حالة السداد",
+
+  "order_for": "طلب من أجل",
+
+  "order_id": "رقم التعريف الخاص بالطلب",
+
+  "order_detail": "تفاصيل الطلب",
+
+  "quantity": "كمية",
+
+  "total": "مجموع",
+
+  "order_history": "تاريخ الطلب",
+
+  "comment": "تعليق",
+
+  "customer_notified": "إخطار العميل",
+
+  "add_order_history": "أضف محفوظات الطلب",
+
+  "update_status": "تحديث الحالة",
+
+  "notify_customer": "بإخطار العملاء",
+
+  "add_history": "أضف التاريخ",
+
+  "payouts": "المدفوعات",
+
+  "add_award": "أضف جائزة",
+
+  "awards": "الجوائز",
+
+  "update_award": "جائزة التحديث",
+
+  "back_to_doctors": "العودة إلى الأطباء",
+
+  "account_info": "معلومات الحساب",
+
+  "specialization": "تخصص",
+
+  "experience": "خبرة",
+
+  "qualification": "مؤهل",
+
+  "email_verified": "تم التحقق من البريد الإلكتروني",
+
+  "email_not_verified": "لم يتم التحقق من البريد الإلكتروني",
+
+  "add_qualification": "أضف مؤهل",
+
+  "update_qualification": "تأهيل التحديث",
+
+  "completed_in": "اكتمل في",
+
+  "university": "جامعة",
+
+  "degree": "الدرجة العلمية",
+
+  "drug_catalog": "كتالوج الأدوية",
+
+  "add_drug": "أضف المخدرات",
+
+  "update_drug": "تحديث المخدرات",
+
+  "strength": "الخضوع ل",
+
+  "enter_strength": "أدخل القوة",
+
+  "unit": "وحدة",
+
+  "drug_name": "اسم الدواء",
+
+  "enter_drug_name": "أدخل اسم الدواء",
+
+  "add_experience": "أضف الخبرة",
+
+  "update_experience": "تجربة التحديث",
+
+  "experiences": "خبرة",
+
+  "organization": "منظمة",
+
+  "currently_working": "تعمل حاليا",
+
+  "enter_organization_name": "أدخل اسم المنظمة",
+
+  "designation": "تعيين",
+
+  "enter_designation_name": "أدخل اسم التعيين",
+
+  "start_year": "سنة البدء",
+
+  "start_month": "شهر البدء",
+
+  "end_year": "نهاية عام",
+
+  "end_month": "نهاية الشهر",
+
+  "online_consultation": "الاستشارة عبر الإنترنت",
+
+  "education": "تعليم",
+
+  "this_will_display_below_your_name": "سيعرض هذا أسفل اسمك",
+
+  "choose_specialization_you_have": "اختر التخصص الذي لديك",
+
+  "practice_since": "الممارسة منذ",
+
+  "total_experience_you_have": "سيعرض هذا أسفل اسمك كعدد إجمالي للخبرة التي لديك",
+
+  "consultation_fee": "رسوم الاستشارة",
+
+  "enter_consultation_fee": "أدخل رسوم الاستشارة",
+
+  "paid_by_user_when_appointmentu": "سيتم دفع هذه الرسوم من قبل المستخدم عند حجز موعد معك",
+
+  "session_duration": "مدة الجلسة",
+
+  "enter_session_duration": "أدخل مدة الجلسة",
+
+  "duration_of_each_session": "مدة كل جلسة ، يتم استخدام قيمتها في وقت إنشاء جدول العمل",
+
+  "session_gap": "فجوة الجلسة",
+
+  "enter_session_gap": "أدخل فجوة الجلسة",
+
+  "gap_between_each_session": "فجوة بين كل جلسة ، يتم استخدام قيمتها في وقت إنشاء جدول العمل",
+
+  "account": "الحساب",
+
+  "inactivate_your_account": "قم بإلغاء تنشيط حسابك لعدم قبول حجز الموعد ، سيؤدي هذا أيضًا إلى إيقاف إدراج ملف التعريف الخاص بك للمستخدمين ، قم بتنشيطه إذا كنت تريد قبول الحجز مرة أخرى",
+
+  "sub_specialization": "التخصص الفرعي",
+
+  "add_work_schedule": "أضف جدول العمل",
+
+  "daily_work_schedule": "جدول العمل اليومي",
+
+  "clinic_name": "اسم العيادة",
+
+  "delete_all_schedule_for": "حذف كل جدول",
+
+  "delete_this_slot": "احذف هذه الفتحة",
+
+  "ocassional_schedule": "الجدول الزمني من حين لآخر",
+
+  "partial_available": "متوفر جزئيًا",
+
+  "select_clinic_hospital": "حدد عيادة / مستشفى",
+
+  "daily_schedule": "الجدول اليومي",
+
+  "days": "أيام",
+
+  "morning": "صباح",
+
+  "afternoon": "بعد الظهر",
+
+  "evening": "اخر النهار",
+
+  "night": "ليل",
+
+  "usage_limit": "حد الاستخدام",
+
+  "country_code": "الرقم الدولي",
+
+  "language": "لغة"
+	
+}

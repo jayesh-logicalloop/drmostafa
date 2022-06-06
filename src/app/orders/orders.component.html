@@ -1,0 +1,139 @@
+
+<div class="page-header" [ngClass]="{'csspinner load1':orderListingLoader}">
+  <div class="col-sm-12">
+    <div class="d-flex">
+      <div class="mr-auto p-2">
+        <h2 class="page-title mt-22">{{'orders' | translate}}</h2>
+      </div>
+      <div class="p-2 d-flex">
+        <input type="text" matInput class="form-control mr-2" ngxDaterangepickerMd [locale]="{applyLabel: 'ok', format: 'DD-MM-YYYY'}"
+          [(ngModel)]="selected" [placeholder]="'dd/mm/yyyy - dd/mm/yyyy'" name="daterange"/>
+        <button class="btn theme-btn mr-2" title="Export Order Excel File" (click)="exportOrderData()"
+          ><i class="mdi mdi-export"></i> Export</button>
+      </div>
+      <div class="p-2">
+        <div class="row">
+          <div class="col-sm-12 text-right">
+            <div class="popover__wrapper">
+              <button type="button" class="btn theme-btn popover__title" (click)="togglePopover()">
+                <i class="mdi mdi-filter-variant btn-icon-prepend"></i> {{'filter' | translate}}
+              </button>
+              <div class="popover__content" [ngClass]="{'active':popoverToggle}">
+                <div class="cp float-right text-Astral" (click)="clearFilter()">{{'clear_filter' | translate}}</div>
+                <h5 class="text-astral">{{'filter_by' | translate}}</h5>
+                <form [formGroup]="searchForm" (ngSubmit)="onSubmitSearchForm()">
+                  <div class="page-header">
+                    <div class="search-field">
+                      <div class="input-group input-group-sm">
+                        <div class="input-group-prepend bg-transparent">
+                          <i class="input-group-text border-0 mdi mdi-magnify"></i>
+                        </div>
+                        <input type="text" class="form-control bg-transparent border-0" placeholder="{{'search_by_order_id_status_name_or_order_for' | translate}}" formControlName="search">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <select class="form-control" formControlName="order_for">
+                        <option value="">All</option>
+                        <option value="Appointment">Appointment</option>
+                        <option value="Book">Book</option>
+                        <option value="Course">Course</option>
+                        <option value="Session">Session</option>
+                        <option value="Chat">Chat</option>
+                        <option value="Wallet">Wallet</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <label for="from_date">{{'from_date' | translate}}</label>
+                      <input [matDatepicker]="myDatepickerSearchFrom" class="form-control" placeholder="{{'from_date' | translate}}"
+                        formControlName="from_date">
+                      <mat-datepicker-toggle [for]="myDatepickerSearchFrom" class="mat-dt-pic">
+                      </mat-datepicker-toggle>
+                      <mat-datepicker #myDatepickerSearchFrom></mat-datepicker>
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label for="to_date">{{'to_date' | translate}}</label>
+                      <input [matDatepicker]="myDatepickerSearchTo" class="form-control" placeholder="{{'to_date' | translate}}"
+                        formControlName="to_date">
+                      <mat-datepicker-toggle [for]="myDatepickerSearchTo" class="mat-dt-pic"></mat-datepicker-toggle>
+                      <mat-datepicker #myDatepickerSearchTo></mat-datepicker>
+                    </div>
+                  </div>
+                  <div class="apply-cancel">
+                    <button type="submit" class="btn theme-btn">{{'apply' | translate}}</button>&nbsp;&nbsp;
+                    <button type="button" class="btn btn-brown" (click)="togglePopover()">{{'cancel' | translate}}</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body p-2 table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>{{'name' | translate}}</th>
+              <th>{{'order_id' | translate}}</th>
+              <th>{{'order_for' | translate}}</th>
+              <th>{{'date' | translate}}</th>
+              <th>{{'amount' | translate}}</th>
+<!--              <th>{{'payment_status' | translate}}</th>-->
+<!--              <th>{{'status' | translate}}</th>-->
+              <th>{{'action' | translate}}</th>
+            </tr>
+          </thead>
+          <tbody [ngClass]="{'csspinner load1':orderListingLoader}">
+            <ng-template [ngIf]="totalItems > 0">
+              <tr
+                *ngFor="let order of orders | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }; let i = index">
+                <th>{{i+1}}</th>
+                <td>{{order.user_name}}</td>
+                <td>{{order.order_id}}</td>
+                <td>{{order.order_for}}</td>
+                <td>{{order.order_date_formatted}}</td>
+                <td>{{order.order_amount_formatted}}</td>
+<!--                <td>{{order.payment_status}}</td>-->
+<!--                <td>{{order.status}}</td>-->
+                <td>
+                  <div class="icon-block">
+                    <a class="cp" title="Order detail" routerLink="/orders/detail/{{order.order_id}}"><i
+                        class="mdi mdi-eye b-gry" aria-hidden="true"></i></a>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template [ngIf]="totalItems == 0">
+              <tr>
+                <td colspan="9">
+                  <div class="alert alert-danger text-center">{{'no_data_found' | translate}}</div>
+                </td>
+              </tr>
+            </ng-template>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer p-2">
+        <div class="row" *ngIf="orders.length">
+          <div class="col-sm-12 mt-3 text-center">
+            <pagination-controls (pageChange)="pageChanged($event)" autoHide="true" responsive="true">>
+            </pagination-controls>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

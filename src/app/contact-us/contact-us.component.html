@@ -1,0 +1,110 @@
+<div class="page-header">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-6">
+        <h2 class="page-title txt-arabic">{{'contact_us' | translate}}</h2>
+      </div>
+
+      <div class="col-sm-6 py-2 py-sm-0 text-right-1">
+        <div class="search-field">
+          <form class="d-flex align-items-center">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend bg-transparent">
+                <i class="input-group-text border-0 mdi mdi-magnify"></i>
+              </div>
+              <input type="text" #searchTerm class="form-control bg-transparent border-0" placeholder="{{'search_by_name_email_or_mobile_number' | translate}}">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body p-2 table-responsive">
+        <table class="table table-hover" [ngClass]="{'csspinner load1':appLoader}">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>{{'name' | translate}}</th>
+              <th>{{'email' | translate}}</th>
+              <th>{{'mobile_number' | translate}}</th>
+              <th>{{'interested_in' | translate}}</th>
+              <th>{{'date' | translate}}</th>
+              <th>{{'action' | translate}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of careerData | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }; let i = index">
+              <td>{{i+1}}</td>
+              <td>{{item.full_name}}</td>
+              <td>{{item.email}}</td>
+              <td>{{item.mobile_number}}</td>
+              <td>{{item.interested_in}}</td>
+              <td>{{item.created_date|date:'MMM d, y, h:mm a'}}</td>
+              <td>
+                <div class="icon-block">
+                  <a title="Edit" (click)="viewData(item)">
+                    <i class="cp mdi mdi-eye b-gry" aria-hidden="true"></i>
+                  </a>
+                  <a title="Delete" (click)="onDelete(item.id,i)">
+                    <i class="cp mdi mdi-delete b-brown"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer p-2">
+        <div class="row" *ngIf="careerData.length">
+          <div class="col-sm-12 mt-3 text-center">
+            <pagination-controls (pageChange)="pageChanged($event)" autoHide="true" responsive="true">></pagination-controls>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="viewModal" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':addFormAction}">
+      <div class="modal-header">
+        <h4 class="modal-title">{{'message' | translate}}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6">
+              <h4 class="text-pre-wrap">{{contactDetail.full_name}}</h4>
+              <p class="text-pre-wrap">{{contactDetail.email}}</p>
+              <p class="text-pre-wrap">{{contactDetail.mobile_number}}</p>
+              <p><strong>{{'country' | translate}} :</strong> {{contactDetail.country}}</p>
+              <p><strong>{{'city' | translate}} :</strong> {{contactDetail.city}} </p>
+            </div>
+            <div class="col-md-6 my-auto">
+              <p><strong>{{'user_type' | translate}}User Type :</strong> {{contactDetail.user_type}}</p>
+              <p><strong>{{'interested_in' | translate}}:</strong> {{contactDetail.interested_in}}</p>
+              <p><strong>{{'date' | translate}} :</strong> {{contactDetail.created_date|date:'MMM d, y, h:mm a'}}</p>
+              <p class="text-pre-wrap"><strong>{{'purpose' | translate}} : </strong> {{contactDetail.subject}}</p>
+            </div>
+          </div>
+          <br>
+          <div class="row mt-3">
+            <div class="col-md-12" *ngIf="contactDetail.message">
+              <h3>{{'message' | translate}}</h3>
+              <p>{{contactDetail.message}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

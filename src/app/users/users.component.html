@@ -1,0 +1,213 @@
+<div class="page-header">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-3">
+        <h3 class="page-title txt-arabic">{{'patients' | translate}}</h3>
+      </div>
+      <div class="col-sm-5">
+        <div class="row">
+          <div class="col-sm-12 text-right">
+            <div class="search-field">
+              <form class="d-flex align-items-center">
+                <div class="input-group input-group-sm">
+                  <div class="input-group-prepend bg-transparent">
+                    <i class="input-group-text border-0 mdi mdi-magnify"></i>
+                  </div>
+                  <input type="text" #searchTerm class="form-control bg-transparent border-0"
+                    placeholder="{{'search_by_name_email_or_mobile_number' | translate}}">
+                  <div class="input-group-append bg-transparent" *ngIf="search.length > 0">
+                    <i class="cp input-group-text border-0 mr-3" title="{{'clear_search' | translate}}" (click)="clearSearch()">×</i>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4 text-right-1">
+        <button type="button" class="btn theme-btn" (click)="openAddForm()">
+          <i class="mdi mdi-plus-circle mr-1"></i> {{'add' | translate}}
+        </button>
+        <button class="btn theme-btn ml-2" title="Export Notes Excel File" (click)="exportBookData()"
+        ><i class="mdi mdi-export"></i> Export</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body p-2 table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr class="text-center">
+              <th>#</th>
+              <th>{{'name' | translate}}</th>
+              <th>{{'id' | translate}}</th>
+              <th>{{'email' | translate}}</th>
+              <th>{{'country_code' | translate}}</th>
+              <th>{{'mobile' | translate}}</th>
+              <th *ngIf="userType=='Super Admin'">{{'status' | translate}}</th>
+              <th>{{'action' | translate}}</th>
+            </tr>
+          </thead>
+          <tbody [ngClass]="{'csspinner load1':dataLoader}">
+            <ng-container *ngIf="users">
+              <tr class="text-center" *ngFor="let user of users | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }; let i = index;"
+              >
+                <td>{{i+1}}</td>
+                <td>{{user.full_name}}</td>
+                <td>{{user.user_id}}</td>
+                <td>{{user.email}}<br><small *ngIf="userType=='Super Admin'">({{user.email_verification_status}})</small></td>
+                <td>{{user.country_code}}</td>
+                <td>{{user.mobile_number}}</td>
+                <td *ngIf="userType=='Super Admin'">{{user.status}}</td>
+                <td>
+                  <div class="icon-block">
+                    <a class="cp" matTooltip="{{'update' | translate}}" matTooltipClass="primary-tooltip"
+                      routerLink="/patients/detail/{{user.user_alias}}"
+                    >
+                      <i class="mdi mdi-pencil b-gry"></i></a>
+                    <a class="cp" matTooltip="{{'view_detail' | translate}}" matTooltipClass="primary-tooltip"
+                      routerLink="/patients/detail/{{user.user_alias}}"
+                    >
+                      <i class="mdi mdi-eye bg-info"></i></a>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+            <ng-container *ngIf="!users">
+              <tr>
+                <td colspan="7"><div class="alert alert-danger text-center">{{'no_data_found' | translate}}</div></td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer p-2">
+        <div class="row" *ngIf="users">
+          <div class="col-sm-12 mt-3 text-center">
+            <pagination-controls (pageChange)="pageChanged($event)" autoHide="true" responsive="true">></pagination-controls>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade actionModal" id="addDoctorFormModal" tabindex="-1" role="dialog" aria-labelledby="addDoctorFormModal" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':addDoctorFormLoader}">
+      <div class="modal-header">
+        <h4 class="modal-title">Add Patient</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="addDoctorForm" (ngSubmit)="onSubmitAddDoctorForm()" #ngadddoctorform="ngForm" autocomplete="off">
+        <div class="modal-body">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-4">
+                <div class="edit-pfrl-img-sec text-right">
+                  <div class="A-profile">
+                    <img [src]="profile_image_src" alt="profile-image" class="rounded-circle" />
+                    <button type="button" class="btn btn-rounded btn-icon bg-Astral" (click)="ngprofilimagefileinput.click()">
+                      <i class="mdi mdi-camera"></i>
+                      <input #ngprofilimagefileinput type="file" (change)="onChangeProfileImage($event)" style="display:none;" accept="image/*" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-8 intro-secx">
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label>{{'first_name' | translate}} <span class="symbol required"></span></label>
+                    <input type="text" class="form-control" placeholder="{{'enter_first_name' | translate}}" formControlName="first_name">
+                    <div class="invalid-feedback" *ngIf="addDoctorForm.controls.first_name.invalid &&
+                        (addDoctorForm.controls.first_name.dirty || addDoctorForm.controls.first_name.touched || ngadddoctorform.submitted)">
+                      <div *ngIf="addDoctorForm.controls.first_name.errors.required">{{'this_field_is_required' | translate}}</div>
+                      <div *ngIf="addDoctorForm.controls.first_name.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                      <div *ngIf="addDoctorForm.controls.first_name.errors.maxlength">{{'maximum_50_characters_allowed' | translate}}</div>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label>{{'last_name' | translate}} <span class="symbol required"></span></label>
+                    <input type="text" class="form-control" placeholder="{{'enter_last_name' | translate}}" formControlName="last_name">
+                    <div class="invalid-feedback" *ngIf="addDoctorForm.controls.last_name.invalid &&
+                        (addDoctorForm.controls.last_name.dirty || addDoctorForm.controls.last_name.touched || ngadddoctorform.submitted)">
+                      <div *ngIf="addDoctorForm.controls.last_name.errors.required">{{'this_field_is_required' | translate}}</div>
+                      <div *ngIf="addDoctorForm.controls.last_name.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                      <div *ngIf="addDoctorForm.controls.last_name.errors.maxlength">{{'maximum_50_characters_allowed' | translate}}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Email <span class="symbol required"></span></label>
+                  <input type="text" class="form-control" placeholder="Enter Email" formControlName="email" autocomplete="off">
+                  <div class="invalid-feedback" *ngIf="addDoctorForm.controls.email.invalid &&
+                    (addDoctorForm.controls.email.dirty || addDoctorForm.controls.email.touched || ngadddoctorform.submitted)"
+                  >
+                    <div *ngIf="addDoctorForm.controls.email.errors.required">{{'this_field_is_required' | translate}}</div>
+                    <div *ngIf="addDoctorForm.controls.email.errors.email || addDoctorForm.controls.email.errors.pattern">{{'valid_email_is_required' | translate}}</div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label>Gender</label>
+                    <select class="form-control" formControlName="gender">
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                    </select>
+                    <div class="invalid-feedback" *ngIf="addDoctorForm.controls.gender.invalid &&
+                      (addDoctorForm.controls.gender.dirty || addDoctorForm.controls.gender.touched || ngadddoctorform.submitted)"
+                    >
+                      <div *ngIf="addDoctorForm.controls.gender.errors.required">{{'this_field_is_required' | translate}}</div>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label>{{'mobile_number' | translate}} <span class="symbol required"></span></label>
+                    <input type="text" class="form-control" placeholder="{{'mobile_number' | translate}}" formControlName="mobile_number">
+                    <div class="invalid-feedback" *ngIf="addDoctorForm.controls.mobile_number.invalid &&
+                      (addDoctorForm.controls.mobile_number.dirty || addDoctorForm.controls.mobile_number.touched ||
+                      ngadddoctorform.submitted)"
+                    >
+                      <div *ngIf="addDoctorForm.controls.mobile_number.errors.required">{{'this_field_is_required' | translate}}</div>
+                      <div *ngIf="addDoctorForm.controls.mobile_number.errors.minlength">{{'minimum_10_characters_required' | translate}}</div>
+                      <div *ngIf="addDoctorForm.controls.mobile_number.errors.maxlength">{{'maximum_15_characters_allowed' | translate}}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Introduction</label>
+                  <textarea class="form-control" rows="4" formControlName="introduction"></textarea>
+                  <div class="invalid-feedback" *ngIf="addDoctorForm.controls.introduction.invalid &&
+                    (addDoctorForm.controls.introduction.dirty || addDoctorForm.controls.introduction.touched || ngadddoctorform.submitted)"
+                  >
+                    <div *ngIf="addDoctorForm.controls.introduction.errors.maxlength">{{'maximum_1000_characters_allowed' | translate}}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <div class="container">
+            <div class="form-row">
+              <div class="form-group col-md-6 my-auto text-left">
+                {{'fields_marked_with_star_is_required' | translate}}
+              </div>
+              <div class="form-group col-md-6 my-auto text-right">
+                <button type="submit" [disabled]="addDoctorFormLoader" class="btn theme-btn mx-auto">
+                  <span [ngClass]="{'spinner-border spinner-border-sm':addDoctorFormLoader}"></span> Save
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

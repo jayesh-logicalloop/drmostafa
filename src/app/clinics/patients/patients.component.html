@@ -1,0 +1,30 @@
+<div class="card">
+  <div class="card-title">
+    <h3>{{'patients' | translate}}</h3>
+  </div>
+  <div class="card-body p-2 table-responsive" [ngClass]="{'csspinner load1':clinicPatientsDataLoader}">
+    <table class="table table-hover">
+      <thead>
+        <tr class="text-center">
+          <th>{{'name' | translate}}</th>
+          <th>{{'email' | translate}}</th>
+          <th>{{'mobile' | translate}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngIf="clinicPatients.length">
+          <tr class="text-center" *ngFor="let user of clinicPatients; let i = index;">
+            <td>{{user.full_name}}</td>
+            <td>{{user.email}}</td>
+            <td>{{user.mobile_number}}</td>
+          </tr>
+        </ng-container>
+        <ng-container *ngIf="!clinicPatients.length">
+          <tr>
+            <td colspan="4"><div class="alert alert-danger text-center">{{'no_data_found' | translate}}</div></td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,774 @@
+<div class="about-doctor-section">
+  <div class="page-header">
+
+    <div class="col-sm-12 px-0 px-sm-2">
+      <div class="d-flex">
+        <div class="mr-auto p-2 bd-highlight">
+          <h2 class="page-title mt-22">{{'appointments' | translate}}</h2>
+        </div>
+
+            <div class="p-2">
+              <div class="popover__wrapper">
+                <button type="button" class="btn theme-btn mr-3 popover__title" (click)="togglePopover()">
+                  <i class="mdi mdi-filter-variant btn-icon-prepend"></i> {{'filter' | translate}}
+                </button>
+                <div class="popover__content">
+                  <div class="cp float-right text-Astral" (click)="clearFilter()">{{'clear_filter' | translate}}</div>
+                  <h5 class="text-astral">{{'filter_by' | translate}}</h5>
+                  <form [formGroup]="searchForm" (ngSubmit)="onSubmitSearchForm()">
+                    <div class="page-header">
+                      <div class="search-field">
+                        <div class="input-group input-group-sm">
+                          <div class="input-group-prepend bg-transparent"><i class="input-group-text border-0 mdi mdi-magnify"></i></div>
+                          <input type="text" class="form-control bg-transparent border-0" placeholder="Search By Doctor , Patient Name" formControlName="search">
+                        </div>
+                      </div>
+                    </div>
+                    <!-- <h3>Date:</h3> -->
+                    <div class="form-row">
+                      <div class="form-group col-md-6">
+                        <label>{{'from_date' | translate}}</label>
+                        <input [matDatepicker]="myDatepickerSearchFrom" class="form-control" placeholder="{{'from_date' | translate}}" formControlName="from_date">
+                        <mat-datepicker-toggle [for]="myDatepickerSearchFrom" class="mat-dt-pic"></mat-datepicker-toggle>
+                        <mat-datepicker #myDatepickerSearchFrom></mat-datepicker>
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label>{{'to_date' | translate}}</label>
+                        <input [matDatepicker]="myDatepickerSearchTo" class="form-control" placeholder="{{'to_date' | translate}}" formControlName="to_date">
+                        <mat-datepicker-toggle [for]="myDatepickerSearchTo" class="mat-dt-pic"></mat-datepicker-toggle>
+                        <mat-datepicker #myDatepickerSearchTo></mat-datepicker>
+                      </div>
+                    </div>
+                    <div class="apply-cancel">
+                      <button type="submit" class="btn theme-btn">{{'apply' | translate}}</button>&nbsp;&nbsp;
+                      <button type="button" class="btn btn-brown" (click)="cancelFilter()">{{'cancel' | translate}}</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div class="p-2 views-btn">
+              <button type="button" class="btn tiles-view" [ngClass]="{'icon-active':viewType=='box'}" (click)="changeViewType('box')">
+                <i class="mdi mdi-apps mdi-36px"></i>
+              </button>
+              <button type="button" class="btn list-view" [ngClass]="{'icon-active':viewType=='list'}" (click)="changeViewType('list')">
+                <i class="mdi mdi-format-list-bulleted mdi-36px"></i>
+              </button>
+            </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-8 px-0 px-sm-2">
+    <nav>
+      <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+        <a class="nav-item nav-link" [ngClass]="{'active':activeTab=='past'}" id="nav-past-tab" data-toggle="tab" href="#nav-past" role="tab"
+        aria-controls="nav-past" aria-selected="false">{{'past' | translate}}</a>
+        <!-- <a class="nav-item nav-link" [ngClass]="{'active':activeTab=='instant'}" id="nav-instant-tab" data-toggle="tab" href="#nav-instant" role="tab" *ngIf="userType=='Doctor'" aria-controls="nav-instant" aria-selected="false">{{'instant' | translate}}</a> -->
+        <a class="nav-item nav-link" [ngClass]="{'active':activeTab=='upcoming'}" id="nav-upcoming-tab" data-toggle="tab" href="#nav-upcoming" role="tab" aria-controls="nav-upcoming" aria-selected="true">{{'upcoming' | translate}}</a>
+        <a class="nav-item nav-link" [ngClass]="{'active':activeTab=='pending'}" id="nav-pending-tab" data-toggle="tab" href="#nav-pending" role="tab" aria-controls="nav-pending" aria-selected="false">{{'pending' | translate}}</a>
+      </div>
+    </nav>
+  </div>
+</div>
+
+<div class="main-box-view" [ngClass]="{'csspinner load1':showContentLoader}">
+  <div class="box-view" id="data-container" [ngClass]="{'list-view':viewType=='list', 'box-view':viewType=='box'}">
+    <div class="col-sm-12">
+      <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane" [ngClass]="{'active':activeTab=='pending'}" id="nav-pending" role="tabpanel" aria-labelledby="nav-pending-tab">
+          <ng-template [ngIf]="totalPendingItems">
+            <div class="row">
+              <div class="col-12 col-md-6 col-lg-3 item-container my-3 px-0 px-sm-2" *ngFor="let appointment of pending_appointments |
+                paginate: {id:'pending', itemsPerPage: itemsPerPage, currentPage: currentPagePe, totalItems:totalPendingItems}; let i = index"
+              >
+                <div class="apointment card-grid my-auto" [ngClass]="{'csspinner load1':addFormAction}">
+                  <div class="card-profile-content commonbox">
+                    <div class="card-profile"> <img [src]="appointment.patient_image_url && appointment.patient_image_url.includes('/assets/images/avatar.jpg') ? 'https://drmostafa.net/media/user-profile-images/3640bcff7cc4d4c2fa93b9d73928ec96-5.jpg' : appointment.patient_image_url" alt="">
+                    </div>
+                    <div class="name-action">
+                      <div class="profile-name">
+                        <h6 class="m-0">{{appointment.patient_name}}</h6>
+                        <div><small class="last-visit">{{appointment.last_visit}}</small></div>
+                        <div><small class="last-visit">{{'booked_for' | translate}} {{appointment.appointment_for}}</small></div>
+                        <div><small class="last-visit">{{'appointment_id' | translate}}: {{appointment.appointment_id}}</small></div>
+                      </div>
+
+                      <div class="hide-in-list icon-block mr-auto">
+                        <a class="cp" *ngIf="userType == 'Doctor'" (click)="confirmAppointment(appointment.appointment_id)"
+                          matTooltip="{{'confirm_appointment' | translate}}" matTooltipClass="primary-tooltip"
+                        >
+                          <i class="mdi mdi-check brdr-blue-btn"></i>
+                        </a>
+
+                        <a class="cp" *ngIf="userType == 'Patient'" (click)="cancelAppointment(appointment.appointment_id)"
+                          matTooltipClass="primary-tooltip" matTooltip="{{'cancel_appointment' | translate}}"
+                        >
+                          <i class="mdi mdi-close brdr-blue-btn"></i>
+                        </a>
+
+                        <a class="cp" *ngIf="userType == 'Doctor'" (click)="declineAppointment(appointment.appointment_id)"
+                          matTooltipClass="primary-tooltip" matTooltip="Decline Appointment"
+                        >
+                          <i class="mdi mdi-close brdr-blue-btn"></i>
+                        </a>
+
+                        <a class="cp" *ngIf="userType == 'Patient' || userType == 'Doctor'" (click)="openReschuledAppointmentModal(appointment.appointment_id)"
+                          matTooltip="{{'reschedule_appointment' | translate}}" matTooltipClass="primary-tooltip">
+                          <i class="mdi mdi-refresh brdr-blue-btn"></i>
+                        </a>
+
+                        <a class="cp" (click)="onViewAppointmentDetail(appointment.appointment_id, i, 'pending')" matTooltip="{{'view_detail' | translate}}" matTooltipClass="primary-tooltip">
+                          <i class="mdi mdi-eye brdr-blue-btn" aria-hidden="true"></i>
+                        </a>
+
+                      </div>
+                    </div>
+                  </div>
+                  <div class="date-times commonbox">
+                    <span class="hide-in-box text-gray hour float-left ap-time"><br>
+                      {{appointment.appointment_from_time_formatted}}</span>
+                    <br class="hide-in-box"><span class="hide-in-box"></span><br class="hide-in-box">
+                    <div class="hide-in-list text-center">
+                      <span class="text-gray small">{{appointment.appointment_date_formatted}}</span>
+                      <br>
+                      <span class="text-gray small">{{appointment.appointment_from_time_formatted}}</span>
+                    </div>
+                    <span class="text-gray small hide-in-box date-time-list date-times">
+                      {{appointment.appointment_date_formatted}}
+                    </span>
+                  </div>
+
+                  <div class="notes commonbox">
+                    <h6 class="m-0" *ngIf="userType!='Doctor'" class="small mb-1 hide-in-list"><i
+                        class="mdi mdi-wallet-travel text-Astral btn-icon-prepend mr-2"></i>
+                      {{appointment.doctor_name}}</h6>
+                    <div class="last-seen">
+                      <h5 *ngIf="appointment.appointment_note">{{'notes' | translate}}:</h5>
+                      <small class="text-gray" *ngIf="appointment.appointment_note">
+                        {{appointment.appointment_note | slice:0:50}}
+                        <ng-template [ngIf]="appointment.appointment_note.length > 50">...</ng-template>
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="hide-in-list address">
+                    <p class="text-gray mb-1">{{appointment.last_visit}}</p>
+                  </div>
+                  <div *ngIf="userType!='Doctor'" class="hide-in-box address">
+                    <h6>{{appointment.doctor_name}}</h6>
+                  </div>
+
+                  <div class="actions commonbox">
+                    <div class="hide-in-box icon-block mr-auto">
+                      <a class="cp" *ngIf="userType == 'Doctor'"
+                        (click)="confirmAppointment(appointment.appointment_id)"
+                        matTooltip="{{'confirm_appointment' | translate}}" matTooltipClass="primary-tooltip"
+                      >
+                        <i class="mdi mdi-check brdr-blue-btn"></i>
+                      </a>
+
+                      <a class="cp" *ngIf="userType == 'Patient'" (click)="cancelAppointment(appointment.appointment_id)"
+                        matTooltipClass="primary-tooltip" matTooltip="{{'cancel_appointment' | translate}}"
+                      >
+                        <i class="mdi mdi-close brdr-blue-btn"></i>
+                      </a>
+
+                      <a class="cp" *ngIf="userType == 'Doctor'" (click)="declineAppointment(appointment.appointment_id)"
+                        matTooltipClass="primary-tooltip" matTooltip="Decline Appointment"
+                      >
+                        <i class="mdi mdi-close brdr-blue-btn"></i>
+                      </a>
+
+                      <a class="cp" *ngIf="userType == 'Patient' || userType == 'Doctor'"
+                        (click)="openReschuledAppointmentModal(appointment.appointment_id)"
+                        matTooltip="{{'reschedule_appointment' | translate}}" matTooltipClass="primary-tooltip">
+                        <i class="mdi mdi-refresh brdr-blue-btn"></i>
+                      </a>
+
+                      <a class="cp" (click)="onViewAppointmentDetail(appointment.appointment_id, i, 'pending')" matTooltip="{{'view_detail' | translate}}" matTooltipClass="primary-tooltip">
+                        <i class="mdi mdi-eye brdr-blue-btn" aria-hidden="true"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-12 mt-3 text-center" *ngIf="pending_appointments.length">
+                <pagination-controls id="pending" (pageChange)="pending_pageChanged($event)" autoHide="true" responsive="true"></pagination-controls>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template [ngIf]="!totalPendingItems">
+            <div class="col-12 col-md-6 col-lg-3 item-container my-3 px-0 px-sm-2 ">
+              <div class="alert alert-danger">{{'no_pending_appointments_found' | translate}}</div>
+            </div>
+          </ng-template>
+        </div>
+        <div class="tab-pane" [ngClass]="{'active':activeTab=='upcoming'}" id="nav-upcoming" role="tabpanel" aria-labelledby="nav-upcoming-tab-tab">
+          <ng-template [ngIf]="totalUpcomingItems">
+            <div class="row">
+              <div class="col-12 col-md-6 col-lg-3 item-container my-3 px-0 px-sm-2"
+                *ngFor="let appointment of upcoming_appointments |
+                  paginate: {id:'upcoming', itemsPerPage: itemsPerPage, currentPage: currentPageUp, totalItems:totalUpcomingItems}; let i = index">
+                <div class="apointment card-grid my-auto" [ngClass]="{'csspinner load1':addFormAction}">
+                  <div class="card-profile-content commonbox">
+                    <div class="card-profile"> <img [src]="appointment.patient_image_url && appointment.patient_image_url.includes('/assets/images/avatar.jpg') ? 'https://drmostafa.net/media/user-profile-images/3640bcff7cc4d4c2fa93b9d73928ec96-5.jpg' : appointment.patient_image_url" alt="">
+                    </div>
+                    <div class="name-action">
+                      <div class="profile-name">
+                        <h6 class="m-0">{{appointment.patient_name}}</h6>
+                        <div><small class="last-visit">{{appointment.last_visit}}</small></div>
+                        <div><small class="last-visit">{{'booked_for' | translate}} {{appointment.appointment_for}}</small></div>
+                        <div><small class="last-visit">{{'appointment_id' | translate}}: {{appointment.appointment_id}}</small></div>
+                      </div>
+                      <div class="hide-in-list icon-block mr-auto">
+                        <a class="cp" *ngIf="userType == 'Doctor' || userType == 'Patient'"
+                          (click)="cancelAppointment(appointment.appointment_id)" matTooltipClass="primary-tooltip"
+                          matTooltip="{{'cancel_appointment' | translate}}">
+                          <i class="mdi mdi-close brdr-blue-btn"></i>
+                        </a>
+
+                        <a class="cp" *ngIf="userType == 'Doctor' || userType == 'Patient'"
+                          (click)="openReschuledAppointmentModal(appointment.appointment_id)"
+                          matTooltip="{{'reschedule_appointment' | translate}}" matTooltipClass="primary-tooltip">
+                          <i class="mdi mdi-refresh brdr-blue-btn"></i>
+                        </a>
+
+                        <a class="cp" *ngIf="userType == 'Doctor' && appointment.show_mark_completed"
+                          (click)="openMarkCompleteModal(appointment.appointment_id, i, 'upcoming')"
+                          matTooltipClass="primary-tooltip" matTooltip="{{'add_report' | translate}}">
+                          <i class="mdi mdi-bookmark-check brdr-blue-btn"></i>
+                        </a>
+
+                        <a class="cp" (click)="onViewAppointmentDetail(appointment.appointment_id, i, 'upcoming')"
+                          matTooltip="{{'view_detail' | translate}}" matTooltipClass="primary-tooltip">
+                          <i class="mdi mdi-eye brdr-blue-btn" aria-hidden="true"></i>
+                        </a>
+                        <a class="cp" routerLink="/appointments/consult/{{appointment.appointment_id}}"
+                          matTooltip="{{'consult_now' | translate}}" matTooltipClass="primary-tooltip"
+                        >
+                          <i class="mdi mdi-headset brdr-blue-btn mt-2" aria-hidden="true"></i>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="date-times commonbox">
+                    <span class="text-gray hour float-left ap-time">{{appointment.appointment_time_formatted}}</span>
+                    <div class="hide-in-list text-right">
+                      <span class="text-gray small">{{appointment.appointment_date_formatted}}</span>
+                    </div>
+                    <span
+                      class="text-gray small hide-in-box date-time-list date-times">{{appointment.appointment_date_formatted}}</span>
+                  </div>
+
+                  <div class="notes commonbox">
+                    <h6 class="m-0" *ngIf="userType!='Doctor'" class="small mb-1 hide-in-list">
+                      <i class="mdi mdi-wallet-travel text-Astral btn-icon-prepend mr-2"></i>
+                      {{appointment.doctor_name}}
+                    </h6>
+                    <div class="last-seen">
+                      <h5 *ngIf="appointment.appointment_note">{{'notes' | translate}}:</h5>
+                      <small *ngIf="appointment.appointment_note" class="text-gray">
+                        {{appointment.appointment_note | slice:0:50}}
+                        <ng-template [ngIf]="appointment.appointment_note.length > 50">...</ng-template>
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="hide-in-list address">
+                    <p class="text-gray mb-1">{{appointment.last_visit}}</p>
+                  </div>
+                  <div *ngIf="userType!='Doctor'" class="hide-in-box address">
+                    <h6>{{appointment.doctor_name}}</h6>
+                  </div>
+
+                  <div class="actions commonbox" style="max-width: 210px !important;">
+                    <div class="hide-in-box icon-block mr-auto">
+                      <a class="cp" (click)="completeAppointment(appointment.appointment_id)"
+                        matTooltip="{{'complete_appointment' | translate}}" matTooltipClass="primary-tooltip">
+                        <i class="mdi mdi-check brdr-blue-btn"></i>
+                      </a>
+
+                      <a class="cp" *ngIf="userType == 'Doctor' || userType == 'Patient'"
+                        (click)="cancelAppointment(appointment.appointment_id)" matTooltipClass="primary-tooltip"
+                        matTooltip="{{'cancel_appointment' | translate}}">
+                        <i class="mdi mdi-close brdr-blue-btn"></i>
+                      </a>
+
+                      <a class="cp" *ngIf="userType == 'Doctor' || userType == 'Patient'"
+                        (click)="openReschuledAppointmentModal(appointment.appointment_id)"
+                        matTooltip="{{'reschedule_appointment' | translate}}" matTooltipClass="primary-tooltip">
+                        <i class="mdi mdi-refresh brdr-blue-btn"></i>
+                      </a>
+
+                      <!-- <a class="cp" *ngIf="userType == 'Doctor' && appointment.show_mark_completed"
+                        (click)="openMarkCompleteModal(appointment.appointment_id, i, 'upcoming')"
+                        matTooltipClass="primary-tooltip" matTooltip="{{'add_report' | translate}}"
+                      >
+                        <i class="mdi mdi-bookmark-check brdr-blue-btn"></i>
+                      </a> -->
+
+                      <a class="cp" (click)="onViewAppointmentDetail(appointment.appointment_id, i, 'upcoming')"
+                        matTooltip="{{'view_detail' | translate}}" matTooltipClass="primary-tooltip"
+                      >
+                        <i class="mdi mdi-eye brdr-blue-btn" aria-hidden="true"></i>
+                      </a>
+                      <a class="cp" routerLink="/appointments/consult/{{appointment.appointment_id}}"
+                          matTooltip="{{'consult_now' | translate}}" matTooltipClass="primary-tooltip"
+                        >
+                          <i class="mdi mdi-headset brdr-blue-btn mt-2" aria-hidden="true"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-12 mt-3 text-center" *ngIf="upcoming_appointments.length">
+                <pagination-controls id="upcoming" (pageChange)="upcoming_pageChanged($event)" autoHide="true" responsive="true"></pagination-controls>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template [ngIf]="!totalUpcomingItems">
+            <div class="col-12 col-md-6 col-lg-3 item-container my-3 px-0 px-sm-2">
+              <div class="alert alert-danger">{{'no_upcoming_appointments_found' | translate}}</div>
+            </div>
+          </ng-template>
+        </div>
+        <div class="tab-pane" [ngClass]="{'active':activeTab=='instant'}" id="nav-instant" role="tabpanel"
+          aria-labelledby="nav-instant-tab-tab" *ngIf="userType=='Doctor'"
+        >
+          <ng-template [ngIf]="totalInstantItems">
+            <div class="row">
+              <div class="col-12 col-md-6 col-lg-3 item-container my-3 px-sm-2 px-0" *ngFor="let appointment of instant_appointments |
+                paginate: {id:'instant', itemsPerPage: itemsPerPage, currentPage: currentPageIn, totalItems:totalInstantItems}; let i = index"
+              >
+                <div class="apointment card-grid my-auto" [ngClass]="{'csspinner load1':addFormAction}">
+                  <div class="card-profile-content commonbox">
+                    <div class="card-profile"> <img [src]="appointment.patient_image_url && appointment.patient_image_url.includes('/assets/images/avatar.jpg') ? 'https://drmostafa.net/media/user-profile-images/3640bcff7cc4d4c2fa93b9d73928ec96-5.jpg' : appointment.patient_image_url" alt="">
+                    </div>
+                    <div class="name-action">
+                      <div class="profile-name">
+                        <h6 class="m-0">{{appointment.patient_name}}</h6>
+                        <div><small class="last-visit">{{appointment.last_visit}}</small></div>
+                        <div><small class="last-visit">{{'booked_for' | translate}} {{appointment.appointment_for}}</small></div>
+                        <div><small class="last-visit">{{'appointment_id' | translate}}: {{appointment.appointment_id}}</small></div>
+                      </div>
+                      <div class="hide-in-list icon-block mr-auto">
+                        <a class="cp" *ngIf="userType == 'Doctor' || userType == 'Patient'"
+                          (click)="cancelAppointment(appointment.appointment_id)"
+                          matTooltipClass="primary-tooltip" matTooltip="{{'cancel_appointment' | translate}}"
+                        >
+                          <i class="mdi mdi-close brdr-blue-btn"></i>
+                        </a>
+
+                        <!-- <a class="cp" *ngIf="userType == 'Doctor' && appointment.show_mark_completed"
+                          (click)="openMarkCompleteModal(appointment.appointment_id, i, 'instant')"
+                          matTooltipClass="primary-tooltip" matTooltip="{{'add_report' | translate}}"
+                        >
+                          <i class="mdi mdi-bookmark-check brdr-blue-btn"></i>
+                        </a> -->
+
+                        <a class="cp" (click)="onViewAppointmentDetail(appointment.appointment_id, i, 'instant')"
+                          matTooltip="{{'view_detail' | translate}}" matTooltipClass="primary-tooltip">
+                          <i class="mdi mdi-eye brdr-blue-btn" aria-hidden="true"></i>
+                        </a>
+
+                        <a class="cp" routerLink="/appointments/consult/{{appointment.appointment_id}}"
+                          matTooltip="{{'consult_now' | translate}}" matTooltipClass="primary-tooltip"
+                        >
+                          <i class="mdi mdi-headset brdr-blue-btn mt-2" aria-hidden="true"></i>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="date-times commonbox">
+                    <span class="text-gray hour float-left ap-time">{{appointment.appointment_time_formatted}}</span>
+                    <div class="hide-in-list text-right">
+                      <span class="text-gray small">{{appointment.appointment_date_formatted}}</span>
+                    </div>
+                    <span
+                      class="text-gray small hide-in-box date-time-list date-times">{{appointment.appointment_date_formatted}}</span>
+                  </div>
+
+                  <div class="notes commonbox">
+                    <h6 class="m-0" *ngIf="userType!='Doctor'" class="small mb-1 hide-in-list">
+                      <i class="mdi mdi-wallet-travel text-Astral btn-icon-prepend mr-2"></i>
+                      {{appointment.doctor_name}}
+                    </h6>
+                    <div class="last-seen">
+                      <h5 *ngIf="appointment.appointment_note">{{'notes' | translate}}:</h5>
+                      <small *ngIf="appointment.appointment_note" class="text-gray">
+                        {{appointment.appointment_note | slice:0:50}}
+                        <ng-template [ngIf]="appointment.appointment_note.length > 50">...</ng-template>
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="hide-in-list address">
+                    <p class="text-gray mb-1">{{appointment.last_visit}}</p>
+                  </div>
+                  <div *ngIf="userType!='Doctor'" class="hide-in-box address">
+                    <h6>{{appointment.doctor_name}}</h6>
+                  </div>
+
+                  <div class="actions commonbox">
+                    <div class="hide-in-box icon-block mr-auto">
+                      <a class="cp" *ngIf="userType == 'Doctor' || userType == 'Patient'" (click)="completeAppointment(appointment.appointment_id)"
+                        matTooltip="{{'complete_appointment' | translate}}" matTooltipClass="primary-tooltip">
+                        <i class="mdi mdi-check brdr-blue-btn"></i>
+                      </a>
+                      <a class="cp" *ngIf="userType == 'Doctor' || userType == 'Patient'" (click)="cancelAppointment(appointment.appointment_id)"
+                        matTooltipClass="primary-tooltip" matTooltip="{{'cancel_appointment' | translate}}"
+                      >
+                        <i class="mdi mdi-close brdr-blue-btn"></i>
+                      </a>
+
+                      <!-- <a class="cp" *ngIf="userType == 'Doctor' && appointment.show_mark_completed"
+                        (click)="openMarkCompleteModal(appointment.appointment_id, i, 'instant')"
+                        matTooltipClass="primary-tooltip" matTooltip="{{'add_report' | translate}}"
+                      >
+                        <i class="mdi mdi-bookmark-check brdr-blue-btn"></i>
+                      </a> -->
+
+                      <a class="cp" (click)="onViewAppointmentDetail(appointment.appointment_id, i, 'instant')"
+                        matTooltip="{{'view_detail' | translate}}" matTooltipClass="primary-tooltip">
+                        <i class="mdi mdi-eye brdr-blue-btn" aria-hidden="true"></i>
+                      </a>
+
+                      <a class="cp" routerLink="/appointments/consult/{{appointment.appointment_id}}"
+                        matTooltip="{{'consult_now' | translate}}" matTooltipClass="primary-tooltip"
+                      >
+                        <i class="mdi mdi-headset brdr-blue-btn mt-2" aria-hidden="true"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-12 mt-3 text-center" *ngIf="instant_appointments.length">
+                <pagination-controls id="instant" (pageChange)="instant_pageChanged($event)" autoHide="true" responsive="true"></pagination-controls>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template [ngIf]="!totalInstantItems">
+            <div class="col-12 col-md-6 col-lg-3 item-container my-3 px-0 px-sm-2">
+              <div class="alert alert-danger">{{'no_instant_appointments_found' | translate}}</div>
+            </div>
+          </ng-template>
+        </div>
+        <div class="tab-pane" [ngClass]="{'active':activeTab=='past'}" id="nav-past" role="tabpanel" aria-labelledby="nav-past-tab">
+          <ng-template [ngIf]="totalPastItems">
+            <div class="row">
+              <div class="col-12 col-md-6 col-lg-3 item-container my-3 px-sm-2 px-0" *ngFor="let appointment of past_appointments |
+                paginate: {id:'past', itemsPerPage: itemsPerPage, currentPage: currentPagePa, totalItems:totalPastItems}; let i = index"
+              >
+                <div class="apointment card-grid my-auto" [ngClass]="{'csspinner load1':addFormAction}">
+                  <div class="card-profile-content commonbox">
+                    <div class="card-profile"> <img [src]="appointment.patient_image_url && appointment.patient_image_url.includes('/assets/images/avatar.jpg') ? 'https://drmostafa.net/media/user-profile-images/3640bcff7cc4d4c2fa93b9d73928ec96-5.jpg' : appointment.patient_image_url" alt="">
+                    </div>
+                    <div class="name-action">
+                      <div class="profile-name">
+                        <h6 class="m-0">{{appointment.patient_name}}</h6>
+                        <div><small class="last-visit">{{appointment.last_visit}}</small></div>
+                        <div><small class="last-visit">{{'booked_for' | translate}} {{appointment.appointment_for}}</small></div>
+                        <div><small class="last-visit">{{'appointment_id' | translate}}: {{appointment.appointment_id}}</small></div>
+                      </div>
+                      <div class="hide-in-list icon-block mr-auto">
+                        <a *ngIf="userType=='Patient'" class="cp"
+                          (click)="openFeedbackModal(appointment.appointment_id, i)"
+                          matTooltip="Give Feedback" matTooltipClass="primary-tooltip"
+                        >
+                          <i class="mdi mdi-comment-processing-outline brdr-blue-btn" aria-hidden="true"></i>
+                        </a>
+                        <!-- <a class="cp" *ngIf="userType == 'Doctor' && appointment.show_mark_completed"
+                          (click)="openMarkCompleteModal(appointment.appointment_id, i, 'past')"
+                          matTooltipClass="primary-tooltip" matTooltip="{{'add_report' | translate}}"
+                        >
+                          <i class="mdi mdi-bookmark-check brdr-blue-btn"></i>
+                        </a> -->
+                        <a class="cp" (click)="onViewAppointmentDetail(appointment.appointment_id, i, 'past')" matTooltip="{{'view_detail' | translate}}" matTooltipClass="primary-tooltip">
+                          <i class="mdi mdi-eye brdr-blue-btn" aria-hidden="true"></i>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="date-times commonbox">
+                    <span class="text-gray hour float-left ap-time">{{appointment.appointment_time_formatted}}</span>
+                    <div class="hide-in-list text-right">
+                      <span class="text-gray small">{{appointment.appointment_date_formatted}}</span>
+                    </div>
+                    <span
+                      class="text-gray small hide-in-box date-time-list date-times">{{appointment.appointment_date_formatted}}</span>
+                  </div>
+
+                  <div class="notes commonbox">
+                    <h6 class="m-0" *ngIf="userType!='Doctor'" class="small mb-1 hide-in-list"><i
+                        class="mdi mdi-wallet-travel text-Astral btn-icon-prepend mr-2"></i>
+                      {{appointment.doctor_name}}</h6>
+                    <div class="last-seen">
+                      <h5 *ngIf="appointment.appointment_note">{{'notes' | translate}}:</h5>
+                      <small *ngIf="appointment.appointment_note" class="text-gray">
+                        {{appointment.appointment_note | slice:0:50}}
+                        <ng-template [ngIf]="appointment.appointment_note.length > 50">...</ng-template>
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="hide-in-list address">
+                    <p class="text-gray mb-1">{{appointment.last_visit}}</p>
+                  </div>
+                  <div *ngIf="userType!='Doctor'" class="hide-in-box address">
+                    <h6>{{appointment.doctor_name}}</h6>
+                  </div>
+
+                  <div class="actions commonbox">
+                    <div class="hide-in-box icon-block mr-auto">
+                      <a class="cp" *ngIf="userType=='Patient'"
+                        (click)="openFeedbackModal(appointment.appointment_id, i)"
+                        matTooltip="Give Feedback" matTooltipClass="primary-tooltip"
+                      >
+                        <i class="mdi mdi-comment-processing-outline brdr-blue-btn" aria-hidden="true"></i>
+                      </a>
+                      <!-- <a class="cp" *ngIf="userType == 'Doctor' && appointment.show_mark_completed"
+                          (click)="openMarkCompleteModal(appointment.appointment_id, i, 'past')"
+                          matTooltipClass="primary-tooltip" matTooltip="{{'add_report' | translate}}"
+                        >
+                          <i class="mdi mdi-bookmark-check brdr-blue-btn"></i>
+                        </a> -->
+                      <a class="cp" (click)="onViewAppointmentDetail(appointment.appointment_id, i, 'past')" matTooltip="{{'view_detail' | translate}}" matTooltipClass="primary-tooltip">
+                        <i class="mdi mdi-eye brdr-blue-btn" aria-hidden="true"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-12 mt-3 text-center" *ngIf="past_appointments.length">
+                <pagination-controls id="past" (pageChange)="past_pageChanged($event)" autoHide="true"
+                  responsive="true"></pagination-controls>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template [ngIf]="!totalPastItems">
+            <div class="col-12 col-md-6 col-lg-3 item-container my-3 px-0 px-sm-2">
+              <div class="alert alert-danger">{{'no_past_appointments_found' | translate}}</div>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-detail [appointmentDetail]="appointmentDetail" [openModalFlag]="openAppointmentDetailModal"></app-detail>
+
+<div class="modal fade actionModal" id="rescheduleModal" tabindex="-1" role="dialog" aria-labelledby="rescheduleModal"
+  aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':rescheduleFormLoader}">
+      <div class="modal-header">
+        <h4 class="modal-title">{{'reschedule_appointment' | translate}}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="rescheduleForm" (ngSubmit)="onSubmitRecheduleForm()" #ngrecheduleform="ngForm">
+        <div class="modal-body">
+          <div class="container">
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>{{'appointment_date' | translate}} <small>(D/M/Y)</small> <span class="symbol required"></span></label>
+                <input [matDatepicker]="myDatepicker" class="form-control" [min]="minDate" [max]='maxRescheduleDate'
+                  (focus)="myDatepicker.open()" placeholder="{{'appointment_date' | translate}}" formControlName="appointment_date" (dateChange)="onChangeRescheduleDate()"
+                >
+                <mat-datepicker-toggle [for]="myDatepicker" class="mat-dt-pic"></mat-datepicker-toggle>
+                <mat-datepicker #myDatepicker></mat-datepicker>
+                <div class="invalid-feedback" *ngIf="rescheduleForm.controls.appointment_date.invalid &&
+                  (rescheduleForm.controls.appointment_date.dirty || rescheduleForm.controls.appointment_date.touched || ngrecheduleform.submitted)"
+                >
+                  <div *ngIf="rescheduleForm.controls.appointment_date.errors.required">{{'this_field_is_required' | translate}}</div>
+                </div>
+              </div>
+              <div class="form-group col-md-6">
+                <label>{{'time_slot' | translate}} <span class="symbol required"></span></label>
+                <select class="form-control" formControlName="appointment_time">
+                  <option>{{'select_timeslot' | translate}}</option>
+                  <ng-container *ngFor="let timeslot of timeslotData.slots.Morning">
+                    <option *ngIf="timeslot.availability == 'Available'" value="{{timeslot.from_time}}">{{timeslot.from_time}}</option>
+                  </ng-container>
+                  <ng-container *ngFor="let timeslot of timeslotData.slots.Afternoon">
+                    <option *ngIf="timeslot.availability == 'Available'" value="{{timeslot.from_time}}">{{timeslot.from_time}}</option>
+                  </ng-container>
+                  <ng-container *ngFor="let timeslot of timeslotData.slots.Evening">
+                    <option *ngIf="timeslot.availability == 'Available'" value="{{timeslot.from_time}}">{{timeslot.from_time}}</option>
+                  </ng-container>
+                  <ng-container *ngFor="let timeslot of timeslotData.slots.Night">
+                    <option *ngIf="timeslot.availability == 'Available'" value="{{timeslot.from_time}}">{{timeslot.from_time}}</option>
+                  </ng-container>
+                </select>
+                <div class="invalid-feedback" *ngIf="rescheduleForm.controls.appointment_time.invalid &&
+                  (rescheduleForm.controls.appointment_time.dirty || rescheduleForm.controls.appointment_time.touched || ngrecheduleform.submitted)"
+                >
+                  <div *ngIf="rescheduleForm.controls.appointment_time.errors.required">{{'this_field_is_required' | translate}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>{{'reason' | translate}}</label>
+              <textarea type="text" class="form-control" placeholder="{{'reason' | translate}}" formControlName="reason"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="submit" [disabled]="rescheduleFormLoader" class="btn theme-btn mx-auto">
+            <span [ngClass]="{'spinner-border spinner-border-sm':rescheduleFormLoader}"></span> {{'reschedule' | translate}}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="feedbackModal" tabindex="-1" role="dialog" aria-labelledby="feedbackModal"
+  aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':addFeedbackFormLoader}">
+      <div class="modal-header">
+        <h4 class="modal-title">{{'feedback' | translate}}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="addFeedbackForm" (ngSubmit)="onSubmitFeedbackForm()" #ngfeedbackform="ngForm">
+        <div class="modal-body">
+          <div class="container" *ngIf="feedbackAlreadyGiven">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="alert alert-success">
+                  {{'feedback_provided' | translate}}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="container" *ngIf="!feedbackAlreadyGiven">
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>{{'rating' | translate}} <span class="symbol required"></span></label>
+                <div class="ratings">
+                  <div class="cp rating-star" (click)="changeRating(1)" [ngClass]="{'active':activeRating==1}">
+                    <i class="mdi mdi-star mdi-24px"></i>
+                    <span>1.0</span>
+                  </div>
+                  <div class="cp rating-star" (click)="changeRating(2)" [ngClass]="{'active':activeRating==2}">
+                    <i class="mdi mdi-star mdi-24px"></i>
+                    <span>2.0</span>
+                  </div>
+                  <div class="cp rating-star" (click)="changeRating(3)" [ngClass]="{'active':activeRating==3}">
+                    <i class="mdi mdi-star mdi-24px"></i>
+                    <span>3.0</span>
+                  </div>
+                  <div class="cp rating-star" (click)="changeRating(4)" [ngClass]="{'active':activeRating==4}">
+                    <i class="mdi mdi-star mdi-24px"></i>
+                    <span>4.0</span>
+                  </div>
+                  <div class="cp rating-star" (click)="changeRating(5)" [ngClass]="{'active':activeRating==5}">
+                    <i class="mdi mdi-star mdi-24px"></i>
+                    <span>5.0</span>
+                  </div>
+                </div>
+                <div class="invalid-feedback" *ngIf="addFeedbackForm.controls.feedback_rating.invalid && (addFeedbackForm.controls.feedback_rating.dirty ||
+                  addFeedbackForm.controls.feedback_rating.touched || ngfeedbackform.submitted)">
+                  <div *ngIf="addFeedbackForm.controls.feedback_rating.errors.required">
+                    {{'please_provide_star_rating' | translate}}
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-md-6">
+                <label>{{'do_you_want_to_recommend_this_doctor' | translate}} <span class="symbol required"></span></label>
+                <br>
+                <label class="radio-inline mt-3 mr-3">
+                  <i *ngIf="!is_yes" class="mdi mdi-thumb-up-outline mdi-36px cp" (click)="recommendDoc('Yes')"></i>
+                  <i *ngIf="is_yes" class="mdi mdi-thumb-up-outline yes mdi-36px cp" (click)="recommendDoc('No')"></i>
+                </label>
+                <label class="radio-inline mt-3 mr-3">
+                  <i *ngIf="!is_no" class="mdi mdi-thumb-down-outline mdi-36px cp" (click)="recommendDoc('No')"></i>
+                  <i *ngIf="is_no" class="mdi mdi-thumb-down-outline yes mdi-36px cp" (click)="recommendDoc('Yes')"></i>
+                </label>
+                <div class="invalid-feedback" *ngIf="addFeedbackForm.controls.recommendation.invalid &&
+                  (addFeedbackForm.controls.recommendation.dirty ||
+                  addFeedbackForm.controls.recommendation.touched || ngfeedbackform.submitted)">
+                  <div *ngIf="addFeedbackForm.controls.recommendation.errors.required">{{'this_field_is_required' | translate}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-12">
+                <label>{{'this_field_is_required' | translate}}: </label>
+                <ng-select2 [data]="feedbackSelect2Data" formControlName="happy_with" [options]="feedbackSelect2Options" [placeholder]="'Tap to Select'"></ng-select2>
+              </div>
+
+              <div class="form-group col-md-12">
+                <label>{{'comment' | translate}} <span class="symbol required"></span></label>
+                <textarea type="text" class="form-control" placeholder="Enter Your Comment" formControlName="feedback_comment"></textarea>
+                <div class="invalid-feedback" *ngIf="addFeedbackForm.controls.feedback_comment.invalid &&
+                  (addFeedbackForm.controls.feedback_comment.dirty || addFeedbackForm.controls.feedback_comment.touched || ngfeedbackform.submitted)"
+                >
+                  <div *ngIf="addFeedbackForm.controls.feedback_comment.errors.required">{{'this_field_is_required' | translate}}</div>
+                  <div *ngIf="addFeedbackForm.controls.feedback_comment.errors.minlength">{{'minimum_20_characters_required' | translate}}</div>
+                  <div *ngIf="addFeedbackForm.controls.feedback_comment.errors.maxlength">{{'minimum_200_characters_required' | translate}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0" *ngIf="!feedbackAlreadyGiven">
+          <button type="submit" [disabled]="addFeedbackFormLoader" class="btn theme-btn mx-auto">
+            <span [ngClass]="{'spinner-border spinner-border-sm':addFeedbackFormLoader}"></span> {{'submit' | translate}}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="markCompleteModal" tabindex="-1" role="dialog" aria-labelledby="markCompleteModal"
+  aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':markCompleteFormLoader}">
+      <div class="modal-header">
+        <h4 class="modal-title">{{'add_report' | translate}}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="markCompleteForm" (ngSubmit)="onSubmitMarkCompleteForm()" #ngmarkcompleteform="ngForm">
+        <div class="modal-body">
+          <div class="container" *ngIf="alreadyMarkCompleted">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="alert alert-success">
+                  {{'report_provided' | translate}}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="container" *ngIf="!alreadyMarkCompleted">
+            <div class="form-group">
+              <label>{{'report' | translate}} <span class="symbol required"></span></label>
+              <textarea type="text" class="form-control" placeholder="Write Report" formControlName="report"></textarea>
+              <div class="invalid-feedback" *ngIf="markCompleteForm.controls.report.invalid &&
+                (markCompleteForm.controls.report.dirty || markCompleteForm.controls.report.touched || ngmarkcompleteform.submitted)"
+              >
+                <div *ngIf="markCompleteForm.controls.report.errors.required">{{'this_field_is_required' | translate}}</div>
+                <div *ngIf="markCompleteForm.controls.report.errors.minlength">{{'minimum_20_characters_required' | translate}}</div>
+                <div *ngIf="markCompleteForm.controls.report.errors.maxlength">{{'maximum_1000_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0" *ngIf="!alreadyMarkCompleted">
+          <button type="submit" [disabled]="markCompleteFormLoader" class="btn theme-btn mx-auto">
+            <span [ngClass]="{'spinner-border spinner-border-sm':markCompleteFormLoader}"></span> {{'submit' | translate}}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,283 @@
+<div class="page-header">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-3 txt-arabic">
+        <h2 class="page-title">{{'clinics_hospitals' | translate}}</h2>
+      </div>
+      <div class="col-sm-5" style="display: none;">
+        <div class="search-field">
+          <form class="d-flex align-items-center">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend bg-transparent">
+                <i class="input-group-text border-0 mdi mdi-magnify"></i>
+              </div>
+              <input type="text" #searchTerm class="form-control bg-transparent border-0" placeholder="{{'search_by_name_address_or_postal_code' | translate}}">
+              <div class="input-group-append bg-transparent" *ngIf="searchItem.length > 0">
+                <i class="cp input-group-text border-0 mr-3" title="{{'clear_search' | translate}}" (click)="clearSearch()">×</i>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="col-sm-4 text-right" style="display: none;">
+        <button type="button" class="btn theme-btn" (click)="openAddInfoForm()">
+          <i class="mdi mdi-plus-circle mr-1"></i> {{'add_clinic_hospital' | translate}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body p-2 table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>{{'name' | translate}}</th>
+              <th>{{'address' | translate}}</th>
+              <th>{{'status' | translate}}</th>
+              <th>{{'verified' | translate}}</th>
+              <th>{{'self' | translate}}</th>
+              <th>{{'default' | translate}}</th>
+              <th>{{'action' | translate}}</th>
+            </tr>
+          </thead>
+          <tbody [ngClass]="{'csspinner load1':clinicsDataLoader}">
+            <ng-container *ngIf="clinics.length">
+              <tr *ngFor="let clinic of clinics; let i = index">
+                <th>{{i+1}}</th>
+                <td>{{clinic.clinic_name}}</td>
+                <td>{{clinic.clinic_address}}</td>
+                <td>{{clinic.status}}</td>
+                <td>{{clinic.verified}}</td>
+                <td>{{clinic.self_clinic}}</td>
+                <td>
+                  <ng-container *ngIf="clinic.is_default == 'Yes'">
+                    <button type="button" class="btn btn-outline-secondary btn-rounded btn-icon"
+                      matTooltip="{{'default' | translate}}" matTooltipClass="primary-tooltip"
+                    >
+                      <i class="mdi mdi-18px mdi-star text-primary"></i>
+                    </button>
+                  </ng-container>
+                  <ng-container *ngIf="clinic.is_default == 'No'">
+                    <button type="button" matTooltip="{{'set_as_default' | translate}}" matTooltipClass="primary-tooltip"
+                      (click)="setAsDefault(clinic.clinic_id)" class="btn btn-outline-secondary btn-rounded btn-icon"
+                    >
+                      <i class="mdi mdi-18px mdi-star"></i>
+                    </button>
+                  </ng-container>
+                </td>
+                <td>
+                  <div class="icon-block">
+                    <a class="cp" *ngIf="clinic.self_clinic == 'Yes'" 
+                      matTooltip="{{'view_detail' | translate}}" matTooltipClass="primary-tooltip"
+                      routerLink="/establishment/update" [queryParams]="{id:clinic.clinic_id}"
+                    >
+                      <i class="mdi mdi-pencil b-gry" aria-hidden="true"></i>
+                    </a>
+
+                    <a class="cp" *ngIf="clinic.self_clinic == 'Yes' && clinic.is_default == 'No'" 
+                      matTooltip="{{'delete' | translate}}" matTooltipClass="primary-tooltip"
+                      (click)="onDeleteEshtablishment(clinic.clinic_id, 'Delete')"
+                    >
+                      <i class="mdi mdi-delete b-brown" aria-hidden="true"></i>
+                    </a>
+
+                    <a class="cp" *ngIf="clinic.self_clinic == 'No'" 
+                      matTooltip="{{'left' | translate}}" matTooltipClass="primary-tooltip"
+                      (click)="onDeleteEshtablishment(clinic.clinic_id, 'Left')"
+                    >
+                      <i class="mdi mdi-delete b-brown" aria-hidden="true"></i>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+            <tr *ngIf="!clinics.length">
+              <td colspan="8">
+                <div class="alert alert-danger text-center">{{'no_data_found' | translate}}</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="addInfoModal" tabindex="-1" role="dialog" aria-labelledby="addInfoModal"
+  aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white">
+      <div class="modal-header">
+        <h4 class="modal-title">Add New Clinic/Hospital</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <ng-container *ngIf="newClinicAction==''">
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <button type="button" class="btn btn-gradient-primary btn-lg btn-block"
+                (click)="onChangeNewEstablishmentAction('join')"
+              >
+                <i class="mdi mdi-account"></i> Join Existing
+              </button>
+            </div>
+            <div class="form-group col-md-6">
+              <button type="button" class="btn btn-gradient-primary btn-lg btn-block"
+                (click)="onChangeNewEstablishmentAction('add_new')"
+              >
+                <i class="mdi mdi-account"></i> Add New
+              </button>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="newClinicAction=='join'">
+        <div class="modal-body" [ngClass]="{'csspinner load1':joinLefFormLoader}">
+          <form [formGroup]="joinLefForm" (ngSubmit)="onSubmitJoinLefForm()" #ngjoinleftform="ngForm">
+            <div class="form-row">
+              <div class="form-group col-md-10">
+                <label>Search Clinic</label>
+                <ng-select2 [data]="joinEstablishmentsSelect2Data" [options]="joinEstablishmentsSelect2Options" formControlName="clinic_id"></ng-select2>
+                <div class="invalid-feedback" *ngIf="joinLefForm.controls.clinic_id.invalid &&
+                  (joinLefForm.controls.clinic_id.dirty || joinLefForm.controls.clinic_id.touched || ngjoinleftform.submitted)"
+                >
+                  <div *ngIf="joinLefForm.controls.clinic_id.errors.required">Chose a clinic/hospital to join.</div>
+                </div>
+              </div>
+              <div class="form-group col-md-2">
+                <br>
+                <button type="submit" [disabled]="joinLefFormLoader" class="btn theme-btn mx-auto">Join</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="newClinicAction=='add_new'">
+        <form [formGroup]="infoForm" (ngSubmit)="onSubmitInfoForm()" #nginfoform="ngForm" [ngClass]="{'csspinner load1':infoFormLoader}">
+          <div class="modal-body">
+            <div class="form-row">
+              <div class="form-group col-md-10">
+                <label>{{'name' | translate}} <span class="symbol required"></span></label>
+                <input type="text" class="form-control" placeholder="{{'enter_name' | translate}}" formControlName="name">
+                <div class="invalid-feedback" *ngIf="infoForm.controls.name.invalid &&
+                  (infoForm.controls.name.dirty || infoForm.controls.name.touched ||
+                  nginfoform.submitted)"
+                >
+                  <div *ngIf="infoForm.controls.name.errors.required">{{'this_field_is_required' | translate}}</div>
+                  <div *ngIf="infoForm.controls.name.errors.minlength">Minimum 3 characters required.</div>
+                  <div *ngIf="infoForm.controls.name.errors.maxlength">{{'maximum_50_characters_allowed' | translate}}</div>
+                </div>
+              </div>
+              <div class="form-group col-md-2">
+                <label>Status <span class="symbol required"></span></label>
+                <select formControlName="status" class="form-control">
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                </select>
+                <div class="invalid-feedback" *ngIf="infoForm.controls.status.invalid &&
+                  (infoForm.controls.status.dirty || infoForm.controls.status.touched || nginfoform.submitted)"
+                >
+                  <div *ngIf="infoForm.controls.status.errors.required">{{'this_field_is_required' | translate}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Logo <small class="text-danger">({{'only_jpg_png_files_allowed' | translate}}, {{'file_size_should_not_be_greater_than_2_mb' | translate}})</small>
+                </label>
+                <div class="custom-file">
+                  <input #nglogofileinput type="file" (change)="onSelectLogo($event)" accept="image/*"
+                    class="custom-file-input">
+                  <label class="custom-file-label" for="customFile">Choose Logo Image</label>
+                </div>
+                <div class="invalid-feedback" *ngIf="infoForm.controls.logo_image.invalid &&
+                    (infoForm.controls.logo_image.dirty || infoForm.controls.logo_image.touched || nginfoform.submitted)">
+                  <div *ngIf="infoForm.controls.logo_image.errors.required">The Logo image is required.</div>
+                </div>
+              </div>
+              <div class="form-group col-md-6" *ngIf="logo_image_src">
+                <img [src]="logo_image_src" alt="" class="img-fluid border border-dark p-1" style="height: 150px; width: 150px;">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label>Email <span class="symbol required"></span></label>
+                <input type="text" class="form-control" placeholder="Enter Email" formControlName="email">
+                <div class="invalid-feedback" *ngIf="infoForm.controls.email.invalid &&
+                  (infoForm.controls.email.dirty || infoForm.controls.email.touched ||
+                  nginfoform.submitted)"
+                >
+                  <div *ngIf="infoForm.controls.email.errors.required">{{'this_field_is_required' | translate}}</div>
+                  <div *ngIf="infoForm.controls.email.errors.email || infoForm.controls.email.errors.pattern">{{'valid_email_is_required' | translate}}</div>
+                  <div *ngIf="infoForm.controls.email.errors.maxlength">{{'maximum_100_characters_allowed' | translate}}</div>
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <label>Phone Number <span class="symbol required"></span></label>
+                <input type="text" class="form-control" placeholder="Enter Phone No." formControlName="phone_number">
+                <div class="invalid-feedback" *ngIf="infoForm.controls.phone_number.invalid &&
+                  (infoForm.controls.phone_number.dirty || infoForm.controls.phone_number.touched || nginfoform.submitted)"
+                >
+                  <div *ngIf="infoForm.controls.phone_number.errors.required">{{'this_field_is_required' | translate}}</div>
+                  <div *ngIf="infoForm.controls.phone_number.errors.minlength">Minimum 6 Characters Required.</div>
+                  <div *ngIf="infoForm.controls.phone_number.errors.maxlength">{{'maximum_15_characters_allowed' | translate}}</div>
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <label>Default <span class="symbol required"></span></label>
+                <select formControlName="set_default" class="form-control">
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+                <div class="invalid-feedback" *ngIf="infoForm.controls.set_default.invalid &&
+                  (infoForm.controls.set_default.dirty || infoForm.controls.set_default.touched || nginfoform.submitted)"
+                >
+                  <div *ngIf="infoForm.controls.set_default.errors.required">{{'this_field_is_required' | translate}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Introduction <span class="symbol required"></span></label>
+              <textarea class="form-control" formControlName="introduction" rows="3"></textarea>
+              <div class="invalid-feedback" *ngIf="infoForm.controls.introduction.invalid &&
+                (infoForm.controls.introduction.dirty || infoForm.controls.introduction.touched || nginfoform.submitted)"
+              >
+                <div *ngIf="infoForm.controls.introduction.errors.required">{{'this_field_is_required' | translate}}</div>
+                <div *ngIf="infoForm.controls.introduction.errors.minlength">Minimum 20 characters required.</div>
+                <div *ngIf="infoForm.controls.introduction.errors.maxlength">{{'maximum_1000_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Work Schedule <span class="symbol required"></span></label>
+              <textarea class="form-control" placeholder="Enter Work Schedule" formControlName="work_schedule" rows="3"></textarea>
+              <div class="invalid-feedback" *ngIf="infoForm.controls.work_schedule.invalid &&
+                (infoForm.controls.work_schedule.dirty || infoForm.controls.work_schedule.touched ||
+                nginfoform.submitted)"
+              >
+                <div *ngIf="infoForm.controls.work_schedule.errors.required">{{'this_field_is_required' | translate}}</div>
+                <div *ngIf="infoForm.controls.work_schedule.errors.maxlength">{{'maximum_250_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Amenities</label>
+              <ng-select2 [data]="amenitiesSelect2Data" [options]="amenitiesSelect2Options"
+              formControlName="amenities"></ng-select2>
+            </div>
+          </div>
+          <div class="modal-footer border-0 text-center">
+            <button type="submit" [disabled]="infoFormLoader" class="btn theme-btn mx-auto">
+              <span [ngClass]="{'spinner-border spinner-border-sm':infoFormLoader}"></span> Add
+            </button>
+          </div>
+        </form>
+      </ng-container>
+    </div>
+  </div>
+</div>

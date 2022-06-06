@@ -1,0 +1,35 @@
+<div class="card">
+  <div class="card-body p-2">
+    <div class="card-title">
+      <h3>{{'services' | translate}}</h3>
+    </div>
+    <form [formGroup]="serviceForm" (ngSubmit)="onSubmitServiceForm()" #myserviceform="ngForm">
+      <div class="form-row" [ngClass]="{'csspinner load1':serviceFormLoader}">
+        <label class="form-group col-md-6">
+          {{'online_consultation' | translate}} <span class="symbol required"></span>
+          <div><small>User has to pay this fee when they book an online(virtual) consulation</small></div>
+        </label>
+        <div class="form-group col-md-6">
+          <input type="text" class="form-control strict_numeric" placeholder="Service Fee" formControlName="service_fee">
+          <div class="invalid-feedback" *ngIf="serviceForm.controls.service_fee.invalid &&
+            (serviceForm.controls.service_fee.dirty || serviceForm.controls.service_fee.touched ||
+            myserviceform.submitted)"
+          >
+            <div *ngIf="serviceForm.controls.service_fee.errors.required">{{'this_field_is_required' | translate}}</div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="form-row">
+        <div class="form-group col-md-6 my-auto text-left">
+          {{'fields_marked_with_star_is_required' | translate}}
+        </div>
+        <div class="form-group col-md-6 my-auto text-right">
+          <button type="submit" [disabled]="serviceFormLoader" class="btn theme-btn">
+          <span [ngClass]="{'spinner-border spinner-border-sm':serviceFormLoader}"></span> {{'update' | translate}}
+        </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

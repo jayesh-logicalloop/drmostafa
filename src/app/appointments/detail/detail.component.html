@@ -1,0 +1,185 @@
+<div class="modal fade actionModal" id="viewAppointment" tabindex="-1" role="dialog" aria-labelledby="viewAppointment"
+  aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document" [ngClass]="{'csspinner load1':appointmentDetailLoader}">
+    <div class="modal-content bg-white">
+      <div class="modal-header">
+        <h4 class="modal-title">{{'appointment_id' | translate}} {{appointmentDetail.appointment_id}}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-2">
+              <img [src]="appointmentDetail.patient_image_url" class="img-fluid rounded-circle" width="100">
+            </div>
+
+            <div class="col-md-4">
+              <h5 class="text-pre-wrap">{{appointmentDetail.patient_name}}</h5>
+              <p class="text-pre-wrap">{{appointmentDetail.patient_age_formatted}},
+                {{appointmentDetail.patient_gender}} </p>
+            </div>
+
+            <div class="col-md-6">
+              <h5 class="">{{'status' | translate}}: {{appointmentDetail.appointment_status}}</h5>
+              <h5>{{'time' | translate}}: {{appointmentDetail.appointment_date_formatted}} / {{appointmentDetail.appointment_time_formatted}}</h5>
+              <div *ngIf="userType == 'Doctor' || userType == 'Patient'">
+                <a class="p-2 btn btn-success mr-2" (click)="consultNow()"
+                  *ngIf="(appointmentDetail.appointment_status == 'Confirmed' || appointmentDetail.appointment_status == 'Pending') &&
+                  appointmentDetail.token != ''" routerLink="/appointments/consult/{{appointmentDetail.appointment_id}}"
+                  matTooltip="{{'consult' | translate}}" matTooltipClass="primary-tooltip"
+                >
+                  <i class="mdi mdi-headphones"></i> {{'consult' | translate}}
+                </a>
+                <button class="p-2 btn btn-success mr-2" (click)="download_prescription(appointmentDetail.appointment_id)"
+                  *ngIf="(appointmentDetail.prescriptions.Imaging.length || appointmentDetail.prescriptions.Lab.length ||
+                  appointmentDetail.prescriptions.Medicine.length || appointmentDetail.prescriptions.Recommend.length || appointmentDetail.prescriptions.Report.length) && userType=='Patient'"
+                  matTooltip="{{'download_prescription' | translate}}" matTooltipClass="primary-tooltip"
+                >
+                  <i class="mdi mdi-download"></i> {{'download_prescription' | translate}}
+                </button>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row" *ngIf="userType != 'Doctor'">
+            <div class="col-md-2">
+              <img [src]="appointmentDetail.doctor_image_url" class="img-fluid rounded-circle" width="100">
+            </div>
+            <div class="col-md-10 my-auto">
+              <div>
+                <h5 class="text-pre-wrap">{{appointmentDetail.doctor_name}}</h5>
+                <div class="text-pre-wrap">{{appointmentDetail.doctor_education}}</div>
+                <div>{{appointmentDetail.doctor_specialization}}</div>
+                <div class="text-pre-wrap">{{appointmentDetail.doctor_experience_formatted}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-md-12" *ngIf="appointmentDetail.appointment_note">
+              <h5>{{'notes' | translate}}</h5>
+              <p> {{appointmentDetail.appointment_note}} </p>
+            </div>
+
+            <div class="col-md-12" *ngIf="appointmentDetail.services">
+              <p> <strong> {{'service' | translate}} : </strong> {{appointmentDetail.services.service_name}} | <strong> {{'fee' | translate}} : </strong>
+                {{appointmentDetail.services.service_fee_formatted}}</p>
+            </div>
+
+            <div class="col-md-12" *ngIf="appointmentDetail.attachments.length > 0">
+              <h5>{{'health_records' | translate}}</h5>
+              <div class="mr-3 mt-1" style="display: inline-block; position:relative;"
+                 *ngFor="let item of appointmentDetail.attachments; let i = index;"
+              >
+                <a data-fancybox [attr.data-caption]="item.file_title" [href]="item.file_url">
+                  <span class="badge badge-info">{{item.file_title}}</span>
+                </a>
+                <i class="mdi mdi-close cp unshare-report" *ngIf="userType=='Patient'"
+                  (click)="unshareReport(item.id, appointmentDetail.appointment_id, i)"
+                  matTooltip="Unshare report" matTooltipClass="primary-tooltip"></i>
+              </div>
+            </div>
+
+            <div class="col-md-12 mt-3" *ngIf="appointmentDetail.prescriptions.Medicine.length || appointmentDetail.prescriptions.Lab.length || appointmentDetail.prescriptions.Imaging.length || appointmentDetail.prescriptions.Recommend.length || appointmentDetail.prescriptions.Report.length">
+              <h5>{{'report' | translate}}</h5>
+              <div class="card">
+                <div class="card-body p-2 table-responsive" *ngIf="appointmentDetail.prescriptions.Medicine.length">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th colspan="7">{{'medicines' | translate}}</th>
+                      </tr>
+                      <tr>
+                        <th>#</th>
+                        <th>{{'item' | translate}}</th>
+                        <!-- <th>{{'dosage' | translate}}</th>
+                        <th>{{'frequency' | translate}}</th>
+                        <th>{{'duration' | translate}}</th>
+                        <th>{{'intake' | translate}}</th>
+                        <th>{{'instruction' | translate}}</th> -->
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of appointmentDetail.prescriptions.Medicine; let i = index">
+                        <td>{{i+1}}</td>
+                        <td class="text-pre-wrap" [innerHTML]="item.item_name"></td>
+                        <!-- <td>{{item.dosage}}</td>
+                        <td>{{item.frequency}}</td>
+                        <td>{{item.duration  + ' ' + item.duration_type }}</td>
+                        <td>{{item.intake}}</td>
+                        <td class="text-pre-wrap">{{item.prescribe_note}}</td> -->
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="card-body p-2 table-responsive" *ngIf="appointmentDetail.prescriptions.Lab.length">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th colspan="2">Lab Test</th>
+                      </tr>
+                      <tr>
+                        <th>#</th>
+                        <th>{{'instruction' | translate}}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of appointmentDetail.prescriptions.Lab; let i = index">
+                        <td>{{i+1}}</td>
+                        <td class="text-pre-wrap">{{item.prescribe_note}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="card-body p-2 table-responsive" *ngIf="appointmentDetail.prescriptions.Imaging.length">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th colspan="2">{{'imaging_test' | translate}}</th>
+                      </tr>
+                      <tr>
+                        <th>#</th>
+                        <th>{{'instruction' | translate}}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of appointmentDetail.prescriptions.Imaging; let i = index">
+                        <td>{{i+1}}</td>
+                        <td class="text-pre-wrap">{{item.prescribe_note}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="card-body p-2 table-responsive" *ngIf="appointmentDetail.prescriptions.Recommend.length">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th colspan="2">{{'recommendation' | translate}}</th>
+                      </tr>
+                      <tr>
+                        <th>#</th>
+                        <th>{{'instruction' | translate}}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of appointmentDetail.prescriptions.Recommend; let i = index">
+                        <td>{{i+1}}</td>
+                        <td class="text-pre-wrap">{{item.prescribe_note}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="card-body p-2" *ngIf="appointmentDetail.prescriptions.Report.length">
+                  <div *ngFor="let item of appointmentDetail.prescriptions.Report; let i = index">
+                    {{item.prescribe_note}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

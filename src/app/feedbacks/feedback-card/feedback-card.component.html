@@ -1,0 +1,104 @@
+<div class="mt-3">
+  <ng-template [ngIf]="showContentLoader">
+    <div class="col-lg-12 grid-margin mb-3" *ngFor="let i of [1,2,3,4]">
+      <div class="card">
+        <content-loader speed=2 width=1090 height=200 primaryColor="#dfdfdf" secondaryColor="#b2b2b2">
+          <svg:rect x="131" y="40" rx="3" ry="3" width="146" height="10" />
+          <svg:circle cx="71" cy="62" r="35" />
+          <svg:rect x="899" y="40" rx="3" ry="3" width="161" height="10" />
+          <svg:rect x="131" y="69" rx="3" ry="3" width="117" height="10" />
+          <svg:rect x="497" y="40" rx="3" ry="3" width="146" height="10" />
+          <svg:rect x="38" y="115" rx="3" ry="3" width="1020" height="8" />
+          <svg:rect x="38" y="135" rx="3" ry="3" width="1020" height="8" />
+          <svg:rect x="38" y="155" rx="3" ry="3" width="1020" height="8" />
+          <!-- <svg:rect x="38" y="191" rx="3" ry="3" width="1020" height="15" /> -->
+        </content-loader>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template [ngIf]="totalItems > 0 && !showContentLoader">
+    <div class="col-lg-12 grid-margin mb-4 border rounded-lg bg-white"
+      *ngFor="let feedback of feedbacks | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }; let i= index">
+      <div class="card">
+        <div class="card-header border-0">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="media">
+                <img [src]="feedback.patient_image_url" style="height: 50px; width: 50px;" class="align-self-center mr-3 img-fluid rounded-circle" alt="">
+                <div class="media-body my-auto">
+                  <div>{{feedback.patient_name}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="my-auto" [ngClass]="{'col-sm-3':userType=='Super Admin', 'col-sm-4 text-center':userType!='Super Admin'}">
+              <a class="text-astral" *ngIf="userType!='Doctor'">{{feedback.doctor_name}}</a>
+            </div>
+            <div class="my-auto" [ngClass]="{'col-sm-3':userType=='Super Admin', 'col-sm-4 text-right':userType!='Super Admin'}">
+              {{feedback.created_date_formatted}}
+            </div>
+            <div class="col-sm-2 text-right my-auto" *ngIf="userType=='Super Admin'">
+                <ng-template [ngIf]="feedback.approved_status == 'Pending'">
+                  <button class="btn btn-sm btn-success mr-2" title="Approve this feedback"
+                    (click)="changeFeedbackStatus('Approved', feedback.feedback_id, i)"
+                  ><i class="mdi mdi-check-circle"></i></button>
+                  <button class="btn btn-sm btn-danger" title="Decline this feedback"
+                    (click)="changeFeedbackStatus('Declined', feedback.feedback_id, i)"
+                  ><i class="mdi mdi-close-circle"></i></button>
+                </ng-template>
+
+                <ng-template [ngIf]="feedback.approved_status == 'Declined'">
+                  <button class="btn btn-sm btn-danger" title="Approve this feedback"
+                    (click)="changeFeedbackStatus('Approved', feedback.feedback_id, i)"
+                  >Declined</button>
+                </ng-template>
+
+                <ng-template [ngIf]="feedback.approved_status == 'Approved'">
+                  <button class="btn btn-sm btn-success" title="Decline this feedback"
+                    (click)="changeFeedbackStatus('Declined', feedback.feedback_id, i)"
+                  >Approved</button>
+                </ng-template>
+            </div>
+          </div>
+        </div>
+        <div class="card-body pr-2 pl-2 pt-0 pb-0 bg-white">
+          <div class="row mb-2">
+            <div class="col-sm-3">
+              <div class="d-flex">
+                <i class="mdi mdi-star mdi-24px" [ngClass]="{'golder-star':feedback.feedback_rating >= 1}"></i>
+                <i class="mdi mdi-star mdi-24px" [ngClass]="{'golder-star':feedback.feedback_rating >= 2}"></i>
+                <i class="mdi mdi-star mdi-24px" [ngClass]="{'golder-star':feedback.feedback_rating >= 3}"></i>
+                <i class="mdi mdi-star mdi-24px" [ngClass]="{'golder-star':feedback.feedback_rating >= 4}"></i>
+                <i class="mdi mdi-star mdi-24px" [ngClass]="{'golder-star':feedback.feedback_rating >= 5}"></i>
+              </div>
+            </div>
+            <div class="col-sm-1">
+              <i *ngIf="feedback.recommendation=='Yes'" class="mdi mdi-thumb-up-outline mdi-24px"></i>
+              <i *ngIf="feedback.recommendation=='No'" class="mdi mdi-thumb-down-outline mdi-24px"></i>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-sm-12">
+              <p class="card-text text-gray">{{feedback.feedback_comment}}</p>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-sm-12">
+              <span class="badge badge-info mr-2 mb-2" *ngFor="let item of feedback.happy_with">{{item}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template [ngIf]="totalItems == 0">
+    <div class="col-sm-12">
+      <div class="alert alert-danger">No feedbacks found</div>
+    </div>
+  </ng-template>
+</div>
+
+<div class="row" *ngIf="totalItems>0">
+  <div class="col-sm-12 mt-3 text-center">
+    <pagination-controls (pageChange)="pageChanged($event)" autoHide="true" responsive="true">></pagination-controls>
+  </div>
+</div>

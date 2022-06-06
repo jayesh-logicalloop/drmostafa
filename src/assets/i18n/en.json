@@ -1,0 +1,933 @@
+{
+	"welcome" : "Welcome",
+
+	"please_login_to_web_interface": "PLEASE LOGIN TO WEB INTERFACE",
+
+	"remember_me": "Remember Me",
+
+	"forget_password": "Forgot Password",
+
+	"login": "LOGIN",
+
+	"submit": "SUBMIT",
+
+	"reset_your_password": "Reset Your Password",
+
+	"upcoming_appointment": "Upcoming Appointment",
+
+	"completed_appointment": "Completed Appointment",
+
+	"canceled_appointment": "Canceled Appointment",
+
+	"total_appointment": "Total Appointment",
+
+	"calendar": "Calendar",
+
+  "dashboard": "Dashboard",
+
+  "patients": "Patients",
+
+  "clinics_hospitals": "Clinics/Hospitals",
+
+  "appointments": "Appointments",
+
+  "feedback": "Feedback",
+
+  "notification": "Notification",
+
+  "orders": "Orders",
+
+  "books": "Books",
+
+  "courses": "Courses",
+
+  "live_courses": "Live Courses",
+
+  "coupons": "Coupons",
+
+  "articles": "Articles",
+
+  "categories": "Categories",
+
+  "healthfeeds": "Healthfeeds",
+
+  "settings": "Settings",
+
+  "web_settings": "Web Settings",
+
+  "appointment_price" : "Appointment Price",
+
+  "email_templates": "Email Templates",
+
+  "contact_us": "Contact Us",
+
+  "administration": "Administration",
+
+  "administrators": "Administrators",
+
+  "menu_pages": "Menu Pages",
+
+  "permissions": "Permissions",
+
+  "walkthrough": "Walkthrough",
+
+  "feeds": "Feeds",
+
+  "logout": "Logout",
+
+  "announcements": "Announcements",
+
+  "add_announcement": "Add Announcement",
+
+  "type": "Type",
+
+  "title": "Title",
+
+  "description": "Description",
+
+  "url" : "URL",
+
+  "date_created": "Date Created",
+
+  "action": "Action",
+
+  "no_data_found": "No data found",
+
+  "announcement": "Announcement",
+
+  "announcement_type": "Announcement Type",
+
+  "this_field_is_required": "This field is required",
+
+  "minimum_2_characters_required": "Minimum 2 characters required",
+
+  "minimum_4_characters_required": "Minimum 4 characters required",
+
+  "minimum_6_characters_required": "Minimum 6 characters required",
+
+  "minimum_8_characters_required": "Minimum 8 characters required",
+
+  "minimum_10_characters_required": "Minimum 10 characters required",
+
+  "minimum_15_characters_required": "Minimum 15 characters required",
+
+  "minimum_20_characters_required": "Minimum 20 characters required",
+
+  "maximum_2_characters_allowed": "Maximum 2 characters allowed",
+
+  "maximum_3_characters_allowed": "Maximum 3 characters allowed",
+
+  "maximum_4_characters_allowed": "Maximum 4 characters allowed",
+
+  "maximum_6_characters_allowed": "Maximum 6 characters allowed",
+
+  "maximum_8_characters_allowed": "Maximum 8 characters allowed",
+
+  "maximum_15_characters_allowed": "Maximum 15 characters allowed",
+
+  "maximum_20_characters_allowed": "Maximum 20 characters allowed",
+
+  "maximum_50_characters_allowed": "Maximum 50 characters allowed",
+
+  "maximum_100_characters_allowed": "Maximum 100 characters allowed",
+
+  "maximum_150_characters_allowed": "Maximum 150 characters allowed",
+
+  "maximum_200_characters_allowed": "Maximum 200 characters allowed",
+
+  "maximum_250_characters_allowed": "Maximum 250 characters allowed",
+
+  "maximum_500_characters_allowed": "Maximum 500 characters allowed",
+
+  "maximum_1000_characters_allowed": "Maximum 1000 characters allowed",
+
+  "only_jpg_png_files_allowed": "Only JPG or PNG files allowed",
+
+  "file_size_should_not_be_greater_than_2_mb": "File size should not be greater than 2 MB",
+
+  "choose_image": "Choose Image",
+
+  "save": "Save",
+
+  "fields_marked_with_star_is_required": "Fields marked with * is required",
+
+  "upcoming": "Upcoming",
+
+  "completed": "Completed",
+
+  "canceled": "Canceled",
+
+  "consultation": "Consultation",
+
+  "start_video_call": "Start Video Call",
+
+  "stop_call": "Stop Call",
+
+  "exit_fullscreen": "Exit Fullscreen",
+
+  "fullscreen": "Fullscreen",
+
+  "chat": "Chat",
+
+  "send": "Send",
+
+  "type_your_message": "Type your message",
+
+  "record_audio_message": "Record audio message",
+
+  "send_audio_message": "Send audio message",
+
+  "start_recording": "Start recording",
+
+  "report": "Report",
+
+  "reports": "Reports",
+
+  "write_prescription": "Write Prescription",
+
+  "update": "Update",
+
+  "add": "Add",
+
+  "add_prescription": "Add Prescription",
+
+  "select_drug": "Select Drug",
+
+  "dose": "Dose",
+
+  "frequency_eg_twice_in_a_day": "Frequency eg. twice in a day",
+
+  "duration": "Duration",
+
+  "prescription": "Prescription",
+
+  "prescriptions": "Prescriptions",
+
+  "medicines": "Medicines",
+
+  "item": "Item",
+
+  "dosage": "Dosage",
+
+  "frequency": "Frequency",
+
+  "intake": "Intake",
+
+  "instruction": "Instruction",
+
+  "lab_test": "Lab Test",
+
+  "imaging_test": "Imaging Test",
+
+  "test": "Test",
+
+  "recommendation": "Recommendation",
+
+  "share_health_record": "Share health record",
+
+  "add_new": "Add New",
+
+  "name": "Name",
+
+  "record": "Record",
+
+  "share": "Share",
+
+  "back": "Back",
+
+  "report_name": "Report Name",
+
+  "date": "Date",
+
+  "doctor": "Doctor",
+
+  "only_jpg_png_and_pdf_files_allowed": "Only JPG, PNG and PDF files allowed",
+
+  "file_size_should_not_be_greater_than_5_mb": "File size should not be greater than 5 MB",
+
+  "choose_file": "Choose File",
+
+  "other": "Other",
+
+  "appointment_id": "Appointment ID",
+
+  "consult": "Consult",
+
+  "download_prescription": "Download Prescription",
+
+  "notes": "Notes",
+
+  "service": "Service",
+
+  "fee": "Fee",
+
+  "health_records": "Health Records",
+
+  "filter": "Filter",
+
+  "clear_filter": "Clear Filter",
+
+  "filter_by": "Filter By",
+
+  "from_date": "From Date",
+
+  "to_date": "To Date",
+
+  "apply": "Apply",
+
+  "cancel": "Cancel",
+
+  "pending": "Pending",
+
+  "instant": "Instant",
+
+  "past": "Past",
+
+  "booked_for": "Booked For",
+
+  "confirm_appointment": "Confirm Appointment",
+
+  "cancel_appointment": "Cancel Appointment",
+
+  "complete_appointment": "Complete Appointment",
+
+  "reschedule_appointment": "Reschedule Appointment",
+
+  "view_detail": "View Detail",
+
+  "no_pending_appointments_found": "No Pending appointments found",
+
+  "add_report": "Add Report",
+
+  "no_upcoming_appointments_found": "No Upcoming appointments found",
+
+  "consult_now": "Consult Now",
+
+  "no_instant_appointments_found": "No instant appointments found",
+
+  "appointment_date": "Appointment Date",
+
+  "time_slot": "Time Slot",
+
+  "select_timeslot": "Select Timeslot",
+
+  "reason": "Reason",
+
+  "enter_reason": "Enter Reason",
+
+  "happy_with": "Happy With",
+
+  "reschedule": "Reschedule",
+
+  "feedback_provided": "Congratulations, You have successfully provided a feedback for this appointment",
+
+  "rating": "Rating",
+
+  "please_provide_star_rating": "Please provide star rating",
+
+  "do_you_want_to_recommend_this_doctor":"Do you want to recommend this doctor?",
+
+  "report_provided": "You have already provided report for this appointment",
+
+  "image": "Image",
+
+  "add_feed": "Add Feed",
+
+  "feed": "Feed",
+
+  "update_profile": "Update Profile",
+
+  "first_name": "First Name",
+
+  "enter_first_name": "Enter First Name",
+
+  "last_name": "Last Name",
+
+  "enter_last_name": "Enter Last Name",
+
+  "email": "Email",
+
+  "enter_email": "Enter Email",
+
+  "valid_email_is_required": "Valid email is required",
+
+  "mobile_number": "Mobile Number",
+
+  "enter_mobile_number": "Enter Mobile Number",
+
+  "gender": "Gender",
+
+  "dob": "DOB",
+
+  "introduction": "Introduction",
+
+  "back_to_patients": "Back to Patients",
+
+  "search_by_name_email_or_mobile_number": "Search By name, email or mobile number",
+
+  "id": "ID",
+
+  "mobile": "Mobile",
+
+  "status": "Status",
+
+  "email_is_verified": "Email is verified",
+
+  "email_is_not_verified": "Email is not verified",
+
+  "info": "Info",
+
+  "family_members": "Family Members",
+
+  "blood_group": "Blood Group",
+
+  "height": "Height",
+
+  "enter_height_in_cm": "Enter height in cm",
+
+  "weight": "Weight",
+
+  "enter_weight_in_kg": "Enter weight in kg",
+
+  "allergy": "Allergy",
+
+  "medical_history": "Medical History",
+
+  "email_verification": "Email Verification",
+
+  "mobile_verification": "Mobile Verification",
+
+  "add_members": "Add Members",
+
+  "add_health_record": "Add Health Record",
+
+  "for": "For",
+
+  "download": "Download",
+
+  "delete": "Delete",
+
+  "time": "Time",
+
+  "enter_report_name": "Enter Report Name",
+
+  "select_family_member": "Select Family Member",
+
+  "enter_name": "Enter name",
+
+  "update_member": "Update Member",
+
+  "are_you_sure": "Are you sure?",
+
+  "ok": "OK",
+
+  "add_clinic_hospital": "Add Clinic / Hospital",
+
+  "search_by_name_address_or_postal_code": "Search by name, address or postal code",
+
+  "default": "Default",
+
+  "self": "Self",
+
+  "verified": "Verified",
+
+  "address": "Address",
+
+  "set_as_default": "Set as default",
+
+  "left": "Left",
+
+  "back_to_clinics_hospitals": "Back to Clinics/Hospitals",
+
+  "basic_info": "Basic Info",
+
+  "location": "Location",
+
+  "documents": "Documents",
+
+  "gallery": "Gallery",
+
+  "services": "Services",
+
+  "bank": "Bank",
+
+  "doctors": "Doctors",
+
+  "phone_number": "Phone Number",
+
+  "work_schedule": "Work Schedule",
+
+  "enter_work_schedule": "Work Schedule",
+
+  "amenities": "Amenities",
+
+  "press_enter_after_each_amenity": "Press Enter after each amenity",
+
+  "country": "Country",
+
+  "enter_country": "Enter Country",
+
+  "state": "State",
+
+  "enter_state": "Enter State",
+
+  "city": "City",
+
+  "enter_city": "Enter City",
+
+  "postal_code": "Postal Code",
+
+  "enter_postal_code": "Enter Postal Code",
+
+  "enter_address": "Enter Address",
+
+  "document_is_verified": "Document is verified",
+
+  "choose": "Choose",
+
+  "verification_status": "Verification Status",
+
+  "verify": "Verify",
+
+  "verify_this_doc": "Verify this doc",
+
+  "reject": "Reject",
+
+  "reject_this_doc": "Reject this doc",
+
+  "banks": "Banks",
+
+  "add_bank": "Add Bank",
+
+  "bank_name": "Bank Name",
+
+  "account_holder_name": "Account Holder Name",
+
+  "account_number": "Account Number",
+
+  "set_default": "Set Default",
+
+  "choose_service_type": "Choose Service Type",
+
+  "yes": "Yes",
+
+  "no": "No",
+
+  "reject_document": "Reject Document",
+
+  "reason_for_reject": "Please provide the reason for rejection, this will be emailed to the user",
+
+  "request_patient_to_reschedule_appointment": "Request patient to reschedule appointment",
+
+  "decline_appointment": "Decline Appointment",
+
+  "no_past_appointments_found": "No Past appointments found",
+
+  "search_by_name": "Search By Name",
+
+  "interested_in": "Interested In",
+
+  "message": "Message",
+
+  "user_type": "User Type",
+
+  "purpose": "Purpose",
+
+  "manage_books": "Manage Books",
+
+  "add_book": "Add Book",
+
+  "price": "Price",
+
+  "offer_price": "Offer Price",
+
+  "update_book": "Update Book",
+
+  "enter_book_name": "Enter Book Name",
+
+  "enter_price": "Enter Price",
+
+  "enter_offer_price": "Enter Offer Price",
+
+  "file_size_should_not_be_greater_than_500_kb": "File size should not be greater than 500 KB",
+
+  "image_is_required": "Image is required",
+
+  "total_pages": "Total Pages",
+
+  "enter_total_pages": "Enter Total Pages",
+
+  "author": "Author",
+
+  "enter_author": "Enter Author",
+
+  "file": "File",
+
+  "only_pdf_files_are_allowed": "Only PDF files are allowed",
+
+  "ebook_is_required": "eBook is required",
+
+  "enter_description": "Enter Description",
+
+  "manage_courses": "Manage courses",
+
+  "add_course": "Add course",
+
+  "enter_course_name": "Enter Course Name",
+
+  "update_course": "Update Course",
+
+  "add_new_video": "Add New Video",
+
+  "video": "Video",
+
+  "update_video": "Update Video",
+
+  "enter_video_title": "Enter Video Title",
+
+  "manage_sessions": "Manage sessions",
+
+  "add_session": "Add session",
+
+  "enter_session_name": "Enter Session Name",
+
+  "update_session": "Update Session",
+
+  "session_time": "Session Time",
+
+  "enter_session_time": "Enter Session Time",
+
+  "announcement_url": "URL",
+
+  "announcement_status": "Status",
+
+  "enter_url": "Enter Session URL",
+
+  "manage_coupons": "Manage Coupons",
+
+  "add_coupon": "Add Coupon",
+
+  "clear_search": "Clear search",
+
+  "coupon": "Coupon",
+
+  "amount": "Amount",
+
+  "start": "Start",
+
+  "end": "End",
+
+  "coupon_code": "Coupon Code",
+
+  "enter_coupon_code": "Enter Coupon Code",
+
+  "update_coupon": "Update Coupon",
+
+  "back_to_coupons": "Back to Coupons",
+
+  "coupon_for": "Coupon For",
+
+  "start_date": "Start Date",
+
+  "choose_start_date": "Choose Start Date",
+
+  "end_date": "End Date",
+
+  "choose_end_date": "Choose End Date",
+
+  "discount_type": "Discount Type",
+
+  "discount_amount": "Discount Amount",
+
+  "enter_discount_amount": "Enter Discount Amount",
+
+  "change_password": "Change Password",
+
+  "update_clinic": "Update Clinic",
+
+  "notifications": "Notifications",
+
+  "see_all_notifications": "See all notifications",
+
+  "no_new_notification": "No new notification",
+
+  "add_settings": "Add Settings",
+
+  "update_setting": "Update Setting",
+
+  "value": "Value",
+
+  "enter_value": "Enter Value",
+
+  "add_email_template": "Add Email Template",
+
+  "subject": "Subject",
+
+  "enter_subject": "Enter Subject",
+
+  "body": "Body",
+
+  "enter_instruction": "Enter Instruction",
+
+  "walkthrough_screens": "Walkthrough Screens",
+
+  "add_walkthrough": "Add Walkthrough",
+
+  "order": "Order",
+
+  "enter_title": "Enter Title",
+
+  "enter_order": "Enter order",
+
+  "create_article": "Create Article",
+
+  "update_article": "Update Article",
+
+  "category": "Category",
+
+  "sub_category": "Sub Category",
+
+  "content": "Content",
+
+  "enter_content": "Enter Content",
+
+  "tags": "Tags",
+
+  "press_enter_to_add_new_tag": "Press enter to add new tag",
+
+  "is_approved": "Is Approved",
+
+  "meta_tag": "Meta Tag",
+
+  "enter_meta_tag": "Enter Meta Tag",
+
+  "meta_description": "Meta Description",
+
+  "enter_meta_description": "Enter Meta Description",
+
+  "create": "Create",
+
+  "approval": "Approval",
+
+  "manage_menus": "Manage Menu",
+
+  "create_menu": "Create Menu",
+
+  "select_parent": "Select Parent",
+
+  "alias": "Alias",
+
+  "enter_alias": "Enter Alias",
+
+  "icon_class": "Icon class",
+
+  "enter_icon_class": "Enter Icon class",
+
+  "enter_menu_url": "Enter Menu URL",
+
+  "menu_api": "Menu API",
+
+  "enter_menu_api": "Enter Menu API",
+
+  "add_category": "Add Category",
+
+  "parent_category": "Parent Category",
+
+  "update_category": "Update Category",
+
+  "manage_administrators": "Manage Administrators",
+
+  "add_admin": "Add Admin",
+
+  "password": "Password",
+
+  "enter_password": "Enter Password",
+
+  "manage_permissions": "Manage Permissions",
+
+  "autosave_the_choosen_permission": "Autosave checkboxes, Check/Uncheck any of checkbox will autosave the chosen permission",
+
+  "search_by_order_id_status_name_or_order_for": "Search by order id, status, name or order for",
+
+  "payment_status": "Payment Status",
+
+  "order_for": "Order For",
+
+  "order_id": "Order Id",
+
+  "order_detail": "Order Detail",
+
+  "quantity": "Quantity",
+
+  "total": "Total",
+
+  "order_history": "Order History",
+
+  "comment": "Comment",
+
+  "customer_notified": "Customer Notified",
+
+  "add_order_history": "Add Order History",
+
+  "update_status": "Update Status",
+
+  "notify_customer": "Notify Customer",
+
+  "add_history": "Add History",
+
+  "payouts": "Payouts",
+
+  "add_award": "Add Award",
+
+  "awards": "Awards",
+
+  "update_award": "Update Award",
+
+  "back_to_doctors": "Back to Doctors",
+
+  "account_info": "Account Info",
+
+  "specialization": "Specialization",
+
+  "experience": "Experience",
+
+  "qualification": "Qualification",
+
+  "email_verified": "Email Verified",
+
+  "email_not_verified": "Email Not Verified",
+
+  "add_qualification": "Add Qualification",
+
+  "update_qualification": "Update Qualification",
+
+  "completed_in": "Completed In",
+
+  "university": "University",
+
+  "degree": "Degree",
+
+  "drug_catalog": "Drug Catalog",
+
+  "add_drug": "Add Drug",
+
+  "update_drug": "Update Drug",
+
+  "strength": "Strength",
+
+  "enter_strength": "Enter Strength",
+
+  "unit": "Unit",
+
+  "drug_name": "Drug Name",
+
+  "enter_drug_name": "Enter Drug Name",
+
+  "add_experience": "Add Experience",
+
+  "update_experience": "Update Experience",
+
+  "experiences": "Experiences",
+
+  "organization": "Organization",
+
+  "currently_working": "Currently Working",
+
+  "enter_organization_name": "Enter Organization Name",
+
+  "designation": "Designation",
+
+  "enter_designation_name": "Enter Designation Name",
+
+  "start_year": "Start Year",
+
+  "start_month": "Start Month",
+
+  "end_year": "End Year",
+
+  "end_month": "End Month",
+
+  "online_consultation": "Online Consultation",
+
+  "education": "Education",
+
+  "this_will_display_below_your_name": "This will display below your name",
+
+  "choose_specialization_you_have": "Choose the specialization you have",
+
+  "practice_since": "Practice Since",
+
+  "total_experience_you_have": "This will display below your name as total number of experience you have",
+
+  "consultation_fee": "Consultation Fee",
+
+  "enter_consultation_fee": "Enter consultation fee",
+
+  "paid_by_user_when_appointmentu": "This fee will be paid by user when they booked an appointment with you",
+
+  "session_duration": "Session Duration",
+
+  "enter_session_duration": "Enter Session Duration",
+
+  "duration_of_each_session": "Duration of each session, its value is used at the time of creation of work schedule",
+
+  "session_gap": "Session Gap",
+
+  "enter_session_gap": "Enter Session Gap",
+
+  "gap_between_each_session": "Gap between each session, its value is used at the time of creation of work schedule",
+
+  "account": "Account",
+
+  "inactivate_your_account": "Inactivate your account for not accepting appointment booking this will also stop listing your profile to users, activate if you want to accept booking again.",
+
+  "sub_specialization": "Sub Specialization",
+
+  "add_work_schedule": "Add work schedule",
+
+  "daily_work_schedule": "Daily Work Schedule",
+
+  "clinic_name": "Clinic Name",
+
+  "delete_all_schedule_for": "Delete all schedule for",
+
+  "delete_this_slot": "Delete this slot",
+
+  "ocassional_schedule": "Occasional Schedule",
+
+  "partial_available": "Partial Available",
+
+  "select_clinic_hospital": "Select Clinic/Hospital",
+
+  "daily_schedule": "Daily Schedule",
+
+  "days": "Days",
+
+  "morning": "Morning",
+
+  "afternoon": "Afternoon",
+
+  "evening": "Evening",
+
+  "night": "Night",
+
+  "usage_limit": "Usage Limit",
+
+  "country_code": "Country code",
+
+  "language": "Language",
+
+  "back_to_book": "Back to Books",
+
+  "back_to_course": "Back to Courses",
+
+  "back_to_sessions": "Back to sessions",
+
+  "slot_management": "Slot Management",
+
+  "slot_date" : "Date",
+
+  "slot_from_time": "From Time",
+
+  "slot_to_time": "To Time"
+}

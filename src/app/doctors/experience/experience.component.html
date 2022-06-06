@@ -1,0 +1,306 @@
+<div class="card">
+  <div class="card-body p-2 table-responsive">
+    <div class="card-title">
+      <button type="button" class="btn theme-btn btn-sm float-right" (click)="openAddExperienceFormModal()">
+        <i class="mdi mdi-plus-circle mr-1"></i> {{'add_experience' | translate}}
+      </button>
+      <h3>{{'experiences' | translate}}</h3>
+    </div>
+    <table class="table table-hover">
+      <thead>
+        <th>{{'organization' | translate}}</th>
+        <th>{{'currently_working' | translate}}</th>
+        <th>{{'start' | translate}}</th>
+        <th>{{'end' | translate}}</th>
+        <th>{{'action' | translate}}</th>
+      </thead>
+      <tbody [ngClass]="{'csspinner load1':dataLoader}">
+        <ng-container *ngIf="total">
+          <tr *ngFor="let experience of experiences; let i = index; let even = even; let odd = odd" [ngClass]="{ odd: odd, even: even }">
+            <td>{{experience.organization}}</td>
+            <td>{{experience.currently_working}}</td>
+            <td>{{experience.start_month_formatted+'-'+experience.start_year}}</td>
+            <td>{{(experience.currently_working == 'Yes') ? 'NA' : experience.end_month_formatted+'-'+experience.end_year}}</td>
+            <td>
+              <div class="icon-block">
+                <a class="cp" (click)="openUpdateExperienceFormModal(experience.id, i)">
+                  <i class="mdi mdi-pencil b-gry" aria-hidden="true"></i>
+                </a>
+                <a class="cp" (click)="onDeleteExperience(experience.id, i)">
+                  <i class="mdi mdi-delete b-brown"></i></a>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+        <ng-container *ngIf="total == 0">
+          <tr>
+            <td colspan="5">
+              <div class="alert alert-danger text-center">{{'no_data_found' | translate}}</div>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="addExperienceModal" tabindex="-1" role="dialog" aria-labelledby="addExperienceModal" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':experienceFormLoader}">
+      <div class="modal-header">
+        <h4 class="modal-title">{{'add_experience' | translate}}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="addExperienceForm" (ngSubmit)="onSubmitAddExperienceForm()" #ngaddexpform="ngForm">
+        <div class="modal-body">
+          <div class="container">
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label>{{'organization' | translate}} <span class="symbol required"></span></label>
+                <input type="text" class="form-control" placeholder="{{'enter_organization_name' | translate}}" formControlName="organization">
+                <div class="invalid-feedback" *ngIf="addExperienceForm.controls.organization.invalid &&
+                  (addExperienceForm.controls.organization.dirty || addExperienceForm.controls.organization.touched || ngaddexpform.submitted)"
+                >
+                  <div *ngIf="addExperienceForm.controls.organization.errors.required">{{'this_field_is_required' | translate}}</div>
+                  <div *ngIf="addExperienceForm.controls.organization.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                  <div *ngIf="addExperienceForm.controls.organization.errors.maxlength">{{'maximum_100_characters_allowed' | translate}}</div>
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <label>{{'designation' | translate}} <span class="symbol required"></span></label>
+                <input type="text" class="form-control" placeholder="{{'enter_designation_name' | translate}}" formControlName="designation">
+                <div class="invalid-feedback" *ngIf="addExperienceForm.controls.designation.invalid &&
+                  (addExperienceForm.controls.designation.dirty || addExperienceForm.controls.designation.touched || ngaddexpform.submitted)"
+                >
+                  <div *ngIf="addExperienceForm.controls.designation.errors.required">{{'this_field_is_required' | translate}}</div>
+                  <div *ngIf="addExperienceForm.controls.designation.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                  <div *ngIf="addExperienceForm.controls.designation.errors.maxlength">{{'maximum_50_characters_allowed' | translate}}</div>
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <label>{{'currently_working' | translate}} <span class="symbol required"></span></label>
+                <select formControlName="currently_working" class="form-control">
+                  <option value='No'>No</option>
+                  <option value='Yes'>Yes</option>
+                </select>
+                <div class="invalid-feedback" *ngIf="addExperienceForm.controls.currently_working.invalid &&
+                  (addExperienceForm.controls.currently_working.dirty || addExperienceForm.controls.currently_working.touched || ngaddexpform.submitted)"
+                >
+                  <div *ngIf="addExperienceForm.controls.currently_working.errors.required">{{'this_field_is_required' | translate}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>{{'start_year' | translate}} <span class="symbol required"></span></label>
+                <select class="form-control" formControlName="start_year">
+                  <option value="">Start Year</option>
+                  <option *ngFor="let year of years" [value]="year">{{year}}</option>
+                </select>
+                <div class="invalid-feedback" *ngIf="addExperienceForm.controls.start_year.invalid && (addExperienceForm.controls.start_year.dirty || addExperienceForm.controls.start_year.touched || ngaddexpform.submitted)">
+                  <div *ngIf="addExperienceForm.controls.start_year.errors.required">{{'this_field_is_required' | translate}}</div>
+                  <div *ngIf="addExperienceForm.controls.start_year.errors.minlength">{{'minimum_4_characters_required' | translate}}</div>
+                  <div *ngIf="addExperienceForm.controls.start_year.errors.maxlength">{{'maximum_4_characters_allowed' | translate}}</div>
+                </div>
+              </div>
+              <div class="form-group col-md-6">
+                <label>{{'start_month' | translate}} <span class="symbol required"></span></label>
+                <select class="form-control" formControlName="start_month">
+                  <option value="">Start Month</option>
+                  <option *ngFor="let month of months" [value]="month.id">{{month.month}}</option>
+                </select>
+                <div class="invalid-feedback"
+                  *ngIf="addExperienceForm.controls.start_month.invalid && (addExperienceForm.controls.start_month.dirty || addExperienceForm.controls.start_month.touched || ngaddexpform.submitted)">
+                  <div *ngIf="addExperienceForm.controls.start_month.errors.required">{{'this_field_is_required' | translate}}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row" *ngIf="addExperienceForm.value.currently_working == 'No'">
+              <div class="form-group col-md-6">
+                <label>{{'end_year' | translate}} <span class="symbol required"></span></label>
+                <select class="form-control" formControlName="end_year">
+                  <option value="">End Year</option>
+                  <option *ngFor="let year of years" [value]="year">{{year}}</option>
+                </select>
+                <div class="invalid-feedback" *ngIf="addExperienceForm.controls.end_year.invalid &&
+                  (addExperienceForm.controls.end_year.dirty || addExperienceForm.controls.end_year.touched || ngaddexpform.submitted)"
+                >
+                  <div *ngIf="addExperienceForm.controls.end_year.errors.required">{{'this_field_is_required' | translate}}</div>
+                  <div *ngIf="addExperienceForm.controls.end_year.errors.minlength">{{'minimum_4_characters_required' | translate}}</div>
+                  <div *ngIf="addExperienceForm.controls.end_year.errors.maxlength">{{'maximum_4_characters_allowed' | translate}}</div>
+                </div>
+              </div>
+              <div class="form-group col-md-6">
+                <label>{{'end_month' | translate}} <span class="symbol required"></span></label>
+                <select class="form-control" formControlName="end_month">
+                  <option value="">End Month</option>
+                  <option *ngFor="let month of months" [value]="month.id">{{month.month}}</option>
+                </select>
+                <div class="invalid-feedback" *ngIf="addExperienceForm.controls.end_month.invalid &&
+                  (addExperienceForm.controls.end_month.dirty || addExperienceForm.controls.end_month.touched || ngaddexpform.submitted)"
+                >
+                  <div *ngIf="addExperienceForm.controls.end_month.errors.required">{{'this_field_is_required' | translate}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>{{'description' | translate}}</label>
+              <textarea type="text" class="form-control" placeholder="{{'enter_description' | translate}}" formControlName="description"></textarea>
+              <div class="invalid-feedback" *ngIf="addExperienceForm.controls.description.invalid &&
+                (addExperienceForm.controls.description.dirty || addExperienceForm.controls.description.touched || ngaddexpform.submitted)"
+              >
+                <div *ngIf="addExperienceForm.controls.description.errors.maxlength">{{'maximum_1000_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <div class="container">
+            <div class="form-row">
+              <div class="form-group col-md-6 my-auto text-left">
+                {{'fields_marked_with_star_is_required' | translate}}
+              </div>
+              <div class="form-group col-md-6 my-auto text-right">
+                <button type="submit" [disabled]="experienceFormLoader" class="btn theme-btn mx-auto">
+                  <span [ngClass]="{'spinner-border spinner-border-sm':experienceFormLoader}"></span> {{'add' | translate}}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="updateExperienceModal" tabindex="-1" role="dialog" aria-labelledby="updateExperienceModal" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':experienceFormLoader}">
+      <div class="modal-header">
+        <h4 class="modal-title">{{'update_experience' | translate}}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="updateExperienceForm" (ngSubmit)="onSubmitUpdateExperienceForm()" #ngupdateexpform="ngForm">
+        <div class="modal-body">
+          <div class="container">
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label>{{'organization' | translate}} <span class="symbol required"></span></label>
+                <input type="text" class="form-control" placeholder="{{'enter_organization_name' | translate}}" formControlName="organization">
+                <div class="invalid-feedback" *ngIf="updateExperienceForm.controls.organization.invalid &&
+                  (updateExperienceForm.controls.organization.dirty || updateExperienceForm.controls.organization.touched || ngupdateexpform.submitted)"
+                >
+                  <div *ngIf="updateExperienceForm.controls.organization.errors.required">{{'this_field_is_required' | translate}}</div>
+                  <div *ngIf="updateExperienceForm.controls.organization.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                  <div *ngIf="updateExperienceForm.controls.organization.errors.maxlength">{{'maximum_100_characters_allowed' | translate}}</div>
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <label>{{'designation' | translate}} <span class="symbol required"></span></label>
+                <input type="text" class="form-control" placeholder="{{'enter_designation_name' | translate}}" formControlName="designation">
+                <div class="invalid-feedback" *ngIf="updateExperienceForm.controls.designation.invalid &&
+                  (updateExperienceForm.controls.designation.dirty || updateExperienceForm.controls.designation.touched || ngupdateexpform.submitted)"
+                >
+                  <div *ngIf="updateExperienceForm.controls.designation.errors.required">{{'this_field_is_required' | translate}}</div>
+                  <div *ngIf="updateExperienceForm.controls.designation.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                  <div *ngIf="updateExperienceForm.controls.designation.errors.maxlength">{{'maximum_100_characters_allowed' | translate}}</div>
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <label>{{'currently_working' | translate}} <span class="symbol required"></span></label>
+                <select formControlName="currently_working" class="form-control">
+                  <option value='Yes'>Yes</option>
+                  <option value='No'>No</option>
+                </select>
+                <div class="invalid-feedback" *ngIf="updateExperienceForm.controls.currently_working.invalid && (updateExperienceForm.controls.currently_working.dirty || updateExperienceForm.controls.currently_working.touched || ngupdateexpform.submitted)">
+                  <div *ngIf="updateExperienceForm.controls.currently_working.errors.required">{{'this_field_is_required' | translate}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>{{'start_year' | translate}} <span class="symbol required"></span></label>
+                <select class="form-control" formControlName="start_year">
+                  <option value="">Start Year</option>
+                  <option *ngFor="let year of years" [value]="year">{{year}}</option>
+                </select>
+                <div class="invalid-feedback" *ngIf="updateExperienceForm.controls.start_year.invalid && (updateExperienceForm.controls.start_year.dirty || updateExperienceForm.controls.start_year.touched || ngupdateexpform.submitted)"
+                >
+                  <div *ngIf="updateExperienceForm.controls.start_year.errors.required">{{'this_field_is_required' | translate}}</div>
+                  <div *ngIf="updateExperienceForm.controls.start_year.errors.minlength">{{'minimum_4_characters_required' | translate}}</div>
+                  <div *ngIf="updateExperienceForm.controls.start_year.errors.maxlength">{{'maximum_4_characters_allowed' | translate}}</div>
+                </div>
+              </div>
+              <div class="form-group col-md-6">
+                <label>{{'start_month' | translate}} <span class="symbol required"></span></label>
+                <select class="form-control" formControlName="start_month">
+                  <option value="">Start Month</option>
+                  <option *ngFor="let month of months" [value]="month.id">{{month.month}}</option>
+                </select>
+                <div class="invalid-feedback" *ngIf="updateExperienceForm.controls.start_month.invalid && (updateExperienceForm.controls.start_month.dirty || updateExperienceForm.controls.start_month.touched || ngupdateexpform.submitted)"
+                >
+                  <div *ngIf="updateExperienceForm.controls.start_month.errors.required">{{'this_field_is_required' | translate}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row" *ngIf="updateExperienceForm.value.currently_working == 'No'">
+              <div class="form-group col-md-6">
+                <label>{{'start_year' | translate}}End Year <span class="symbol required"></span></label>
+                <select class="form-control" formControlName="end_year">
+                  <option value="">End Year</option>
+                  <option *ngFor="let year of years" [value]="year">{{year}}</option>
+                </select>
+                <div class="invalid-feedback" *ngIf="updateExperienceForm.controls.end_year.invalid &&
+                  (updateExperienceForm.controls.end_year.dirty || updateExperienceForm.controls.end_year.touched || ngupdateexpform.submitted)">
+                  <div *ngIf="updateExperienceForm.controls.end_year.errors.required">{{'this_field_is_required' | translate}}</div>
+                  <div *ngIf="updateExperienceForm.controls.end_year.errors.minlength">{{'minimum_4_characters_required' | translate}}</div>
+                  <div *ngIf="updateExperienceForm.controls.end_year.errors.maxlength">{{'maximum_4_characters_allowed' | translate}}</div>
+                </div>
+              </div>
+              <div class="form-group col-md-6">
+                <label>{{'end_month' | translate}} <span class="symbol required"></span></label>
+                <select class="form-control" formControlName="end_month">
+                  <option value="">End Month</option>
+                  <option *ngFor="let month of months" [value]="month.id">{{month.month}}</option>
+                </select>
+                <div class="invalid-feedback" *ngIf="updateExperienceForm.controls.end_month.invalid &&
+                  (updateExperienceForm.controls.end_month.dirty || updateExperienceForm.controls.end_month.touched || ngupdateexpform.submitted)"
+                >
+                  <div *ngIf="updateExperienceForm.controls.end_month.errors.required">{{'this_field_is_required' | translate}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>{{'description' | translate}}</label>
+              <textarea type="text" class="form-control" placeholder="{{'enter_description' | translate}}" formControlName="description"></textarea>
+              <div class="invalid-feedback" *ngIf="updateExperienceForm.controls.description.invalid &&
+                (updateExperienceForm.controls.description.dirty || updateExperienceForm.controls.description.touched || ngaddexpform.submitted)"
+              >
+                <div *ngIf="updateExperienceForm.controls.description.errors.maxlength">{{'maximum_1000_characters_allowed' | translate}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <div class="container">
+            <div class="form-row">
+              <div class="form-group col-md-6 my-auto text-left">
+                {{'fields_marked_with_star_is_required' | translate}}
+              </div>
+              <div class="form-group col-md-6 my-auto text-right">
+                <button type="submit" [disabled]="experienceFormLoader" class="btn theme-btn mx-auto">
+                  <span [ngClass]="{'spinner-border spinner-border-sm':experienceFormLoader}"></span> {{'update' | translate}}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

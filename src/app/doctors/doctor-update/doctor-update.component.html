@@ -1,0 +1,211 @@
+<div class="page-header" *ngIf="userType == 'Super Admin'">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-3">
+        <a routerLink="/doctors">{{'back_to_doctors' | translate}}</a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-3" [ngClass]="{'csspinner load1':updateDoctorFormLoader}">
+    <div class="edit-pfrl-img-sec">
+      <div class="A-profile">
+        <img [src]="userData.profile_image_url" alt="" class="rounded-circle">
+        <button type="button" class="btn btn-rounded btn-icon bg-Astral" (click)="ngprofileimagefileinput.click()">
+          <i class="mdi mdi-camera"></i>
+          <input #ngprofileimagefileinput type="file" (change)="onChangeProfileImage($event)" style="display:none;" accept="image/*">
+        </button>
+      </div>
+      <div class="card">
+        <div class="card-body p-2 text-center">
+          <h6 class="card-title mb-1">{{userData.full_name}}</h6>
+          <div class="mb-1"><small><i *ngIf="userData.email_verification_status == 'Verified'" class="mdi mdi-check-decagram text-success" matTooltip="{{'email_verified' | translate}}" matTooltipClass="primary-tooltip"></i>
+            <i *ngIf="userData.email_verification_status != 'Verified'" class="mdi mdi-close-circle text-danger" matTooltip="{{'email_not_verified' | translate}}" matTooltipClass="primary-tooltip"></i> {{userData.email}}</small>
+          </div>
+          <div class="mb-1"><small><i class="mdi mdi-cellphone-android"></i> {{userData.mobile_number}}</small></div>
+          <div class="mb-1"><small><i class="mdi mdi-account-check"></i> {{userData.account_status}} / {{userData.status}}</small></div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group edit-pfrl-img-sec">
+      <ul class="nav flex-column nav-pills nav-justified" role="tablist">
+        <li class="nav-item text-left">
+          <a class="nav-link" [ngClass]="{'active':activeTab=='info'}" id="info-tab" data-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="true"><i class="mdi mdi-account-card-details"></i> {{'account_info' | translate}}</a>
+        </li>
+        <li class="nav-item text-left">
+          <a class="nav-link" [ngClass]="{'active':activeTab=='settings'}" id="doc-settings-tab" data-toggle="tab" href="#doc-settings" role="tab" aria-controls="doc-settings" aria-selected="false"><i class="mdi mdi-settings"></i> {{'settings' | translate}}</a>
+        </li>
+        <!-- <li class="nav-item text-left">
+          <a class="nav-link" [ngClass]="{'active':activeTab=='specialization'}" id="specialization-tab" data-toggle="tab" href="#specialization" role="tab" aria-controls="specialization" aria-selected="false"><i class="mdi mdi-medical-bag"></i> {{'specialization' | translate}}</a>
+        </li> -->
+        <!-- <li class="nav-item text-left">
+          <a class="nav-link" [ngClass]="{'active':activeTab=='service'}" id="service-tab" data-toggle="tab" href="#service" role="tab" aria-controls="service" aria-selected="false"><i class="mdi mdi-book"></i> Service</a>
+        </li> -->
+        <li class="nav-item text-left">
+          <a class="nav-link" [ngClass]="{'active':activeTab=='work-schedule'}" id="work-schedule-tab" data-toggle="tab" href="#work-schedule" role="tab" aria-controls="work-schedule" aria-selected="false"><i class="mdi mdi-calendar-clock"></i> {{'work_schedule' | translate}}</a>
+        </li>
+        <!-- <li class="nav-item text-left">
+          <a class="nav-link" [ngClass]="{'active':activeTab=='documents'}" id="documents-tab" data-toggle="tab" href="#documents" role="tab" aria-controls="documents" aria-selected="false"><i class="mdi mdi-file-document"></i> {{'documents' | translate}}</a>
+        </li> -->
+        <li class="nav-item text-left">
+          <a class="nav-link" [ngClass]="{'active':activeTab=='experience'}" id="experience-tab" data-toggle="tab" href="#experience" role="tab" aria-controls="experience" aria-selected="false"><i class="mdi mdi-lightbulb"></i> {{'experience' | translate}}</a>
+        </li>
+        <li class="nav-item text-left">
+          <a class="nav-link" [ngClass]="{'active':activeTab=='education'}" id="education-tab" data-toggle="tab" href="#education" role="tab" aria-controls="education" aria-selected="false"><i class="mdi mdi-library"></i> {{'qualification' | translate}}</a>
+        </li>
+        <li class="nav-item text-left">
+          <a class="nav-link" [ngClass]="{'active':activeTab=='awards'}" id="awards-tab" data-toggle="tab" href="#awards" role="tab" aria-controls="awards" aria-selected="false"><i class="mdi mdi-trophy"></i> {{'awards' | translate}}</a>
+        </li>
+        <li class="nav-item text-left" *ngIf="userType != 'Clinic'">
+          <a class="nav-link" [ngClass]="{'active':activeTab=='establishment'}" id="establishment-tab" data-toggle="tab" href="#establishment" role="tab" aria-controls="establishment" aria-selected="false"><i class="mdi mdi-hospital-marker"></i> {{'clinics_hospitals' | translate}}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="col-md-9 intro-sec">
+    <div class="tab-content">
+      <div class="tab-pane" [ngClass]="{'active':activeTab=='info'}" id="info" role="tabpanel" aria-labelledby="info-tab">
+        <div class="card">
+          <div class="card-body p-2" [ngClass]="{'csspinner load1':updateDoctorFormLoader}">
+            <div class="card-title"><h3>{{'account_info' | translate}}</h3></div>
+            <form [formGroup]="updateDoctorForm" (ngSubmit)="onSubmitupdateDoctorForm()" #ngupdatedoctorform="ngForm">
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label>{{'first_name' | translate}} <span class="symbol required"></span></label>
+                  <input type="text" class="form-control" placeholder="{{'enter_first_name' | translate}}" formControlName="first_name">
+                  <div class="invalid-feedback" *ngIf="updateDoctorForm.controls.first_name.invalid &&
+                    (updateDoctorForm.controls.first_name.dirty || updateDoctorForm.controls.first_name.touched ||
+                    ngupdatedoctorform.submitted)"
+                  >
+                    <div *ngIf="updateDoctorForm.controls.first_name.errors.required">{{'this_field_is_required' | translate}}</div>
+                    <div *ngIf="updateDoctorForm.controls.first_name.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                    <div *ngIf="updateDoctorForm.controls.first_name.errors.maxlength">{{'maximum_50_characters_allowed' | translate}}</div>
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>{{'first_name' | translate}} <span class="symbol required"></span></label>
+                  <input type="text" class="form-control" placeholder="{{'enter_last_name' | translate}}" formControlName="last_name">
+                  <div class="invalid-feedback" *ngIf="updateDoctorForm.controls.last_name.invalid &&
+                    (updateDoctorForm.controls.last_name.dirty || updateDoctorForm.controls.last_name.touched ||
+                    ngupdatedoctorform.submitted)"
+                  >
+                    <div *ngIf="updateDoctorForm.controls.last_name.errors.required">{{'this_field_is_required' | translate}}</div>
+                    <div *ngIf="updateDoctorForm.controls.last_name.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                    <div *ngIf="updateDoctorForm.controls.last_name.errors.maxlength">{{'maximum_50_characters_allowed' | translate}}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label>{{'email' | translate}}
+                    <i *ngIf="userData.email_verification_status == 'Verified'" class="mdi mdi-check-decagram text-success" matTooltip="{{'email_verified' | translate}}" matTooltipClass="primary-tooltip"></i>
+                    <i *ngIf="userData.email_verification_status != 'Verified'" class="mdi mdi-close-circle text-danger" matTooltip="{{'email_not_verified' | translate}}" matTooltipClass="primary-tooltip"></i>
+                    <span class="symbol required"></span>
+                  </label>
+                  <input type="text" class="form-control" placeholder="Enter Email" formControlName="email">
+                  <div class="invalid-feedback" *ngIf="updateDoctorForm.controls.email.invalid &&
+                    (updateDoctorForm.controls.email.dirty || updateDoctorForm.controls.email.touched || ngupdatedoctorform.submitted)"
+                  >
+                    <div *ngIf="updateDoctorForm.controls.email.errors.required">{{'this_field_is_required' | translate}}</div>
+                    <div *ngIf="updateDoctorForm.controls.email.errors.email || updateDoctorForm.controls.email.errors.pattern">{{'valid_email_is_required' | translate}}</div>
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>{{'mobile_number' | translate}} <span class="symbol required"></span>
+                  </label>
+                  <input type="text" class="form-control" placeholder="{{'mobile_number' | translate}}" formControlName="mobile_number">
+                  <div class="invalid-feedback" *ngIf="updateDoctorForm.controls.mobile_number.invalid &&
+                    (updateDoctorForm.controls.mobile_number.dirty || updateDoctorForm.controls.mobile_number.touched ||
+                    ngupdatedoctorform.submitted)"
+                  >
+                    <div *ngIf="updateDoctorForm.controls.mobile_number.errors.required">{{'this_field_is_required' | translate}}</div>
+                    <div *ngIf="updateDoctorForm.controls.mobile_number.errors.minlength">{{'minimum_8_characters_required' | translate}}</div>
+                    <div *ngIf="updateDoctorForm.controls.mobile_number.errors.maxlength">{{'maximum_15_characters_allowed' | translate}}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label>{{'gender' | translate}} <span class="symbol required"></span></label>
+                  <select class="form-control" formControlName="gender">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                  </select>
+                  <div class="invalid-feedback" *ngIf="updateDoctorForm.controls.gender.invalid &&
+                    (updateDoctorForm.controls.gender.dirty || updateDoctorForm.controls.gender.touched ||
+                    ngupdatedoctorform.submitted)"
+                  >
+                    <div *ngIf="updateDoctorForm.controls.gender.errors.required">{{'this_field_is_required' | translate}}</div>
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>{{'dob' | translate}} <small>(Format: D/M/Y)</small> <span class="symbol required"></span></label>
+                  <input [matDatepicker]="myDatepickerSearchFrom" [max]="dobAllowedMaxDate" class="form-control"
+                    placeholder="Date Of Birth" formControlName="dob">
+                  <mat-datepicker-toggle [for]="myDatepickerSearchFrom" class="mat-dt-pic"></mat-datepicker-toggle>
+                  <mat-datepicker #myDatepickerSearchFrom></mat-datepicker>
+                  <div class="invalid-feedback" *ngIf="updateDoctorForm.controls.dob.invalid &&
+                    (updateDoctorForm.controls.dob.dirty || updateDoctorForm.controls.dob.touched || ngupdatedoctorform.submitted)"
+                  >
+                    <div *ngIf="updateDoctorForm.controls.dob.errors.required">{{'this_field_is_required' | translate}}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="introduction">{{'introduction' | translate}}</label>
+                <textarea class="form-control" id="introduction" rows="5" formControlName="introduction"></textarea>
+                <div class="invalid-feedback" *ngIf="updateDoctorForm.controls.introduction.invalid &&
+                  (updateDoctorForm.controls.introduction.dirty || updateDoctorForm.controls.introduction.touched || ngupdatedoctorform.submitted)"
+                >
+                  <div *ngIf="updateDoctorForm.controls.introduction.errors.maxlength">{{'maximum_1000_characters_allowed' | translate}}</div>
+                </div>
+              </div>
+              <hr>
+              <div class="form-row">
+                <div class="form-group col-md-6 my-auto text-left">
+                  {{'fields_marked_with_star_is_required' | translate}}
+                </div>
+                <div class="form-group col-md-6 my-auto text-right">
+                  <button type="submit" [disabled]="updateDoctorFormLoader" class="btn theme-btn mx-auto">
+                    <span [ngClass]="{'spinner-border spinner-border-sm':updateDoctorFormLoader}"></span> {{'update' | translate}}
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane" [ngClass]="{'active':activeTab=='settings'}" id="doc-settings" role="tabpanel" aria-labelledby="doc-settings-tab">
+        <app-settings></app-settings>
+      </div>
+      <!-- <div class="tab-pane" [ngClass]="{'active':activeTab=='specialization'}" id="specialization" role="tabpanel" aria-labelledby="specialization-tab">
+        <app-specialization></app-specialization>
+      </div> -->
+      <!-- <div class="tab-pane" [ngClass]="{'active':activeTab=='service'}" id="service" role="tabpanel" aria-labelledby="service-tab">
+        <app-services></app-services>
+      </div> -->
+      <div class="tab-pane" [ngClass]="{'active':activeTab=='work-schedule'}" id="work-schedule" role="tabpanel" aria-labelledby="work-schedule-tab">
+        <app-work-schedule></app-work-schedule>
+      </div>
+      <!-- <div class="tab-pane" [ngClass]="{'active':activeTab=='documents'}" id="documents" role="tabpanel" aria-labelledby="documents-tab">
+        <app-documents></app-documents>
+      </div> -->
+      <div class="tab-pane" [ngClass]="{'active':activeTab=='experience'}" id="experience" role="tabpanel" aria-labelledby="experience-tab">
+        <app-experience></app-experience>
+      </div>
+      <div class="tab-pane" [ngClass]="{'active':activeTab=='education'}" id="education" role="tabpanel" aria-labelledby="education-tab">
+        <app-education></app-education>
+      </div>
+      <div class="tab-pane" [ngClass]="{'active':activeTab=='awards'}" id="awards" role="tabpanel" aria-labelledby="awards-tab">
+        <app-awards></app-awards>
+      </div>
+      <div class="tab-pane" [ngClass]="{'active':activeTab=='establishment'}" id="establishment" role="tabpanel"
+        aria-labelledby="establishment-tab" *ngIf="userType != 'Clinic'"
+      >
+        <app-establishment></app-establishment>
+      </div>
+    </div>
+  </div>
+</div>
+

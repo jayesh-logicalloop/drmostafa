@@ -1,0 +1,203 @@
+<div class="card">
+  <div class="card-title p-3">
+    <h2>
+      <span *ngIf="coupon_id === '0'"> {{'add_coupon' | translate}}</span>
+      <span *ngIf="coupon_id != '0'"> {{'update_coupon' | translate}} </span>
+    </h2>
+    <a routerLink="/coupons"><i class="mdi mdi-arrow-left-bold-circle"></i> {{'back_to_coupons' | translate}}</a>
+  </div>
+  <div class="card-body p-3">
+    <form [formGroup]="updateForm" (ngSubmit)="onSubmitUpdateForm()" #ngupdateForm="ngForm" [ngClass]="{'csspinner load1': updateFormLoader}">
+      <div class="form-row">
+        <div class="form-group col-md-3">
+          <label>{{'coupon_code' | translate}} <span class="symbol required"></span></label>
+          <input type="text" class="form-control" placeholder="{{'enter_coupon_code' | translate}}" formControlName="coupon_code">
+          <div class="invalid-feedback" *ngIf="updateForm.controls.coupon_code.invalid &&
+            (updateForm.controls.coupon_code.dirty || updateForm.controls.coupon_code.touched || ngupdateForm.submitted)"
+          >
+            <div *ngIf="updateForm.controls.coupon_code.errors.required">{{'this_field_is_required' | translate}}</div>
+            <div *ngIf="updateForm.controls.coupon_code.errors.minlength">{{'minimum_4_characters_required' | translate}}</div>
+            <div *ngIf="updateForm.controls.coupon_code.errors.maxlength">{{'maximum_15_characters_allowed' | translate}}</div>
+          </div>
+        </div>
+        <div class="form-group col-md-3">
+          <label>{{'coupon_for' | translate}} <span class="symbol required"></span></label>
+          <select class="form-control" formControlName="coupon_for">
+            <option value="All">All Items</option>
+            <option value="Specific">Specific Items</option>
+          </select>
+          <div class="invalid-feedback" *ngIf="updateForm.controls.coupon_for.invalid &&
+            (updateForm.controls.coupon_for.dirty || updateForm.controls.coupon_for.touched || ngupdateForm.submitted)"
+          >
+            <div *ngIf="updateForm.controls.coupon_for.errors.required">{{'this_field_is_required' | translate}}</div>
+          </div>
+        </div>
+        <div class="form-group col-md-3">
+          <label>{{'usage_limit' | translate}} <span class="symbol required"></span></label>
+          <input type="text" class="form-control" placeholder="{{'usage_limit' | translate}}" formControlName="usage_limit">
+          <div class="invalid-feedback" *ngIf="updateForm.controls.usage_limit.invalid &&
+            (updateForm.controls.usage_limit.dirty || updateForm.controls.usage_limit.touched || ngupdateForm.submitted)"
+          >
+            <div *ngIf="updateForm.controls.usage_limit.errors.required">{{'this_field_is_required' | translate}}</div>
+          </div>
+        </div>
+        <div class="form-group col-md-3">
+          <label>{{'status' | translate}} <span class="symbol required"></span></label>
+          <select class="form-control" formControlName="status">
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+          <div class="invalid-feedback" *ngIf="updateForm.controls.status.invalid &&
+            (updateForm.controls.status.dirty || updateForm.controls.status.touched || ngupdateForm.submitted)"
+          >
+            <div *ngIf="updateForm.controls.status.errors.required">{{'this_field_is_required' | translate}}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-3">
+          <label>{{'start_date' | translate}} <small>(D/M/Y)</small> <span class="symbol required"></span></label>
+          <input [matDatepicker]="sdp" class="form-control" (focus)="sdp.open()" placeholder="{{'choose_start_date' | translate}}" formControlName="start_date">
+          <mat-datepicker-toggle [for]="sdp" class="mat-dt-pic"></mat-datepicker-toggle>
+          <mat-datepicker #sdp></mat-datepicker>
+          <div class="invalid-feedback" *ngIf="updateForm.controls.start_date.invalid &&
+            (updateForm.controls.start_date.dirty || updateForm.controls.start_date.touched || ngupdateForm.submitted)"
+          >
+            <div *ngIf="updateForm.controls.start_date.errors.required">{{'this_field_is_required' | translate}}</div>
+          </div>
+        </div>
+        <div class="form-group col-md-3">
+          <label>{{'end_date' | translate}} <small>(D/M/Y)</small> <span class="symbol required"></span></label>
+          <input [matDatepicker]="edp" class="form-control" (focus)="edp.open()" placeholder="{{'choose_end_date' | translate}}" formControlName="end_date">
+          <mat-datepicker-toggle [for]="edp" class="mat-dt-pic"></mat-datepicker-toggle>
+          <mat-datepicker #edp></mat-datepicker>
+          <div class="invalid-feedback" *ngIf="updateForm.controls.end_date.invalid &&
+            (updateForm.controls.end_date.dirty || updateForm.controls.end_date.touched || ngupdateForm.submitted)"
+          >
+            <div *ngIf="updateForm.controls.end_date.errors.required">{{'this_field_is_required' | translate}}</div>
+          </div>
+        </div>
+        <div class="form-group col-md-3">
+          <label>{{'discount_type' | translate}} <span class="symbol required"></span></label>
+          <select class="form-control" formControlName="discount_type">
+            <option value="Fixed">Fixed</option>
+            <option value="Percentage">Percentage</option>
+          </select>
+          <div class="invalid-feedback" *ngIf="updateForm.controls.discount_type.invalid &&
+            (updateForm.controls.discount_type.dirty || updateForm.controls.discount_type.touched || ngupdateForm.submitted)"
+          >
+            <div *ngIf="updateForm.controls.discount_type.errors.required">{{'this_field_is_required' | translate}}</div>
+          </div>
+        </div>
+        <div class="form-group col-md-3">
+          <label>{{'discount_amount' | translate}} <span class="symbol required"></span></label>
+          <input type="text" class="form-control strict_numeric" placeholder="{{'enter_discount_amount' | translate}}" formControlName="discount_amount">
+          <div class="invalid-feedback" *ngIf="updateForm.controls.discount_amount.invalid &&
+            (updateForm.controls.discount_amount.dirty || updateForm.controls.discount_amount.touched || ngupdateForm.submitted)"
+          >
+            <div *ngIf="updateForm.controls.discount_amount.errors.required">{{'this_field_is_required' | translate}}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row" *ngIf="this.updateForm.value.coupon_for == 'Specific'">
+        <div class="form-group col-md-4">
+          <table class="table table-bordered">
+            <tr>
+              <th>#</th>
+              <th>{{'book' | translate}}</th>
+              <th>{{'action' | translate}}</th>
+            </tr>
+            <tr *ngFor="let item of books; let i = index">
+              <td>{{i+1}}</td>
+              <td>{{item.name}}</td>
+              <td><input type="checkbox" [checked]="item.checked" (change)="addUpdateProduct($event.target.checked, 'Book', item.book_id)" /></td>
+            </tr>
+          </table>
+        </div>
+        <div class="form-group col-md-4">
+          <table class="table table-bordered">
+            <tr>
+              <th>#</th>
+              <th>{{'course' | translate}}</th>
+              <th>{{'action' | translate}}</th>
+            </tr>
+            <tr *ngFor="let item of courses; let i = index">
+              <td>{{i+1}}</td>
+              <td>{{item.name}}</td>
+              <td><input type="checkbox" [checked]="item.checked" (change)="addUpdateProduct($event.target.checked, 'Course', item.course_id)" /></td>
+            </tr>
+          </table>
+        </div>
+        <div class="form-group col-md-4">
+          <table class="table table-bordered">
+            <tr>
+              <th>#</th>
+              <th>{{'live_courses' | translate}}</th>
+              <th>{{'action' | translate}}</th>
+            </tr>
+            <tr *ngFor="let item of sessions; let i = index">
+              <td>{{i+1}}</td>
+              <td>{{item.name}}</td>
+              <td><input type="checkbox" [checked]="item.checked" (change)="addUpdateProduct($event.target.checked, 'Session', item.session_id)" /></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label>{{'image' | translate}} <span class="symbol required"></span>
+            <div class="text-danger">
+              <div><small>{{'only_jpg_png_files_allowed' | translate}}</small></div>
+              <div><small>{{'file_size_should_not_be_greater_than_500_kb' | translate}}</small></div>
+            </div>
+          </label>
+          <div class="custom-file">
+            <input #ngimagefileinput type="file" (change)="onChangeImage($event)" accept="image/png,image/jpeg" class="custom-file-input">
+            <label class="custom-file-label" for="customFile">{{'choose_image' | translate}}</label>
+          </div>
+          <div class="invalid-feedback" *ngIf="updateForm.controls.image.invalid &&
+            (updateForm.controls.image.dirty || updateForm.controls.image.touched || ngupdateForm.submitted)"
+          >
+            <div *ngIf="updateForm.controls.image.errors.required">{{'image_is_required' | translate}}</div>
+          </div>
+        </div>
+        <div class="form-group col-sm-6 text-center" *ngIf="image_src">
+          <div class="img-item">
+            <!-- <button type="button" class="btn btn-outline-secondary btn-rounded btn-icon img-delete"
+              matTooltip="Remove Image" matTooltipClass="primary tooltip"
+            >
+              <i class="mdi mdi-delete mdi-18px" (click)="removeImage()"></i>
+            </button> -->
+            <img [src]="image_src" alt="" class="img-ele img-fluid">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>{{'description' | translate}} <span class="symbol required"></span></label>
+        <textarea class="form-control" placeholder="{{'enter_description' | translate}}" formControlName="description"></textarea>
+        <div class="invalid-feedback" *ngIf="updateForm.controls.description.invalid &&
+          (updateForm.controls.description.dirty || updateForm.controls.description.touched || ngupdateForm.submitted)"
+        >
+          <div *ngIf="updateForm.controls.description.errors.required">{{'this_field_is_required' | translate}}</div>
+          <div *ngIf="updateForm.controls.description.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+          <div *ngIf="updateForm.controls.description.errors.maxlength">{{'maximum_250_characters_allowed' | translate}}</div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-6 my-auto text-left">
+          {{'fields_marked_with_star_is_required' | translate}}
+        </div>
+        <div class="form-group col-md-6 my-auto text-right">
+          <button type="submit" [disabled]="updateFormLoader" class="btn theme-btn mx-auto">
+            <span [ngClass]="{'spinner-border spinner-border-sm':updateFormLoader}"></span> {{'update' | translate}}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

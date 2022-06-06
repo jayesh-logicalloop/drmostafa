@@ -1,0 +1,860 @@
+
+<div class="page-header" *ngIf="userType != 'Patient'">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-3 txt-arabic">
+        <a routerLink="/patients">{{'back_to_patients' | translate}}</a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row" *ngIf="!dataLoader">
+  <div class="col-md-3">
+    <div class="edit-pfrl-img-sec">
+      <div class="A-profile">
+        <img [src]="userData.profile_image_url" alt="profile-image" class="rounded-circle">
+        <button type="button" class="btn btn-rounded btn-icon bg-Astral" (click)="ngprofileimagefileinput.click()"
+          *ngIf="userType == 'Patient' || userType == 'Super Admin'"
+        >
+          <i class="mdi mdi-camera"></i>
+          <input #ngprofileimagefileinput type="file" (change)="onChangeProfileImage($event)" style="display:none;" accept="image/*" />
+        </button>
+      </div>
+      <div class="card">
+        <div class="card-body p-3 text-center">
+          <h6 class="card-title text-center mb-1">{{userData.full_name}}</h6>
+          <div class="mb-1">
+            <small>
+              <i *ngIf="userData.email_verification_status == 'Verified'" class="mdi mdi-check-decagram text-success"
+                matTooltip="{{'email_is_verified' | translate}}" matTooltipClass="primary-tooltip"></i>
+              <i *ngIf="userData.email_verification_status != 'Verified'" class="mdi mdi-close-circle text-danger"
+                matTooltip="{{'email_is_not_verified' | translate}}" matTooltipClass="primary-tooltip"></i> {{userData.email}}
+            </small>
+          </div>
+          <div class="mb-1"><small><i class="mdi mdi-cellphone-android"></i> {{userData.mobile_number}}</small></div>
+          <div class="mb-1"><small><i class="mdi mdi-account-check"></i> {{userData.status}}</small></div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group edit-pfrl-img-sec">
+      <ul class="nav flex-column nav-pills nav-justified" role="tablist">
+        <li class="nav-item text-left">
+          <a class="nav-link" [ngClass]="{'active':activeTab=='info'}" id="info-tab" data-toggle="tab" href="#info" role="tab"
+            aria-controls="info" aria-selected="true"
+          >
+            <i class="mdi mdi-account-card-details"></i> {{'info' | translate}}
+          </a>
+        </li>
+        <li class="nav-item text-left" *ngIf="userType == 'Patient' || userType == 'Super Admin'">
+          <a class="nav-link" [ngClass]="{'active':activeTab=='family'}" id="family-tab" data-toggle="tab" href="#family" role="tab" aria-controls="family" aria-selected="false"><i class="mdi mdi-account-multiple-plus"></i> {{'family_members' | translate}}</a>
+        </li>
+        <li class="nav-item text-left" *ngIf="userType == 'Patient' || userType == 'Super Admin'">
+          <a class="nav-link" [ngClass]="{'active':activeTab=='health-records'}" id="health-records-tab" data-toggle="tab" href="#health-records" role="tab" aria-controls="health-records" aria-selected="false"><i class="mdi mdi-medical-bag"></i> {{'health_records' | translate}}</a>
+        </li>
+        <li class="nav-item text-left">
+          <a class="nav-link" [ngClass]="{'active':activeTab=='appointments'}" id="appointments-tab" data-toggle="tab" href="#appointments" role="tab" aria-controls="appointments" aria-selected="false"><i class="mdi mdi-book"></i> {{'appointments' | translate}}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="col-md-9 intro-sec px-0">
+    <div class="tab-content">
+      <div class="tab-pane" [ngClass]="{'active':activeTab=='info'}" id="info" role="tabpanel" aria-labelledby="info-tab">
+        <div class="card">
+          <div class="card-body p-3" [ngClass]="{'csspinner load1':updateUserFormLoader}">
+            <div class="card-title"><h3>{{'info' | translate}}</h3></div>
+            <form [formGroup]="updateUserForm" (ngSubmit)="onSubmitUserUpdateForm()"
+              #ngupdateuserform="ngForm" [ngClass]="{'csspinner load1':updateUserFormLoader}"
+            >
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label>{{'first_name' | translate}} <span class="symbol required"></span></label>
+                  <input type="text" class="form-control" placeholder="{{'enter_first_name' | translate}}" formControlName="first_name">
+                  <div class="invalid-feedback" *ngIf="updateUserForm.controls.first_name.invalid &&
+                    (updateUserForm.controls.first_name.dirty || updateUserForm.controls.first_name.touched || ngupdateuserform.submitted)"
+                  >
+                    <div *ngIf="updateUserForm.controls.first_name.errors.required">{{'this_field_is_required' | translate}}</div>
+                    <div *ngIf="updateUserForm.controls.first_name.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                    <div *ngIf="updateUserForm.controls.first_name.errors.maxlength">{{'maximum_50_characters_allowed' | translate}}</div>
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>{{'last_name' | translate}} <span class="symbol required"></span></label>
+                  <input type="text" class="form-control" placeholder="{{'enter_last_name' | translate}}" formControlName="last_name">
+                  <div class="invalid-feedback" *ngIf="updateUserForm.controls.last_name.invalid &&
+                    (updateUserForm.controls.last_name.dirty || updateUserForm.controls.last_name.touched || ngupdateuserform.submitted)"
+                  >
+                    <div *ngIf="updateUserForm.controls.last_name.errors.required">{{'this_field_is_required' | translate}}</div>
+                    <div *ngIf="updateUserForm.controls.last_name.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                    <div *ngIf="updateUserForm.controls.last_name.errors.maxlength">{{'maximum_50_characters_allowed' | translate}}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label>{{'email' | translate}} <span class="symbol required"></span></label>
+                  <input type="text" class="form-control" placeholder="Enter Email" formControlName="email">
+                  <div class="invalid-feedback" *ngIf="updateUserForm.controls.email.invalid &&
+                    (updateUserForm.controls.email.dirty || updateUserForm.controls.email.touched || ngupdateuserform.submitted)"
+                  >
+                    <div *ngIf="updateUserForm.controls.email.errors.required">{{'this_field_is_required' | translate}}</div>
+                    <div *ngIf="updateUserForm.controls.email.errors.email || updateUserForm.controls.email.errors.pattern">
+                      {{'valid_email_is_required' | translate}}
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>{{'mobile_number' | translate}} <span class="symbol required"></span></label>
+                  <!-- <input type="text" class="form-control strict_integer" placeholder="{{'enter_mobile_number' | translate}}" formControlName="mobile_number"> -->
+                  <br>
+                  <ngx-intl-tel-input [cssClass]="'form-control'"
+                    [preferredCountries]="preferredCountries"
+                    [enableAutoCountrySelect]="true"
+                    [enablePlaceholder]="true"
+                    customPlaceholder="{{'enter_mobile_number' | translate}}"
+                    [searchCountryFlag]="true"
+                    [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                    [selectFirstCountry]="false"
+                    [selectedCountryISO]="selectedCountryCode"
+                    [maxLength]="15"
+                    [phoneValidation]="true"
+                    [separateDialCode]="true"
+                    name="mobile_number"
+                    formControlName="mobile_number">
+                  </ngx-intl-tel-input>
+                  <div class="invalid-feedback" *ngIf="updateUserForm.controls.mobile_number.invalid &&
+                    (updateUserForm.controls.mobile_number.dirty || updateUserForm.controls.mobile_number.touched || ngupdateuserform.submitted)"
+                  >
+                    <div *ngIf="updateUserForm.controls.mobile_number.errors.required">{{'this_field_is_required' | translate}}</div>
+                    <div *ngIf="updateUserForm.controls.mobile_number.errors.minlength">{{'minimum_8_characters_required' | translate}}</div>
+                    <div *ngIf="updateUserForm.controls.mobile_number.errors.maxlength">{{'maximum_15_characters_allowed' | translate}}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label>{{'gender' | translate}} <span class="symbol required"></span></label>
+                  <select class="form-control" formControlName="gender">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                  </select>
+                  <div class="invalid-feedback" *ngIf="updateUserForm.controls.gender.invalid &&
+                    (updateUserForm.controls.gender.dirty || updateUserForm.controls.gender.touched || ngupdateuserform.submitted)"
+                  >
+                    <div *ngIf="updateUserForm.controls.gender.errors.required">{{'this_field_is_required' | translate}}</div>
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>{{'dob' | translate}} <small>(Format: D/M/Y)</small> <span class="symbol required"></span></label>
+                  <input [matDatepicker]="userDOBDatePicker" (click)="userDOBDatePicker.open()" [max]="maxDateDob" class="form-control"
+                    placeholder="{{'dob' | translate}}" formControlName="dob">
+                  <mat-datepicker-toggle [for]="userDOBDatePicker" class="mat-dt-pic" *ngIf="userType != 'Doctor'"></mat-datepicker-toggle>
+                  <mat-datepicker #userDOBDatePicker></mat-datepicker>
+                  <div class="invalid-feedback" *ngIf="updateUserForm.controls.dob.invalid &&
+                    (updateUserForm.controls.dob.dirty || updateUserForm.controls.dob.touched || ngupdateuserform.submitted)"
+                  >
+                    <div *ngIf="updateUserForm.controls.dob.errors.required">{{'this_field_is_required' | translate}}</div>
+                  </div>
+                </div>
+              </div>
+              <!--<div class="form-row">
+                <div class="form-group col-md-4">
+                  <label>{{'blood_group' | translate}}</label>
+                  <select formControlName="blood_group" class="form-control">
+                    <option value=""> Blood Group </option>
+                    <option *ngFor="let bg of allBloodGroups" [value]="bg">{{bg}}</option>
+                  </select>
+                </div>
+                <div class="form-group col-md-4">
+                  <label>{{'height' | translate}} <small>(in cm)</small></label>
+                  <input type="text" class="form-control strict_integer" placeholder="{{'enter_height_in_cm' | translate}}" formControlName="height">
+                  <div class="invalid-feedback" *ngIf="updateUserForm.controls.height.invalid &&
+                    (updateUserForm.controls.height.dirty || updateUserForm.controls.height.touched || ngupdateuserform.submitted)"
+                  >
+                    <div *ngIf="updateUserForm.controls.height.errors.maxlength">{{'maximum_3_characters_allowed' | translate}}</div>
+                  </div>
+                </div>
+                <div class="form-group col-md-4">
+                  <label>{{'weight' | translate}} <small>(in kg)</small></label>
+                  <input type="text" class="form-control strict_integer" placeholder="{{'enter_weight_in_kg' | translate}}" formControlName="weight">
+                  <div class="invalid-feedback" *ngIf="updateUserForm.controls.weight.invalid &&
+                    (updateUserForm.controls.weight.dirty || updateUserForm.controls.weight.touched || ngupdateuserform.submitted)"
+                  >
+                    <div *ngIf="updateUserForm.controls.weight.errors.maxlength">{{'maximum_3_characters_allowed' | translate}}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label>{{'allergy' | translate}}</label>
+                  <textarea class="form-control" formControlName="allergy"></textarea>
+                  <div class="invalid-feedback" *ngIf="updateUserForm.controls.allergy.invalid &&
+                    (updateUserForm.controls.allergy.dirty || updateUserForm.controls.allergy.touched || ngupdateuserform.submitted)"
+                  >
+                    <div *ngIf="updateUserForm.controls.allergy.errors.maxlength">{{'maximum_1000_characters_allowed'}}</div>
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>{{'medical_history' | translate}}</label>
+                  <textarea class="form-control" formControlName="medical_history"></textarea>
+                  <div class="invalid-feedback" *ngIf="updateUserForm.controls.medical_history.invalid &&
+                    (updateUserForm.controls.medical_history.dirty || updateUserForm.controls.medical_history.touched || ngupdateuserform.submitted)"
+                  >
+                    <div *ngIf="updateUserForm.controls.medical_history.errors.maxlength">{{'maximum_1000_characters_allowed'}}</div>
+                  </div>
+                </div>
+              </div>-->
+              <ng-template [ngIf]="userType =='Super Admin' || userType =='Doctor'">
+                <div class="form-row">
+                  <div class="form-group col-md-4">
+                    <label>{{'email_verification' | translate}} <span class="symbol required"></span></label>
+                    <select class="form-control" formControlName="email_verification_status">
+                      <option value="Verified">Verified</option>
+                      <option value="Not Verified">Not Verified</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label>{{'mobile_verification' | translate}} <span class="symbol required"></span></label>
+                    <select class="form-control" formControlName="mobile_verification_status">
+                      <option value="Verified">Verified</option>
+                      <option value="Not Verified">Not Verified</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label>{{'status' | translate}} <span class="symbol required"></span></label>
+                    <select class="form-control" formControlName="status">
+                      <option value="Active">Active</option>
+                      <option value="Inactive">Inactive</option>
+                    </select>
+                  </div>
+                </div>
+              </ng-template>
+              <hr>
+              <div class="form-row" *ngIf="userType == 'Patient' || userType == 'Super Admin' || userType == 'Doctor'">
+                <div class="form-group col-md-6 my-auto text-left">
+                  {{'fields_marked_with_star_is_required' | translate}}
+                </div>
+                <div class="form-group col-md-6 my-auto text-right">
+                  <button type="submit" class="btn theme-btn mx-auto">{{'update' | translate}}</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane" *ngIf="userType == 'Patient' || userType == 'Super Admin'" [ngClass]="{'active':activeTab=='family'}"
+        id="family" role="tabpanel" aria-labelledby="family-tab"
+      >
+        <div class="card">
+          <div class="card-body p-3 table-responsive">
+            <div class="card-title">
+              <button *ngIf="userType == 'Patient'" type="button" class="btn theme-btn btn-sm float-right" (click)="openAddFamilyMemberFormModal()">
+                <i class="mdi mdi-plus-circle mr-1"></i> {{'add_members' | translate}}
+              </button>
+              <h3>{{'family_members' | translate}}</h3>
+            </div>
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>{{'name' | translate}}</th>
+                  <th>{{'email' | translate}}</th>
+                  <th>{{'mobile' | translate}}</th>
+                  <th>{{'dob' | translate}}</th>
+                  <th>{{'gender' | translate}}</th>
+                  <th *ngIf="userType == 'Patient'">{{'action' | translate}}</th>
+                </tr>
+              </thead>
+              <tbody [ngClass]="{'csspinner load1':familyMembersDataLoader}">
+                <ng-container *ngIf="familyMembers.length">
+                  <tr *ngFor="let member of familyMembers; let i = index;">
+                    <td><img [src]="member.patient_image_url" alt="" class="img-fluid" style="height: 30px; width: 30px;"> {{member.patient_name}}</td>
+                    <td>{{member.patient_email}}</td>
+                    <td>{{member.patient_mobile}}</td>
+                    <td>{{member.patient_dob_formatted}}</td>
+                    <td>{{member.patient_gender}}</td>
+                    <td *ngIf="userType == 'Patient'">
+                      <div class="icon-block">
+                        <a class="cp" matTooltip="Update Member" matTooltipClass="primary-tooltip"
+                          (click)="openFamilyMemberUpdateFormModal(member.patient_id, i)"
+                        >
+                          <i class="mdi mdi-pencil b-gry" aria-hidden="true"></i></a>
+                        <a class="cp" matTooltip="Delete Member" matTooltipClass="primary-tooltip" (click)="onDeleteFamilyMember(member.patient_id)">
+                          <i class="mdi mdi-delete b-brown"></i></a>
+                      </div>
+                    </td>
+                  </tr>
+                </ng-container>
+                <ng-container *ngIf="!familyMembers.length">
+                  <tr>
+                    <td colspan="6"><div class="alert alert-danger text-center">{{'no_data_found' | translate}}</div></td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane" *ngIf="userType == 'Patient' || userType == 'Super Admin'" [ngClass]="{'active':activeTab=='health-records'}" id="health-records" role="tabpanel" aria-labelledby="health-records-tab">
+        <div class="card">
+          <div class="card-body p-3 table-responsive">
+            <div class="card-title">
+              <button *ngIf="userType == 'Patient'" type="button" class="btn theme-btn btn-sm float-right" (click)="openAddHealthRecordFormModal()">
+                <i class="mdi mdi-plus-circle mr-1"></i> {{'add_health_record' | translate}}
+              </button>
+              <h3>{{'health_records' | translate}}</h3>
+            </div>
+            <table class="table table-hover">
+              <thead>
+                <th>ID</th>
+                <th>{{'name' | translate}}</th>
+                <th>{{'for' | translate}}</th>
+                <th>{{'doctor' | translate}}Doctor</th>
+                <th>{{'description' | translate}}</th>
+                <th>{{'action' | translate}}</th>
+              </thead>
+              <tbody [ngClass]="{'csspinner load1': healthRecordsDataLoader}">
+                <ng-container *ngIf="healthRecords">
+                  <tr *ngFor="let item of healthRecords ; let i = index">
+                    <th>{{i+1}}</th>
+                    <td>
+                      <ng-container *ngIf="item.file_url">
+                        <a data-fancybox [attr.data-caption]="item.name" [href]="item.file_url">{{item.name}}</a>
+                      </ng-container>
+                      <ng-container *ngIf="!item.file_url">{{item.name}}</ng-container>
+                    </td>
+                    <td>
+                      <ng-container *ngIf="item.record_for == 'Self'">{{item.record_for}}</ng-container>
+                      <ng-container *ngIf="item.record_for != 'Self'">{{item.patient_name}}</ng-container>
+                    </td>
+                    <td>{{item.doctor}}</td>
+                    <td class="text-pre-wrap">{{item.description}}</td>
+                    <td>
+                      <a *ngIf="item.download_url" [href]="item.download_url" class="cp ml-2"
+                        matTooltipClass="primary-tooltip" matTooltip="{{'download' | translate}}"
+                      >
+                        <i class="mdi mdi-download"></i>
+                      </a>
+                      <button type="button" class="cp btn p-0 text-danger" (click)="deleteHealthRecord(item.id)"
+                        matTooltipClass="primary-tooltip" matTooltip="{{'delete' | translate}}"
+                      >
+                        <i class="mdi mdi-delete"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </ng-container>
+                <ng-container *ngIf="!healthRecords">
+                  <tr>
+                    <td colspan="5"><div class="alert alert-danger text-center">{{'no_data_found' | translate}}</div></td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane" [ngClass]="{'active':activeTab=='appointments'}" id="appointments" role="tabpanel" aria-labelledby="appointments-tab">
+        <div class="card">
+          <div class="card-body p-3 table-responsive">
+            <div class="card-title txt-arabic"><h3>{{'appointments' | translate}}</h3></div>
+            <table class="table table-hover">
+              <thead>
+                <th>{{'appointment_id' | translate}}</th>
+                <th *ngIf="userType == 'Super Admin' || userType == 'Clinic' || userType == 'Patient'">{{'doctor' | translate}}</th>
+                <th>{{'time' | translate}}</th>
+                <th>{{'status' | translate}}</th>
+              </thead>
+              <tbody>
+                <ng-container *ngIf="appointments.length">
+                  <tr *ngFor="let item of appointments ; let i = index">
+                    <th>{{item.appointment_id}}</th>
+                    <td *ngIf="userType == 'Super Admin' || userType == 'Clinic' || userType == 'Patient'">{{item.doctor_name}}</td>
+                    <td>{{item.appointment_datetime_formatted}}</td>
+                    <td>{{item.appointment_status}}</td>
+                  </tr>
+                </ng-container>
+                <ng-container *ngIf="!appointments.length">
+                  <tr>
+                    <td colspan="4"><div class="alert alert-danger text-center">{{'no_data_found' | translate}}</div></td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="addHealthRecordModal" tabindex="-1" role="dialog" aria-labelledby="addHealthRecordModal" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':addHealthRecordFormLoader}">
+      <div class="modal-header">
+        <h4 class="modal-title">{{'add_health_record' | translate}}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="addHealthRecordForm" (ngSubmit)="onSubmitAddHealthRecordForm()" #ngaddhealthrecordform="ngForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label>{{'report_name' | translate}} <span class="symbol required"></span></label>
+            <input type="text" class="form-control" placeholder="{{'enter_report_name' | translate}}" formControlName="name">
+            <div class="invalid-feedback" *ngIf="addHealthRecordForm.controls.name.invalid &&
+                (addHealthRecordForm.controls.name.dirty || addHealthRecordForm.controls.name.touched || ngaddhealthrecordform.submitted)"
+            >
+              <div *ngIf="addHealthRecordForm.controls.name.errors.required">{{'this_field_is_required' | translate}}</div>
+              <div *ngIf="addHealthRecordForm.controls.name.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+              <div *ngIf="addHealthRecordForm.controls.name.errors.maxlength">{{'maximum_200_characters_allowed' | translate}}</div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-sm-6">
+              <label>{{'for' | translate}} <span class="symbol required"></span></label>
+              <select class="form-control" formControlName="record_for">
+                <option value="Self">Self</option>
+                <option value="Family">Family Member</option>
+              </select>
+              <div class="invalid-feedback" *ngIf="addHealthRecordForm.controls.record_for.invalid &&
+                (addHealthRecordForm.controls.record_for.dirty || addHealthRecordForm.controls.record_for.touched || ngaddhealthrecordform.submitted)"
+              >
+                <div *ngIf="addHealthRecordForm.controls.record_for.errors.required">{{'this_field_is_required' | translate}}</div>
+              </div>
+            </div>
+            <div class="form-group col-sm-6" *ngIf="addHealthRecordForm.value.record_for=='Family'">
+              <label>{{'select_family_member' | translate}} <span class="symbol required"></span></label>
+              <select class="form-control" formControlName="patient_id">
+                <ng-container *ngFor="let member of familyMembers">
+                  <ng-template [ngIf]="member.patient_type != 'Self'">
+                    <option [value]="member.patient_id">{{member.patient_name}}</option>
+                  </ng-template>
+                </ng-container>
+              </select>
+              <div class="invalid-feedback" *ngIf="addHealthRecordForm.controls.patient_id.invalid &&
+                (addHealthRecordForm.controls.patient_id.dirty || addHealthRecordForm.controls.patient_id.touched || ngaddhealthrecordform.submitted)"
+              >
+              <div *ngIf="addHealthRecordForm.controls.patient_id.errors.required">{{'this_field_is_required' | translate}}</div>
+            </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label>{{'date' | translate}} <small>(Format: D/M/Y)</small> <span class="symbol required"></span></label>
+              <input [matDatepicker]="recordDateDatePicker" class="form-control" [max]="maxDateDob"
+                (click)="recordDateDatePicker.open()" placeholder="Date of report/prescription" formControlName="record_date"
+              >
+              <mat-datepicker #recordDateDatePicker></mat-datepicker>
+              <div class="invalid-feedback" *ngIf="addHealthRecordForm.controls.record_date.invalid &&
+                (addHealthRecordForm.controls.record_date.dirty || addHealthRecordForm.controls.record_date.touched || ngaddhealthrecordform.submitted)"
+              >
+                <div *ngIf="addHealthRecordForm.controls.record_date.errors.required">{{'this_field_is_required' | translate}}</div>
+              </div>
+            </div>
+            <div class="form-group col-md-6">
+              <label>{{'doctor' | translate}}</label>
+              <input type="text" class="form-control" placeholder="Doctor" formControlName="doctor">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="mb-0">{{'record' | translate}} <span class="symbol required"></span></label>
+            <div class="mb-2">
+              <small class="text-danger">{{'only_jpg_png_and_pdf_files_allowed' | translate}}</small><br>
+              <small class="text-danger">{{'file_size_should_not_be_greater_than_5_mb' | translate}}</small><br>
+            </div>
+            <div class="custom-file">
+              <input #ngaddhealthrecordfileinput type="file" (change)="onChangeHealthRecordFile($event)" class="custom-file-input">
+              <label class="custom-file-label">{{'choose_file' | translate}}</label>
+            </div>
+            <div class="invalid-feedback" *ngIf="addHealthRecordForm.controls.file.invalid &&
+              (addHealthRecordForm.controls.file.dirty || addHealthRecordForm.controls.file.touched ||
+              ngaddhealthrecordform.submitted)"
+            >
+              <div *ngIf="addHealthRecordForm.controls.file.errors.required">{{'this_field_is_required' | translate}}</div>
+            </div>
+          </div>
+          <div class="form-group" *ngIf="addHealthRecordFileInput">
+            {{addHealthRecordFileInput.name}} <i class="mdi mdi-close mx-auto my-auto cp text-danger" (click)="removeHealthRecordFile()"></i>
+          </div>
+          <div class="form-group">
+            <label>{{'type' | translate}} <span class="symbol required"></span></label>
+            <div class="form-row">
+              <div class="col-md-4 text-center cp" (click)="onChangeHealthRecordType('Report')">
+                <i class="mdi mdi-playlist-plus mdi-36px" [ngClass]="{'activeReport' : record_type=='Report'}"></i>
+                <p>Report</p>
+              </div>
+              <div class="col-md-4 text-center cp" (click)="onChangeHealthRecordType('Prescription')">
+                <i class="mdi mdi-library-plus mdi-36px" [ngClass]="{'activeReport' : record_type=='Prescription'}"></i>
+                <p>Prescription</p>
+              </div>
+              <div class="col-md-4 text-center cp" (click)="onChangeHealthRecordType('Other')">
+                <i class="mdi mdi-file-document mdi-36px" [ngClass]="{'activeReport' : record_type=='Other'}"></i>
+                <p>Other</p>
+              </div>
+            </div>
+            <div class="invalid-feedback" *ngIf="addHealthRecordForm.controls.record_type.invalid &&
+              (addHealthRecordForm.controls.record_type.dirty || addHealthRecordForm.controls.record_type.touched || ngaddhealthrecordform.submitted)"
+            >
+              <div *ngIf="addHealthRecordForm.controls.record_type.errors.required">{{'this_field_is_required' | translate}}</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>{{'description' | translate}}</label>
+            <textarea class="form-control" formControlName="description"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <div class="container">
+            <div class="form-row">
+              <div class="form-group col-md-6 my-auto text-left">
+                {{'fields_marked_with_star_is_required' | translate}}
+              </div>
+              <div class="form-group col-md-6 my-auto text-right">
+                <button type="submit" [disabled]="addHealthRecordFormLoader" class="btn theme-btn mx-auto">
+                  <span [ngClass]="{'spinner-border spinner-border-sm':addHealthRecordFormLoader}"></span> {{'add' | translate}}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="addFamilyMemberModal" tabindex="-1" role="dialog" aria-labelledby="addFamilyMemberModal" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':familyMemberFormLoader}">
+      <div class="modal-header">
+        <h4 class="modal-title">{{'add_members' | translate}}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="familyMemberForm" (ngSubmit)="onSubmitAddFamilyMemberForm()" #ngaddfamilymemberform="ngForm">
+        <div class="modal-body">
+          <div class="container">
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>{{'name' | translate}} <span class="symbol required"></span></label>
+                <input type="text" class="form-control" placeholder="{{'enter_name' | translate}}"  formControlName="patient_name">
+                <div class="invalid-feedback"
+                  *ngIf="familyMemberForm.controls.patient_name.invalid &&
+                  (familyMemberForm.controls.patient_name.dirty || familyMemberForm.controls.patient_name.touched || ngaddfamilymemberform.submitted)">
+                  <div *ngIf="familyMemberForm.controls.patient_name.errors.required">{{'this_field_is_required' | translate}}</div>
+                  <div *ngIf="familyMemberForm.controls.patient_name.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                  <div *ngIf="familyMemberForm.controls.patient_name.errors.maxlength">{{'maximum_100_characters_allowed' | translate}}</div>
+                </div>
+              </div>
+              <div class="form-group col-md-6">
+                <label>{{'email' | translate}} <span class="symbol required"></span></label>
+                <input type="text" class="form-control" placeholder="{{'enter_email' | translate}}" formControlName="patient_email">
+                <div class="invalid-feedback" *ngIf="familyMemberForm.controls.patient_email.invalid &&
+                (familyMemberForm.controls.patient_email.dirty || familyMemberForm.controls.patient_email.touched || ngaddfamilymemberform.submitted)">
+                  <div *ngIf="familyMemberForm.controls.patient_email.errors.required">{{'this_field_is_required' | translate}}</div>
+                  <div *ngIf="familyMemberForm.controls.patient_email.errors.email || familyMemberForm.controls.patient_email.errors.pattern">
+                    {{'valid_email_is_required' | translate}}
+                  </div>
+                  <div *ngIf="familyMemberForm.controls.patient_email.errors.maxlength">{{'maximum_100_characters_allowed' | translate}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label>{{'mobile' | translate}} <span class="symbol required"></span></label>
+                <input type="text" class="form-control" placeholder="{{'enter_mobile_number' | translate}}" formControlName="patient_mobile">
+                <div class="invalid-feedback" *ngIf="familyMemberForm.controls.patient_mobile.invalid &&
+                  (familyMemberForm.controls.patient_mobile.dirty || familyMemberForm.controls.patient_mobile.touched || ngaddfamilymemberform.submitted)">
+                  <div *ngIf="familyMemberForm.controls.patient_mobile.errors.required">{{'this_field_is_required' | translate}}</div>
+                  <div *ngIf="familyMemberForm.controls.patient_mobile.errors.minlength">{{'minimum_10_characters_required' | translate}}</div>
+                  <div *ngIf="familyMemberForm.controls.patient_mobile.errors.maxlength">{{'maximum_15_characters_allowed' | translate}}</div>
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <label>{{'gender' | translate}} <span class="symbol required"></span></label>
+                <select class="form-control" formControlName="patient_gender">
+                  <option>Select Gender</option>
+                  <option value='Male'>Male</option>
+                  <option value='Female'>Female</option>
+                </select>
+                <div class="invalid-feedback" *ngIf="familyMemberForm.controls.patient_gender.invalid &&
+                  (familyMemberForm.controls.patient_gender.dirty || familyMemberForm.controls.patient_gender.touched || ngaddfamilymemberform.submitted)">
+                  <div *ngIf="familyMemberForm.controls.patient_gender.errors.required">{{'this_field_is_required' | translate}}</div>
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <label>{{'dob' | translate}} <small>(Format: D/M/Y) </small> <span class="symbol required"></span></label>
+                <input [matDatepicker]="patientAddDOBDatePicker" class="form-control" placeholder="Date Of Birth" formControlName="patient_dob"
+                  (focus)="patientAddDOBDatePicker.open()" [max]="maxDateDob">
+                <mat-datepicker-toggle [for]="patientAddDOBDatePicker" class="mat-dt-pic"></mat-datepicker-toggle>
+                <mat-datepicker #patientAddDOBDatePicker></mat-datepicker>
+                <div class="invalid-feedback" *ngIf="familyMemberForm.controls.patient_dob.invalid &&
+                  (familyMemberForm.controls.patient_dob.dirty || familyMemberForm.controls.patient_dob.touched || ngaddfamilymemberform.submitted)"
+                 >
+                  <div *ngIf="familyMemberForm.controls.patient_dob.errors.required">{{'this_field_is_required' | translate}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-12">
+                <label>{{'image' | translate}}</label>
+                <div class="custom-file">
+                  <input #ngpatientimagefileinput type="file" (change)="onChangeFamilyMemberImage($event)" accept="image/*"
+                    class="custom-file-input form-control">
+                  <label class="custom-file-label" for="customFile">{{'choose_image' | translate}}</label>
+                </div>
+              </div>
+              <div class="form-row ml-2" *ngIf="familyMemberImageSrc">
+                <div class="form-group">
+                  <div class="col-md-3 border border-dark p-1 img-item">
+                    <button type="button" class="btn btn-outline-secondary btn-rounded btn-icon img-delete">
+                      <i class="mdi mdi-delete mdi-18px" (click)="removeFamilyMemberImage()"></i>
+                    </button>
+                    <img [src]="familyMemberImageSrc" alt="image" class="img-ele img-fluid">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label>{{'blood_group' | translate}}</label>
+                <select formControlName="blood_group" class="form-control">
+                  <option value=""> Blood Group </option>
+                  <option value="A+">A+</option>
+                  <option value="A+">A-</option>
+                  <option value="A+">B+</option>
+                  <option value="A+">B-</option>
+                  <option value="A+">O+</option>
+                  <option value="A+">O-</option>
+                  <option value="A+">AB+</option>
+                  <option value="A+">AB-</option>
+                </select>
+              </div>
+              <div class="form-group col-md-4">
+                <label>{{'height' | translate}} <small>(in cm)</small></label>
+                <input type="text" class="form-control strict_integer" placeholder="{{'enter_height_in_cm' | translate}}" formControlName="height">
+                <div class="invalid-feedback" *ngIf="familyMemberForm.controls.height.invalid &&
+                  (familyMemberForm.controls.height.dirty || familyMemberForm.controls.height.touched || ngaddfamilymemberform.submitted)"
+                >
+                  <div *ngIf="familyMemberForm.controls.height.errors.maxlength">{{'maximum_3_characters_allowed' | translate}}</div>
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <label>{{'weight' | translate}} <small>(in kg)</small></label>
+                <input type="text" class="form-control strict_integer" placeholder="{{'enter_weight_in_kg' | translate}}" formControlName="weight">
+                <div class="invalid-feedback" *ngIf="familyMemberForm.controls.weight.invalid &&
+                  (familyMemberForm.controls.weight.dirty || familyMemberForm.controls.weight.touched || ngaddfamilymemberform.submitted)"
+                >
+                  <div *ngIf="familyMemberForm.controls.weight.errors.maxlength">{{'maximum_3_characters_allowed' | translate}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>{{'allergy' | translate}}</label>
+                <textarea class="form-control" formControlName="allergy"></textarea>
+                <div class="invalid-feedback" *ngIf="familyMemberForm.controls.allergy.invalid &&
+                  (familyMemberForm.controls.allergy.dirty || familyMemberForm.controls.allergy.touched || ngaddfamilymemberform.submitted)"
+                >
+                  <div *ngIf="familyMemberForm.controls.allergy.errors.maxlength">{{'maximum_1000_characters_allowed'}}</div>
+                </div>
+              </div>
+              <div class="form-group col-md-6">
+                <label>{{'medical_history' | translate}}</label>
+                <textarea class="form-control" formControlName="medical_history"></textarea>
+                <div class="invalid-feedback" *ngIf="familyMemberForm.controls.medical_history.invalid &&
+                  (familyMemberForm.controls.medical_history.dirty || familyMemberForm.controls.medical_history.touched || ngaddfamilymemberform.submitted)"
+                >
+                  <div *ngIf="familyMemberForm.controls.medical_history.errors.maxlength">{{'maximum_1000_characters_allowed'}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <div class="container">
+            <div class="form-row">
+              <div class="form-group col-md-6 my-auto text-left">
+                {{'fields_marked_with_star_is_required' | translate}}
+              </div>
+              <div class="form-group col-md-6 my-auto text-right">
+                <button type="submit" [disabled]="familyMemberFormLoader" class="btn theme-btn mx-auto">
+                  <span [ngClass]="{'spinner-border spinner-border-sm':familyMemberFormLoader}"></span> {{'add' | translate}}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="updateFamilyMemberFormModal" tabindex="-1" role="dialog" aria-labelledby="updateFamilyMemberFormModal" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':familyMemberFormLoader}">
+      <div class="modal-header">
+        <h4 class="modal-title">{{'update_member' | translate}}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="familyMemberForm" (ngSubmit)="onSubmitFamilyMemberUpdateForm()" #ngupdatefamilymemberform="ngForm">
+        <div class="modal-body">
+          <div class="container">
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>{{'name' | translate}} <span class="symbol required"></span></label>
+                <input type="text" class="form-control" placeholder="{{'enter_name' | translate}}" formControlName="patient_name">
+                <div class="invalid-feedback" *ngIf="familyMemberForm.controls.patient_name.invalid &&
+                  (familyMemberForm.controls.patient_name.dirty || familyMemberForm.controls.patient_name.touched || ngupdatefamilymemberform.submitted)"
+                >
+                  <div *ngIf="familyMemberForm.controls.patient_name.errors.required">{{'this_field_is_required' | translate}}</div>
+                  <div *ngIf="familyMemberForm.controls.patient_name.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                  <div *ngIf="familyMemberForm.controls.patient_name.errors.maxlength">{{'maximum_100_characters_allowed' | translate}}</div>
+                </div>
+              </div>
+              <div class="form-group col-md-6">
+                <label>{{'email' | translate}} <span class="symbol required"></span></label>
+                <input type="text" class="form-control" placeholder="{{'enter_email' | translate}}" formControlName="patient_email">
+                <div class="invalid-feedback" *ngIf="familyMemberForm.controls.patient_email.invalid &&
+                  (familyMemberForm.controls.patient_email.dirty || familyMemberForm.controls.patient_email.touched || ngupdatefamilymemberform.submitted)">
+                  <div *ngIf="familyMemberForm.controls.patient_email.errors.required">{{'this_field_is_required' | translate}}</div>
+                  <div *ngIf="familyMemberForm.controls.patient_email.errors.email || familyMemberForm.controls.patient_email.errors.pattern">
+                    {{'valid_email_is_required' | translate}}
+                  </div>
+                  <div *ngIf="familyMemberForm.controls.patient_email.errors.maxlength">{{'maximum_100_characters_allowed' | translate}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label>{{'mobile' | translate}} <span class="symbol required"></span></label>
+                <input type="text" class="form-control" placeholder="{{'enter_mobile_number' | translate}}" formControlName="patient_mobile">
+                <div class="invalid-feedback" *ngIf="familyMemberForm.controls.patient_mobile.invalid &&
+                  (familyMemberForm.controls.patient_mobile.dirty || familyMemberForm.controls.patient_mobile.touched || ngupdatefamilymemberform.submitted)"
+                >
+                  <div *ngIf="familyMemberForm.controls.patient_mobile.errors.required">{{'this_field_is_required' | translate}}</div>
+                  <div *ngIf="familyMemberForm.controls.patient_mobile.errors.minlength">{{'minimum_10_characters_required' | translate}}</div>
+                  <div *ngIf="familyMemberForm.controls.patient_mobile.errors.maxlength">{{'maximum_15_characters_allowed' | translate}}</div>
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <label>{{'gender' | translate}} <span class="symbol required"></span></label>
+                <select class="form-control" formControlName="patient_gender">
+                  <option value=''>Select Gender</option>
+                  <option value='Male'>Male</option>
+                  <option value='Female'>Female</option>
+                </select>
+                <div class="invalid-feedback" *ngIf="familyMemberForm.controls.patient_gender.invalid &&
+                  (familyMemberForm.controls.patient_gender.dirty || familyMemberForm.controls.patient_gender.touched || ngupdatefamilymemberform.submitted)"
+                >
+                  <div *ngIf="familyMemberForm.controls.patient_gender.errors.required">{{'this_field_is_required' | translate}}</div>
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <label>{{'dob' | translate}} <small>(Format: D/M/Y)</small> <span class="symbol required"></span></label>
+                <input [matDatepicker]="patientUpdateDOBDatePicker" class="form-control" [max]="maxDateDob" placeholder="Date Of Birth" formControlName="patient_dob">
+                <mat-datepicker-toggle [for]="patientUpdateDOBDatePicker" class="mat-dt-pic"></mat-datepicker-toggle>
+                <mat-datepicker #patientUpdateDOBDatePicker></mat-datepicker>
+                <div class="invalid-feedback" *ngIf="familyMemberForm.controls.patient_dob.invalid &&
+                  (familyMemberForm.controls.patient_dob.dirty || familyMemberForm.controls.patient_dob.touched || ngupdatefamilymemberform.submitted)"
+                >
+                  <div *ngIf="familyMemberForm.controls.patient_dob.errors.required">{{'this_field_is_required' | translate}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-12">
+                <label>{{'image' | translate}}</label>
+                <div class="custom-file">
+                  <input #ngpatientimagefileinput type="file" (change)="onChangeFamilyMemberImage($event)" accept="image/*" class="custom-file-input form-control">
+                  <label class="custom-file-label" for="customFile">{{'choose_image' | translate}}</label>
+                </div>
+              </div>
+              <div class="form-row ml-2" *ngIf="familyMemberImageSrc">
+                <div class="form-group">
+                  <div class="col-md-3 border border-dark p-1 img-item">
+                    <button type="button" class="btn btn-outline-secondary btn-rounded btn-icon img-delete">
+                      <i class="mdi mdi-delete mdi-18px" (click)="removeFamilyMemberImage()"></i>
+                    </button>
+                    <img [src]="familyMemberImageSrc" alt="image" class="img-ele img-fluid">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label>{{'blood_group' | translate}} </label>
+                <select formControlName="blood_group" class="form-control">
+                  <option value="">Blood Group</option>
+                  <option value="A+">A+</option>
+                  <option value="A+">A-</option>
+                  <option value="A+">B+</option>
+                  <option value="A+">B-</option>
+                  <option value="A+">O+</option>
+                  <option value="A+">O-</option>
+                  <option value="A+">AB+</option>
+                  <option value="A+">AB-</option>
+                </select>
+              </div>
+              <div class="form-group col-md-4">
+                <label>{{'height' | translate}} <small>(in cm)</small></label>
+                <input type="text" class="form-control strict_integer" placeholder="{{'enter_height_in_cm' | translate}}" formControlName="height">
+                <div class="invalid-feedback" *ngIf="familyMemberForm.controls.height.invalid &&
+                  (familyMemberForm.controls.height.dirty || familyMemberForm.controls.height.touched || ngupdatefamilymemberform.submitted)"
+                >
+                  <div *ngIf="familyMemberForm.controls.height.errors.maxlength">{{'maximum_3_characters_allowed' | translate}}</div>
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <label>{{'weight' | translate}} <small>(in kg)</small></label>
+                <input type="text" class="form-control strict_integer" placeholder="{{'enter_weight_in_kg' | translate}}" formControlName="weight">
+                <div class="invalid-feedback" *ngIf="familyMemberForm.controls.weight.invalid &&
+                  (familyMemberForm.controls.weight.dirty || familyMemberForm.controls.weight.touched || ngupdatefamilymemberform.submitted)"
+                >
+                  <div *ngIf="familyMemberForm.controls.weight.errors.maxlength">{{'maximum_3_characters_allowed' | translate}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>{{'allergy' | translate}}</label>
+                <textarea class="form-control" formControlName="allergy"></textarea>
+                <div class="invalid-feedback" *ngIf="familyMemberForm.controls.allergy.invalid &&
+                  (familyMemberForm.controls.allergy.dirty || familyMemberForm.controls.allergy.touched || ngupdatefamilymemberform.submitted)"
+                >
+                  <div *ngIf="familyMemberForm.controls.allergy.errors.maxlength">{{'maximum_1000_characters_allowed'}}</div>
+                </div>
+              </div>
+              <div class="form-group col-md-6">
+                <label>{{'medical_history' | translate}}</label>
+                <textarea class="form-control" formControlName="medical_history"></textarea>
+                <div class="invalid-feedback" *ngIf="familyMemberForm.controls.medical_history.invalid &&
+                  (familyMemberForm.controls.medical_history.dirty || familyMemberForm.controls.medical_history.touched || ngupdatefamilymemberform.submitted)"
+                >
+                  <div *ngIf="familyMemberForm.controls.medical_history.errors.maxlength">{{'maximum_1000_characters_allowed'}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <div class="container">
+            <div class="form-row">
+              <div class="form-group col-md-6 my-auto text-left">
+                {{'fields_marked_with_star_is_required' | translate}}
+              </div>
+              <div class="form-group col-md-6 my-auto text-right">
+                <button type="submit" [disabled]="familyMemberFormLoader" class="btn theme-btn mx-auto">
+                  <span [ngClass]="{'spinner-border spinner-border-sm':familyMemberFormLoader}"></span> {{'update' | translate}}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+

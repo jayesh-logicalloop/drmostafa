@@ -1,0 +1,208 @@
+<div class="page-header">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-9">
+        <h2 class="page-title">Manage Menus</h2>
+      </div>
+      <div class="col-sm-3 text-right">
+        <button type="button" class="btn theme-btn" (click)="onManageCrud('', 'Create')">
+          <i class="mdi mdi-plus-circle mr-1"></i> Add Menu
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-12 table-responsive">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Title</th>
+          <th>Type</th>
+          <th>Category</th>
+          <th>Order</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of crudData | paginate: {itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems:totalItems}; let i = index"
+        >
+          <th>{{i+1}}</th>
+          <td>{{item.title}}</td>
+          <td>{{item.menu_type}}</td>
+          <td>{{item.menu_category}}</td>
+          <td>{{item.sort_order}}</td>
+          <td>{{item.status}}</td>
+          <td>
+            <div class="icon-block">
+              <a class="cp" (click)="onManageCrud(item.id, 'Update', i)">
+              <i class="mdi mdi-pencil b-gry" aria-hidden="true"></i>
+              </a>
+              <a class="cp" (click)="deleteCrudData(item.id, i)">
+              <i class="mdi mdi-delete b-brown"></i>
+              </a>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="row" *ngIf="crudData.length">
+  <div class="col-sm-12 mt-3 text-center">
+    <pagination-controls (pageChange)="pageChanged($event)" autoHide="true" responsive="true">>
+    </pagination-controls>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="CrudModal" tabindex="-1" role="dialog" aria-labelledby="CrudModal"
+    aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content bg-white">
+        <div class="modal-header">
+          <h4 class="modal-title">{{currentAction}} Menu</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form [formGroup]="crudForm" (ngSubmit)="onSubmitCrudForm()" #mycrudform="ngForm"
+          [ngClass]="{'csspinner load1':crudFormLoader}"
+        >
+          <div class="modal-body">
+            <div class="container">
+              <div class="form-row">
+                <div class="form-group col-sm-4">
+                  <label for="title">Title <span class="symbol required"></span></label>
+                  <input type="text" class="form-control" id="title" placeholder="Title"
+                    [formGroup]="crudForm" formControlName="title"
+                  >
+                  <div class="invalid-feedback" *ngIf="crudForm.controls.title.invalid &&
+                    (crudForm.controls.title.dirty || crudForm.controls.title.touched || mycrudform.submitted)"
+                  >
+                    <div *ngIf="crudForm.controls.title.errors.required">{{'this_field_is_required' | translate}}</div>
+                    <div *ngIf="crudForm.controls.title.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                    <div *ngIf="crudForm.controls.title.errors.maxlength">{{'maximum_50_characters_allowed' | translate}}</div>
+                  </div>
+                </div>
+                <div class="form-group col-sm-4">
+                  <label for="sub_title">Sub Title</label>
+                  <input type="text" class="form-control" id="sub_title" placeholder="Sub Title"
+                    [formGroup]="crudForm" formControlName="sub_title"
+                  >
+                  <div class="invalid-feedback" *ngIf="crudForm.controls.sub_title.invalid &&
+                    (crudForm.controls.sub_title.dirty || crudForm.controls.sub_title.touched || mycrudform.submitted)"
+                  >
+                    <div *ngIf="crudForm.controls.sub_title.errors.maxlength">{{'maximum_50_characters_allowed' | translate}}</div>
+                  </div>
+                </div>
+                <div class="form-group col-sm-4">
+                  <label for="icon">Icon</label>
+                  <input type="text" class="form-control" id="icon" placeholder="Icon"
+                    [formGroup]="crudForm" formControlName="icon"
+                  >
+                  <div class="invalid-feedback" *ngIf="crudForm.controls.icon.invalid &&
+                    (crudForm.controls.icon.dirty || crudForm.controls.icon.touched || mycrudform.submitted)"
+                  >
+                    <div *ngIf="crudForm.controls.icon.errors.maxlength">{{'maximum_50_characters_allowed' | translate}}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-sm-10">
+                  <label for="url">URL <span class="symbol required"></span></label>
+                  <input type="text" class="form-control" id="url"
+                    placeholder="Enter URL" [formGroup]="crudForm" formControlName="url"
+                  >
+                  <div class="invalid-feedback" *ngIf="crudForm.controls.url.invalid &&
+                    (crudForm.controls.url.dirty || crudForm.controls.url.touched || mycrudform.submitted)"
+                  >
+                    <div *ngIf="crudForm.controls.url.errors.required">{{'this_field_is_required' | translate}}</div>
+                    <div *ngIf="crudForm.controls.url.errors.maxlength">{{'maximum_250_characters_allowed' | translate}}</div>
+                  </div>
+                </div>
+                <div class="form-group col-sm-2">
+                  <label for="target">Open In <span class="symbol required"></span></label>
+                  <select class="form-control" id="target" [formGroup]="crudForm" formControlName="target">
+                    <option value="_self">Self</option>
+                    <option value="_blank">New Tab</option>
+                  </select>
+                  <div class="invalid-feedback" *ngIf="crudForm.controls.target.invalid &&
+                    (crudForm.controls.target.dirty || crudForm.controls.target.touched ||
+                      mycrudform.submitted)"
+                  >
+                    <div *ngIf="crudForm.controls.target.errors.required">{{'this_field_is_required' | translate}}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-sm-3">
+                  <label for="menu_type">Menu Type <span class="symbol required"></span></label>
+                  <select formControlName="menu_type" class="form-control" id="menu_type"
+                    [formGroup]="crudForm" (change)="onChangeMenuType($event.target.value)"
+                  >
+                    <option value="Header">Header</option>
+                    <option value="Footer">Footer</option>
+                  </select>
+                  <div class="invalid-feedback" *ngIf="crudForm.controls.menu_type.invalid &&
+                    (crudForm.controls.menu_type.dirty || crudForm.controls.menu_type.touched || mycrudform.submitted)"
+                  >
+                    <div *ngIf="crudForm.controls.menu_type.errors.required">{{'this_field_is_required' | translate}}</div>
+                  </div>
+                </div>
+                <div class="form-group col-sm-3">
+                  <label for="menu_category">Menu Category <span class="symbol required"></span></label>
+                  <select class="form-control" id="menu_category"
+                    [formGroup]="crudForm" formControlName="menu_category"
+                  >
+                    <option value="">Select category</option>
+                    <option *ngFor="let category of menuCategoryOptions;" [value]="category">{{category}}</option>
+                  </select>
+                  <div class="invalid-feedback" *ngIf="crudForm.controls.menu_category.invalid &&
+                    (crudForm.controls.menu_category.dirty || crudForm.controls.menu_category.touched ||
+                      mycrudform.submitted)"
+                  >
+                    <div *ngIf="crudForm.controls.menu_category.errors.required">{{'this_field_is_required' | translate}}</div>
+                  </div>
+                </div>
+                <div class="form-group col-sm-3">
+                  <label for="sorder">Order <span class="symbol required"></span></label>
+                  <input type="text" class="form-control strict_integer" id="order"
+                    placeholder="Order" [formGroup]="crudForm" formControlName="sort_order"
+                  >
+                  <div class="invalid-feedback" *ngIf="crudForm.controls.sort_order.invalid &&
+                    (crudForm.controls.sort_order.dirty || crudForm.controls.sort_order.touched || mycrudform.submitted)"
+                  >
+                    <div *ngIf="crudForm.controls.sort_order.errors.required">{{'this_field_is_required' | translate}}</div>
+                  </div>
+                </div>
+                <div class="form-group col-sm-3">
+                  <label for="status">Status <span class="symbol required"></span></label>
+                  <select class="form-control" id="status" [formGroup]="crudForm" formControlName="status">
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                  </select>
+                  <div class="invalid-feedback" *ngIf="crudForm.controls.status.invalid &&
+                    (crudForm.controls.status.dirty || crudForm.controls.status.touched || mycrudform.submitted)"
+                  >
+                    <div *ngIf="crudForm.controls.status.errors.required">{{'this_field_is_required' | translate}}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer border-0">
+            <button type="submit" class="btn theme-btn mx-auto">
+              <ng-template [ngIf]="this.currentAction=='Create'">Save</ng-template>
+              <ng-template [ngIf]="this.currentAction=='Update'">Update</ng-template>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+</div>
+
+

@@ -1,0 +1,100 @@
+<div class="page-header">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-9">
+        <h2 class="page-title">Manage Content</h2>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body p-2 table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Section</th>
+              <th>Type</th>
+              <th>Content</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody [ngClass]="{'csspinner load1':dataLoader}">
+            <tr *ngFor="let content of cmsContent; let i = index">
+              <td>{{content.section_name}}</td>
+              <td>{{content.content_type}} </td>
+              <td class="text-break-all text-pre-wrap" *ngIf="content.content_type != 'image'">Content</td>
+              <td *ngIf="content.content_type == 'image'">
+                <a *ngIf="content.content" [href]="content.content" target="_blank"><img [src]="content.content" alt=""></a>
+              </td>
+              <td>
+                <div class="icon-block">
+                  <a class="cp" (click)="onEditContent(content.id, i)">
+                    <i class="mdi mdi-pencil b-gry" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="contentModal" tabindex="-1" role="dialog" aria-labelledby="contentModal"
+  aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':cmsContentFormLoader}">
+      <div class="modal-header">
+        <h4 class="modal-title">Update Content</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="cmsContentForm" (ngSubmit)="onSubmitCMSContentForm()" #ngcmscontentform="ngForm">
+        <div class="modal-body">
+          <div class="container">
+            <div class="form-group">
+              <label for="title">Content <span class="symbol required"></span></label>
+              <ng-container *ngIf="content_type=='content'">
+                <ckeditor formControlName="content" [formGroup]="cmsContentForm" [config]="editorConfig">
+                </ckeditor>
+              </ng-container>
+              <ng-container *ngIf="content_type=='text'">
+                <input class="form-control" formControlName="content" [formGroup]="cmsContentForm">
+              </ng-container>
+              <ng-container *ngIf="content_type=='image'">
+                <div class="custom-file">
+                  <input #ngfileinput type="file" (change)="onFileInput($event)" accept="image/*" class="custom-file-input">
+                  <label class="custom-file-label" for="customFile">{{'choose_image' | translate}}</label>
+                </div>
+              </ng-container>
+              <div class="invalid-feedback" *ngIf="cmsContentForm.controls.content.invalid &&
+                (cmsContentForm.controls.content.dirty || cmsContentForm.controls.content.touched ||
+                ngcmscontentform.submitted)"
+              >
+                <div *ngIf="cmsContentForm.controls.content.errors.required">{{'this_field_is_required' | translate}}</div>
+              </div>
+            </div>
+            <div class="form-row ml-2" *ngIf="content_type=='image' && imgSrc">
+              <div class="form-group">
+                <div class="col-md-12 p-1">
+                  <img [src]="imgSrc" alt="image" class="img-fluid" style="height: 300px; width: 300px;">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="submit" [disabled]="cmsContentFormLoader" class="btn theme-btn mx-auto">
+            <span [ngClass]="{'spinner-border spinner-border-sm':cmsContentFormLoader}"></span> Update
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

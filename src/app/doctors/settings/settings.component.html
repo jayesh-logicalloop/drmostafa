@@ -1,0 +1,135 @@
+
+<div class="card">
+  <div class="card-body p-2">
+    <div class="card-title">
+      <h3>{{'settings' | translate}}</h3>
+    </div>
+    <form [formGroup]="settingsForm" (ngSubmit)="onSubmitSettingsForm()" #mysettingsform="ngForm" [ngClass]="{'csspinner load1':settingsFormLoader}">
+      <div class="form-row">
+        <label class="form-group col-md-6">
+          {{'specialization' | translate}} <span class="symbol required"></span>
+          <div><small>{{'choose_specialization_you_have' | translate}}</small></div>
+        </label>
+        <div class="form-group col-md-6">
+          <select class="form-control" formControlName="specialization">
+            <option value="" selected>Select</option>
+            <option *ngFor="let row of specializations" [value]="row.specialization_name">{{row.specialization_name}}</option>
+          </select>
+          <div class="invalid-feedback" *ngIf="settingsForm.controls.specialization.invalid &&
+            (settingsForm.controls.specialization.dirty || settingsForm.controls.specialization.touched || mysettingsform.submitted)"
+          >
+            <div *ngIf="settingsForm.controls.specialization.errors.required">{{'this_field_is_required' | translate}}</div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="form-row">
+        <label class="form-group col-md-6">{{'practice_since' | translate}} <span class="symbol required"></span>
+          <div><small>{{'total_experience_you_have' | translate}}</small></div>
+        </label>
+        <div class="form-group col-md-3">
+          <select class="form-control" formControlName="practice_started_month">
+            <option *ngFor="let month of months" [value]="month.id">{{month.month}}</option>
+          </select>
+          <div class="invalid-feedback" *ngIf="settingsForm.controls.practice_started_month.invalid &&
+            (settingsForm.controls.practice_started_month.dirty || settingsForm.controls.practice_started_month.touched || mysettingsform.submitted)"
+          >
+            <div *ngIf="settingsForm.controls.practice_started_month.errors.required">{{'this_field_is_required' | translate}}</div>
+          </div>
+        </div>
+        <div class="form-group col-md-3">
+          <select class="form-control" formControlName="practice_started_year">
+            <option *ngFor="let year of years" [value]="year">{{year}}</option>
+          </select>
+          <div class="invalid-feedback" *ngIf="settingsForm.controls.practice_started_year.invalid &&
+            (settingsForm.controls.practice_started_year.dirty || settingsForm.controls.practice_started_year.touched || mysettingsform.submitted)"
+          >
+            <div *ngIf="settingsForm.controls.practice_started_year.errors.required">{{'this_field_is_required' | translate}}</div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="form-row">
+        <label class="form-group col-md-6">{{'consultation_fee' | translate}} <span class="symbol required"></span>
+          <div><small>{{'paid_by_user_when_appointmentu' | translate}}</small>
+        </div>
+        </label>
+        <div class="form-group col-md-6">
+          <div class="input-group fc-border">
+            <div class="input-group-prepend bg-transparent">
+              <i class="input-group-text border-0 mdi mdi-currency-inr mdi-18px"></i>
+            </div>
+            <input type="text" class="form-control bg-transparent border-0 strict_numeric" placeholder="{{'enter_consultation_fee' | translate}}" formControlName="consultation_fee">
+          </div>
+          <div class="invalid-feedback" *ngIf="settingsForm.controls.consultation_fee.invalid &&
+            (settingsForm.controls.consultation_fee.dirty || settingsForm.controls.consultation_fee.touched || mysettingsform.submitted)"
+          >
+            <div *ngIf="settingsForm.controls.consultation_fee.errors.required">{{'this_field_is_required' | translate}}</div>
+            <div *ngIf="settingsForm.controls.consultation_fee.errors.maxlength">{{'maximum_4_characters_allowed' | translate}}</div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="form-row">
+        <label class="form-group col-md-6">
+          {{'session_duration' | translate}} <small>(in minutes)</small> <span class="symbol required"></span>
+          <div><small>{{'duration_of_each_session' | translate}}</small></div>
+        </label>
+        <div class="form-group col-md-6">
+          <input type="text" class="form-control strict_integer" placeholder="{{'enter_session_duration' | translate}}" formControlName="session_duration">
+          <div class="invalid-feedback" *ngIf="settingsForm.controls.session_duration.invalid &&
+            (settingsForm.controls.session_duration.dirty || settingsForm.controls.session_duration.touched || mysettingsform.submitted)"
+          >
+            <div *ngIf="settingsForm.controls.session_duration.errors.required">{{'this_field_is_required' | translate}}</div>
+            <div *ngIf="settingsForm.controls.session_duration.errors.maxlength">{{'maximum_3_characters_allowed' | translate}}</div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="form-row">
+        <label class="form-group col-md-6">
+          {{'session_gap' | translate}} <small>(in minutes)</small> <span class="symbol required"></span>
+          <div><small>{{'gap_between_each_session' | translate}}</small></div>
+        </label>
+        <div class="form-group col-md-6">
+          <input type="text" class="form-control strict_integer" placeholder="{{'enter_session_gap' | translate}}" formControlName="session_gap">
+          <div class="invalid-feedback" *ngIf="settingsForm.controls.session_gap.invalid &&
+            (settingsForm.controls.session_gap.dirty || settingsForm.controls.session_gap.touched || mysettingsform.submitted)"
+          >
+            <div *ngIf="settingsForm.controls.session_gap.errors.required">{{'this_field_is_required' | translate}}</div>
+            <div *ngIf="settingsForm.controls.session_gap.errors.maxlength">{{'maximum_2_characters_allowed' | translate}}</div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="form-row">
+        <label class="form-group col-md-6">
+          {{'account' | translate}} <span class="symbol required"></span>
+          <div><small>{{'inactivate_your_account' | translate}}</small></div>
+        </label>
+        <div class="form-group col-md-6">
+          <select class="form-control" formControlName="status">
+            <option value="Active">Activate</option>
+            <option value="Inactive">Inactivate</option>
+          </select>
+          <div class="invalid-feedback" *ngIf="settingsForm.controls.status.invalid &&
+            (settingsForm.controls.status.dirty || settingsForm.controls.status.touched || mysettingsform.submitted)"
+          >
+            <div *ngIf="settingsForm.controls.status.errors.required">{{'this_field_is_required' | translate}}</div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="form-row">
+        <div class="form-group col-md-6 my-auto text-left">
+          {{'fields_marked_with_star_is_required' | translate}}
+        </div>
+        <div class="form-group col-md-6 my-auto text-right">
+          <button type="submit" [disabled]="settingsFormLoader" class="btn theme-btn">
+            <span [ngClass]="{'spinner-border spinner-border-sm':settingsFormLoader}"></span> {{'update' | translate}}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

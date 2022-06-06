@@ -1,0 +1,302 @@
+<div class="page-header">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-9">
+        <h2 class="page-title">Languages</h2>
+      </div>
+      <div class="col-sm-3 text-right">
+        <button type="button" class="btn theme-btn" data-toggle="modal" data-target="#createLanguage">
+          <i class="mdi mdi-plus-circle mr-1"></i> Add Language
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body p-2 table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Language Name</th>
+              <th>Language Code</th>
+              <th>Status</th>
+              <th>Action</th>
+              <th class="text-right">Contents</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of languagesData | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }; let i = index">
+              <th>{{i+1}}</th>
+              <td>{{item.language}}</td>
+              <td>{{item.language_code}}</td>
+              <td>{{item.status}}</td>
+              <td>
+                <div class="icon-block">
+                  <a class="cp" (click)="onEditLanguage(item.language_id,i)">
+                    <i class="mdi mdi-pencil b-gry" aria-hidden="true"></i>
+                  </a>
+                  <a class="cp" (click)="setRemoveRowData('language_id', item.language_id, item.content_type, i)"
+                    [swal]="deleteSwal">
+                    <i class="mdi mdi-delete b-brown"></i>
+                  </a>
+                </div>
+              </td>
+              <td class="text-pre-wrap text-right">
+                <div class="icon-blockX">
+                  <div *ngFor="let lang of languagesData" class="d-inline-block">
+                    <button class="btn btn-success btn-xs d-inline-block p-1 m-1"
+                      *ngIf="checkLanguageContent(item.languages, lang.language_code)"
+                      (click)="onManageContent(item.language_id, lang.language_code, lang.language, item.content_type, 'Update' )">
+                      <i class="mdi mdi-pencil"></i> {{lang.language_code | uppercase}}
+                    </button>
+                    <button class="btn btn-danger btn-xs d-inline-block p-1 m-1 "
+                      *ngIf="!checkLanguageContent(item.languages, lang.language_code)"
+                      (click)="onManageContent(item.language_id, lang.language_code, lang.language, item.content_type, 'Create' )">
+                      <i class="mdi mdi-plus"></i> {{lang.language_code | uppercase}}
+                    </button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer p-2">
+        <div class="row" *ngIf="languagesData.length">
+          <div class="col-sm-12 mt-3 text-center">
+            <pagination-controls (pageChange)="pageChanged($event)" autoHide="true" responsive="true">>
+            </pagination-controls>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="createLanguage" tabindex="-1" role="dialog" aria-labelledby="createLanguage" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':addFormAction}">
+      <div class="modal-header">
+        <h4 class="modal-title">Add Language</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="addForm" (ngSubmit)="onSubmitAddForm()" #myform="ngForm">
+        <div class="modal-body">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-12">
+
+                <div class="edit-pfrl-img-sec">
+                  <div class="form-group">
+                    <label for="language">Language Name</label>
+                    <input type="text" class="form-control" id="language" placeholder="Enter Language Name"
+                      [formGroup]="addForm" formControlName="language">
+                    <div *ngIf="addForm.controls.language.invalid &&
+                                            (addForm.controls.language.dirty ||
+                                            addForm.controls.language.touched || myform.submitted)"
+                      class="invalid-feedback">
+                      <div *ngIf="addForm.controls.language.errors.required">
+                        {{'this_field_is_required' | translate}}
+                      </div>
+                      <div *ngIf="addForm.controls.language.errors.minlength">
+                        {{'minimum_2_characters_required' | translate}}
+                      </div>
+                      <div *ngIf="addForm.controls.language.errors.maxlength">
+                        {{'maximum_100_characters_allowed' | translate}}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="language">Language Code</label>
+                    <input type="text" class="form-control" id="language_code" placeholder="Enter Language code"
+                      [formGroup]="addForm" formControlName="language_code">
+                    <div *ngIf="addForm.controls.language_code.invalid &&
+                                            (addForm.controls.language_code.dirty ||
+                                            addForm.controls.language_code.touched || myform.submitted)"
+                      class="invalid-feedback">
+                      <div *ngIf="addForm.controls.language_code.errors.required">
+                        {{'this_field_is_required' | translate}}
+                      </div>
+                      <div *ngIf="addForm.controls.language_code.errors.minlength">
+                        {{'minimum_2_characters_required' | translate}}
+                      </div>
+                      <div *ngIf="addForm.controls.language_code.errors.maxlength">
+                        Maximum 5 characters allowed.
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="status">Language status</label>
+                    <select formControlName="status" class="form-control" id="status" [formGroup]="addForm">
+                      <option value="Active">Active</option>
+                      <option value="Inactive">Inactive</option>
+                    </select>
+                    <div *ngIf="addForm.controls.status.invalid &&
+                                        (addForm.controls.status.dirty ||
+                                        addForm.controls.status.touched || myform.submitted)" class="invalid-feedback">
+                      <div *ngIf="addForm.controls.status.errors.required">
+                        {{'this_field_is_required' | translate}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="submit" [disabled]="addFormAction" class="btn theme-btn mx-auto">
+            <span [ngClass]="{'spinner-border spinner-border-sm':addFormAction}"></span> Save
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="updateLanguage" tabindex="-1" role="dialog" aria-labelledby="updateLanguage" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':updateFormAction}">
+      <div class="modal-header">
+        <h4 class="modal-title">Update Language</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="updateForm" (ngSubmit)="onSubmitupdateForm()" #myform2="ngForm">
+        <div class="modal-body">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="edit-pfrl-img-sec">
+
+                  <div class="form-group">
+                    <label for="language_update">Language Name</label>
+                    <input type="text" class="form-control" id="language_update" placeholder="Enter Language Name"
+                      [formGroup]="updateForm" formControlName="language_update">
+                    <div *ngIf="updateForm.controls.language_update.invalid &&
+                                            (updateForm.controls.language_update.dirty ||
+                                            updateForm.controls.language_update.touched || myform.submitted)"
+                      class="invalid-feedback">
+                      <div *ngIf="updateForm.controls.language_update.errors.required">
+                        {{'this_field_is_required' | translate}}
+                      </div>
+                      <div *ngIf="updateForm.controls.language_update.errors.minlength">
+                        {{'minimum_2_characters_required' | translate}}
+                      </div>
+                      <div *ngIf="updateForm.controls.language_update.errors.maxlength">
+                        {{'maximum_100_characters_allowed' | translate}}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="language_code_update">Language Code</label>
+                    <input type="text" class="form-control" id="language_code_update" placeholder="Enter Language code"
+                      [formGroup]="updateForm" formControlName="language_code_update">
+                    <div *ngIf="updateForm.controls.language_code_update.invalid &&
+                                            (updateForm.controls.language_code_update.dirty ||
+                                            updateForm.controls.language_code_update.touched || myform.submitted)"
+                      class="invalid-feedback">
+                      <div *ngIf="updateForm.controls.language_code_update.errors.required">
+                        {{'this_field_is_required' | translate}}
+                      </div>
+                      <div *ngIf="updateForm.controls.language_code_update.errors.minlength">
+                        {{'minimum_2_characters_required' | translate}}
+                      </div>
+                      <div *ngIf="updateForm.controls.language_code_update.errors.maxlength">
+                        Maximum 5 characters allowed.
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="status_update">Language status</label>
+                    <select formControlName="status_update" class="form-control" id="status_update"
+                      [formGroup]="updateForm">
+                      <option value="Active">Active</option>
+                      <option value="Inactive">Inactive</option>
+                    </select>
+                    <div *ngIf="updateForm.controls.status_update.invalid &&
+                                        (updateForm.controls.status_update.dirty ||
+                                        updateForm.controls.status_update.touched || myform.submitted)"
+                      class="invalid-feedback">
+                      <div *ngIf="updateForm.controls.status_update.errors.required">
+                        {{'this_field_is_required' | translate}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="submit" [disabled]="updateFormAction" class="btn theme-btn mx-auto">
+            <span [ngClass]="{'spinner-border spinner-border-sm':updateFormAction}"></span> Save
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="ContentModal" tabindex="-1" role="dialog" aria-labelledby="ContentModal" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':contentFormAction}">
+      <div class="modal-header">
+        <h4 class="modal-title contentModalTitle"> {{contentLanguage}} Content</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="contentForm" (ngSubmit)="onSubmitContentForm()" #myform2="ngForm">
+        <div class="modal-body">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="edit-pfrl-img-sec">
+                  <div class="form-group">
+                    <label for="content_title">Content title</label>
+                    <input type="text" class="form-control" id="content_title" placeholder="Enter content title"
+                      [formGroup]="contentForm" formControlName="content_title">
+                    <div class="invalid-feedback" *ngIf="contentForm.controls.content_title.invalid &&
+                      (contentForm.controls.content_title.dirty || contentForm.controls.content_title.touched || myform.submitted)"
+                    >
+                      <div *ngIf="contentForm.controls.content_title.errors.required">
+                        {{'this_field_is_required' | translate}}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <input type="hidden" name="content_detail" value="N/A" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="submit" [disabled]="contentFormAction" class="btn theme-btn mx-auto">
+            <span [ngClass]="{'spinner-border spinner-border-sm':contentFormAction}"></span> Submit
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<swal #deleteSwal title="Delete?" icon="question" [showCancelButton]="true" [focusCancel]="true"
+  (confirm)="processRemoveRowData()">
+</swal>

@@ -1,0 +1,37 @@
+export interface iEstablishment {
+  account_status: string,
+  clinic_address: string,
+  clinic_alias: string,
+  clinic_amenities: []
+  clinic_attachments: []
+  clinic_city: string,
+  clinic_country: string,
+  clinic_email: string,
+  clinic_id: string,
+  clinic_latitude: string,
+  clinic_longitude: string,
+  clinic_name: string,
+  clinic_phone_number: string,
+  clinic_postal_code: string,
+  clinic_region: string,
+  completion_level: string,
+  completion_message: string,
+  completion_status: string,
+  completion_step: string,
+  country_code: string,
+  email_verification_status: string,
+  full_name: string,
+  group_id: string,
+  introduction: string,
+  logo_image: string,
+  logo_image_url: string,
+  mobile_verification_status: string,
+  profile_image: string,
+  profile_image_url: string,
+  region_code: string,
+  status: string,
+  time_slots: []
+  user_alias: string,
+  user_id: string,
+  work_schedule: string
+}

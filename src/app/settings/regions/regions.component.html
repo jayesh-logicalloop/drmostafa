@@ -1,0 +1,264 @@
+<div class="page-header">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-9">
+        <h2 class="page-title">Regions</h2>
+      </div>
+      <div class="col-sm-3 text-right">
+        <button type="button" class="btn theme-btn" (click)="openForm()" data-toggle="modal"
+          data-target="#createRegion">
+          <i class="mdi mdi-plus-circle mr-1"></i> Add Region
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body p-2 table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Code</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let item of regionData | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }; let i = index">
+              <th>{{i+1}}</th>
+              <td>{{item.region_name }}</td>
+              <td>{{item.region_code | uppercase }}</td>
+              <td>
+                <div class="icon-block">
+                  <a class="cp" (click)="onEditRegion(item.region_id,i)" data-toggle="modal" data-target="#editprofile">
+                    <i class="mdi mdi-pencil b-gry" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer p-2">
+        <div class="row" *ngIf="regionData.length">
+          <div class="col-sm-12 mt-3 text-center">
+            <pagination-controls (pageChange)="pageChanged($event)" autoHide="true" responsive="true">>
+            </pagination-controls>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="createRegion" tabindex="-1" role="dialog" aria-labelledby="createRegion" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':addFormAction}">
+      <div class="modal-header">
+        <h4 class="modal-title">Add Region</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="addForm" (ngSubmit)="onSubmitAddForm()" #myform="ngForm">
+        <div class="modal-body">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="edit-pfrl-img-sec">
+                  <div class="form-group">
+                    <label for="country_code">Country Code</label>
+                    <select formControlName="country_code" class="form-control" id="country_code" [formGroup]="addForm">
+                      <option value=""> Select Country </option>
+                      <option *ngFor="let country of countries; let r = index;" [value]="country.country_code">
+                        {{country.country_name}}</option>
+                    </select>
+                    <div *ngIf="addForm.controls.country_code.invalid &&
+                                (addForm.controls.country_code.dirty ||
+                                addForm.controls.country_code.touched || myform.submitted)" class="invalid-feedback">
+                      <div *ngIf="addForm.controls.country_code.errors.required">
+                        {{'this_field_is_required' | translate}}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="region_name">Region Name</label>
+                    <input type="text" class="form-control" id="region_name" placeholder="Enter Region Name"
+                      [formGroup]="addForm" formControlName="region_name">
+                    <div *ngIf="addForm.controls.region_name.invalid &&
+                                        (addForm.controls.region_name.dirty ||
+                                        addForm.controls.region_name.touched || myform.submitted)"
+                      class="invalid-feedback">
+                      <div *ngIf="addForm.controls.region_name.errors.required">
+                        {{'this_field_is_required' | translate}}
+                      </div>
+                      <div *ngIf="addForm.controls.region_name.errors.minlength">
+                        {{'minimum_2_characters_required' | translate}}
+                      </div>
+                      <div *ngIf="addForm.controls.region_name.errors.maxlength">
+                        {{'maximum_100_characters_allowed' | translate}}
+                      </div>
+
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="region_code">Region Code</label>
+                    <input type="text" class="form-control" id="region_code" placeholder="Enter Region Code"
+                      [formGroup]="addForm" formControlName="region_code">
+                    <div *ngIf="addForm.controls.region_code.invalid &&
+                                        (addForm.controls.region_code.dirty ||
+                                        addForm.controls.region_code.touched || myform.submitted)"
+                      class="invalid-feedback">
+                      <div *ngIf="addForm.controls.region_code.errors.required">
+                        {{'this_field_is_required' | translate}}
+                      </div>
+                      <div *ngIf="addForm.controls.region_code.errors.minlength">
+                        {{'minimum_2_characters_required' | translate}}
+                      </div>
+                      <div *ngIf="addForm.controls.region_code.errors.maxlength">
+                        Maximum 10 characters allowed.
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="region_status">Region Status</label>
+                    <select formControlName="region_status" class="form-control" id="region_status"
+                      [formGroup]="addForm">
+                      <option value="Active">Active</option>
+                      <option value="Inactive">Inactive</option>
+                    </select>
+                    <div *ngIf="addForm.controls.region_status.invalid &&
+                                  (addForm.controls.region_status.dirty ||
+                                  addForm.controls.region_status.touched || myform.submitted)"
+                      class="invalid-feedback">
+                      <div *ngIf="addForm.controls.region_status.errors.required">
+                        {{'this_field_is_required' | translate}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="submit" [disabled]="addFormAction" class="btn theme-btn mx-auto">
+            <span [ngClass]="{'spinner-border spinner-border-sm':addFormAction}"></span> Save
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="updateRegion" tabindex="-1" role="dialog" aria-labelledby="updateRegion" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':updateFormAction}">
+      <div class="modal-header">
+        <h4 class="modal-title">Update Region</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="updateForm" (ngSubmit)="onSubmitupdateForm()" #myform2="ngForm">
+        <div class="modal-body">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-12">
+
+                <div class="edit-pfrl-img-sec">
+                  <div class="form-group">
+                    <label for="country_code_update">Country Code</label>
+                    <select formControlName="country_code_update" class="form-control" id="country_code_update"
+                      [formGroup]="updateForm">
+                      <option value=""> Select Country </option>
+                      <option *ngFor="let country of countries; let r = index;" [value]="country.country_code">
+                        {{country.country_name}}</option>
+                    </select>
+                    <div *ngIf="updateForm.controls.country_code_update.invalid &&
+                                    (updateForm.controls.country_code_update.dirty ||
+                                    updateForm.controls.country_code_update.touched || myform.submitted)"
+                      class="invalid-feedback">
+                      <div *ngIf="updateForm.controls.country_code_update.errors.required">
+                        {{'this_field_is_required' | translate}}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="region_name_update">Region Name</label>
+                    <input type="text" class="form-control" id="region_name_update" placeholder="Enter Region Name"
+                      [formGroup]="updateForm" formControlName="region_name_update">
+                    <div *ngIf="updateForm.controls.region_name_update.invalid &&
+                                            (updateForm.controls.region_name_update.dirty ||
+                                            updateForm.controls.region_name_update.touched || myform2.submitted)"
+                      class="invalid-feedback">
+                      <div *ngIf="updateForm.controls.region_name_update.errors.required">
+                        {{'this_field_is_required' | translate}}
+                      </div>
+                      <div *ngIf="updateForm.controls.region_name_update.errors.minlength">
+                        {{'minimum_2_characters_required' | translate}}
+                      </div>
+                      <div *ngIf="updateForm.controls.region_name_update.errors.maxlength">
+                        {{'maximum_100_characters_allowed' | translate}}
+                      </div>
+
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="region_code_update">Region Code</label>
+                    <input type="text" class="form-control" id="region_code_update" placeholder="Enter Region Code"
+                      [formGroup]="updateForm" formControlName="region_code_update">
+                    <div *ngIf="updateForm.controls.region_code_update.invalid &&
+                                            (updateForm.controls.region_code_update.dirty ||
+                                            updateForm.controls.region_code_update.touched || myform2.submitted)"
+                      class="invalid-feedback">
+                      <div *ngIf="updateForm.controls.region_code_update.errors.required">
+                        {{'this_field_is_required' | translate}}
+                      </div>
+                      <div *ngIf="updateForm.controls.region_code_update.errors.minlength">
+                        {{'minimum_2_characters_required' | translate}}
+                      </div>
+                      <div *ngIf="updateForm.controls.region_code_update.errors.maxlength">
+                        Maximum 10 characters allowed.
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="region_status_update">Region Status</label>
+                    <select formControlName="region_status_update" class="form-control" id="region_status_update"
+                      [formGroup]="updateForm">
+                      <option value="Active">Active</option>
+                      <option value="Inactive">Inactive</option>
+                    </select>
+                    <div *ngIf="updateForm.controls.region_status_update.invalid &&
+                                        (updateForm.controls.region_status_update.dirty ||
+                                        updateForm.controls.region_status_update.touched || myform2.submitted)"
+                      class="invalid-feedback">
+                      <div *ngIf="updateForm.controls.region_status_update.errors.required">
+                        {{'this_field_is_required' | translate}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="submit" [disabled]="updateFormAction" class="btn theme-btn mx-auto">
+            <span [ngClass]="{'spinner-border spinner-border-sm':updateFormAction}"></span> Save
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

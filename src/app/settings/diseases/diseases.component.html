@@ -1,0 +1,161 @@
+<div class="page-header">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-9">
+        <h2 class="page-title">Disease</h2>
+      </div>
+      <div class="col-sm-3 text-right">
+        <button type="button" class="btn theme-btn" (click)="openAddForm()">
+          <i class="mdi mdi-plus-circle mr-1"></i> Add Disease
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body p-2 table-responsive">
+        <table class="table table-hover" [ngClass]="{'csspinner load1':dataLoader}">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Disease</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of diseases |
+              paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }; let i = index"
+            >
+              <th>{{i+1}}</th>
+              <td>{{item.disease}}</td>
+              <td>{{item.status}}</td>
+              <td>
+                <div class="icon-block">
+                  <a class="cp" (click)="onEditItem(item.disease_id, i)">
+                    <i class="mdi mdi-pencil b-gry"></i>
+                  </a>
+                  <a class="cp" (click)="onDeleteItem(item.disease_id, i)">
+                    <i class="mdi mdi-delete b-brown"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer p-2">
+        <div class="row" *ngIf="diseases.length">
+          <div class="col-sm-12 mt-3 text-center">
+            <pagination-controls (pageChange)="pageChanged($event)" autoHide="true" responsive="true">>
+            </pagination-controls>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="addFormModal" tabindex="-1" role="dialog" aria-labelledby="addFormModal" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':addFormLoader}">
+      <div class="modal-header">
+        <h4 class="modal-title">Add Disease</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="addForm" (ngSubmit)="onSubmitAddForm()" #ngaddform="ngForm">
+        <div class="modal-body">
+          <div class="container">
+            <div class="form-row">
+              <div class="form-group col-sm-8">
+                <label for="disease">Disease <span class="symbol required"></span></label>
+                <input type="text" class="form-control" id="disease" placeholder="Enter Disease Name"
+                  [formGroup]="addForm" formControlName="disease">
+                <div class="invalid-feedback" *ngIf="addForm.controls.disease.invalid && (addForm.controls.disease.dirty ||
+                  addForm.controls.disease.touched || ngaddform.submitted)"
+                >
+                  <div *ngIf="addForm.controls.disease.errors.required">{{'this_field_is_required' | translate}}</div>
+                  <div *ngIf="addForm.controls.disease.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                  <div *ngIf="addForm.controls.disease.errors.maxlength">{{'maximum_50_characters_allowed' | translate}}</div>
+                </div>
+              </div>
+              <div class="form-group col-sm-4">
+                <label for="status">Status <span class="symbol required"></span></label>
+                <select class="form-control" id="status" [formGroup]="addForm" formControlName="status">
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                </select>
+                <div class="invalid-feedback" *ngIf="addForm.controls.status.invalid &&
+                  (addForm.controls.status.dirty || addForm.controls.status.touched || ngaddform.submitted)"
+                >
+                  <div *ngIf="addForm.controls.status.errors.required">{{'this_field_is_required' | translate}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="submit" [disabled]="addFormLoader" class="btn theme-btn mx-auto">
+            <span [ngClass]="{'spinner-border spinner-border-sm':addFormLoader}"></span> Save
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="updateFormModal" tabindex="-1" role="dialog" aria-labelledby="updateFormModal" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':updateFormLoader}">
+      <div class="modal-header">
+        <h4 class="modal-title">Update Disease</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="updateForm" (ngSubmit)="onSubmitupdateForm()" #ngupdateform="ngForm">
+        <div class="modal-body">
+          <div class="container">
+            <div class="form-row">
+              <div class="form-group col-sm-8">
+                <label for="du">Disease <span class="symbol required"></span></label>
+                <input type="text" class="form-control" id="du" placeholder="Enter Disease Name"
+                  [formGroup]="updateForm" formControlName="disease">
+                <div class="invalid-feedback" *ngIf="updateForm.controls.disease.invalid &&
+                  (updateForm.controls.disease.dirty || updateForm.controls.disease.touched ||
+                  ngupdateform.submitted)"
+                >
+                  <div *ngIf="updateForm.controls.disease.errors.required">{{'this_field_is_required' | translate}}</div>
+                  <div *ngIf="updateForm.controls.disease.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                  <div *ngIf="updateForm.controls.disease.errors.maxlength">{{'maximum_100_characters_allowed' | translate}}</div>
+                </div>
+              </div>
+              <div class="form-group col-sm-4">
+                <label for="statuss">Status <span class="symbol required"></span></label>
+                <select class="form-control" id="statuss" [formGroup]="updateForm" formControlName="status">
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                </select>
+                <div class="invalid-feedback" *ngIf="updateForm.controls.status.invalid &&
+                  (updateForm.controls.status.dirty || updateForm.controls.status.touched || ngupdateform.submitted)"
+                >
+                  <div *ngIf="updateForm.controls.status.errors.required">{{'this_field_is_required' | translate}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="submit" [disabled]="updateFormLoader" class="btn theme-btn mx-auto">
+            <span [ngClass]="{'spinner-border spinner-border-sm':updateFormLoader}"></span> Update
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,123 @@
+<div class="main-box-view">
+  <div id="data-container" class="box-view" [ngClass]="{'list-view':viewType=='list', 'box-view':viewType=='box'}">
+    <div class="col-sm-12" *ngIf="viewType=='box'">
+      <div class="row">
+        <ng-template [ngIf]="showContentLoader">
+          <div class="col-12 col-md-6 col-lg-3" *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12]">
+            <div class="card-grid">
+              <content-loader speed=2 width=230 height=280 primaryColor="#dfdfdf" secondaryColor="#b2b2b2">
+                <svg:rect x="50" y="116" rx="3" ry="3" width="138" height="10" />
+                <svg:circle cx="114" cy="53" r="48" />
+                <svg:rect x="627" y="23" rx="3" ry="3" width="117" height="10" />
+                <svg:rect x="32" y="150" rx="3" ry="3" width="170" height="10" />
+                <svg:rect x="15" y="180" rx="3" ry="3" width="200" height="10" />
+                <svg:circle cx="74" cy="240" r="15" />
+                <svg:circle cx="114" cy="241" r="15" />
+                <svg:circle cx="154" cy="240" r="15" />
+                <svg:rect x="-1" y="34" rx="3" ry="3" width="38" height="10" />
+              </content-loader>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template [ngIf]="totalItems > 0 && !showContentLoader">
+          <div class="col-12 col-md-6 col-lg-3 item-container"
+            *ngFor="let user of doctors | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems };let i = index">
+            <div class="doctorcard card-grid">
+              <span class="badge badge-custom"
+                [ngClass]="{'text-success': user.account_status == 'Verified', 'text-danger': user.account_status != 'Verified'}">
+                <i class="cp mdi mdi-18px"
+                  [ngClass]="{'mdi-check-decagram': user.account_status == 'Verified', 'mdi-close-circle': user.account_status != 'Verified'}"
+                  [matTooltip]="user.account_status == 'Verified' ? 'Account is Verified, click to Not Verified account' : 'Account is Not Verified, click to Verify account'"
+                  matTooltipClass="primary-tooltip" (click)="statusChange(user.user_id)"></i>
+              </span>
+              <span class="badge badge-custom" matTooltipClass="primary-tooltip" [ngClass]="{'text-success': user.account_status == 'Verified', 'text-danger': user.account_status != 'Verified'}" style="top:3rem" [matTooltip]="'Profile is ' + user.completion_level + '% completed'">
+                {{user.completion_level}} %
+              </span>
+              <span class="badge badge-custom"
+                [ngClass]="{'text-success': user.verification_status == 'Verified', 'text-danger': user.verification_status != 'Verified'}"
+                style="top:4.55rem">
+                <i class="mdi mdi-18px mdi-at" [matTooltip]="user.verification_status == 'Verified' ? 'Email is Verified' : 'Email is Not Verified'"
+                  matTooltipClass="primary-tooltip"></i>
+              </span>
+
+              <div class="card-profile-content">
+                <div class="card-profile">
+                  <a class="cp" routerLink="update/{{user.user_id}}">
+                    <img [src]="user.profile_image_url" alt="image">
+                  </a>
+                </div>
+                <div class="profile-name">
+                  <h6 class="cp text-Astral mb-0" routerLink="update/{{user.user_id}}">{{user.full_name}}</h6>
+                  <div class="ellipsis-1">{{user.email}}</div>
+                  <div><i class="mdi mdi-cellphone-android"></i> {{user.mobile_number}}</div>
+                  <p class="mb-0 text-gray" *ngIf="viewType=='box'">
+                    <!-- {{user.clinics.clinic_address !='' ? user.clinics.clinic_address : '&nbsp;'}}</p>
+                  <p class="mb-0 text-gray" *ngIf="viewType=='list'">
+                    {{user.clinics.clinic_name !='' ? user.clinics.clinic_name : '&nbsp;'}}</p> -->
+                    <!-- <p class="small mb-0">
+                    <i class="mdi mdi-account-box text-Astral btn-icon-prepend" *ngIf="user.assistants.name"></i>&nbsp;{{user.assistants.name}}
+                     <a href="#" class="text-Astral">...More</a>
+                  </p> -->
+                </div>
+              </div>
+              <div class="light-blue-btn"><a class="btn btn-link asist-hlp">
+                  {{(user.specializations.length > 0 )? user.specializations[0].specialization_name : 'General Practitioners (GP)'}}</a>
+              </div>
+              <!-- <div class="address">
+                <h6>Address</h6>
+                <span
+                  class="text-gray">{{user.clinics.clinic_address !='' ? user.clinics.clinic_address : 'No Address'}}</span>
+                </div> -->
+              <div class="actions">
+                <div class="icon-block" *ngIf="userType=='Clinic'">
+                  <i routerLink="update/{{user.user_id}}" class="cp mdi mdi-pencil-box b-gry"></i>
+                  <i class="cp mdi mdi-delete b-brown" (click)="deleteUser(user.user_id, i)"></i>
+                  <!-- <i routerLink="update/{{user.user_id}}" class="cp mdi mdi-eye b-blue"></i> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+        <div class="col-sm-12" *ngIf="totalItems == 0">
+          <div class="alert alert-danger text-center">{{'no_data_found' | translate}}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-12 table-responsive" *ngIf="viewType=='list'">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Mobile</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody [ngClass]="{'csspinner load1':showContentLoader}">
+          <tr *ngFor="let user of doctors | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }; let i = index">
+            <td>{{i+1}}</td>
+            <td><a class="cp" routerLink="update/{{user.user_id}}">{{user.full_name}}</a></td>
+            <td>{{user.email}}<br><small>({{user.email_verification_status}})</small></td>
+            <td>{{user.mobile_number}}</td>
+            <td>{{user.status+' | '+user.account_status}}</td>
+            <td>
+              <div class="icon-block">
+                <a class="cp" routerLink="update/{{user.user_id}}">
+                  <i class="mdi mdi-pencil b-gry" aria-hidden="true"></i>
+                </a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="row" *ngIf="totalItems>0">
+  <div class="col-sm-12 mt-3 text-center">
+    <pagination-controls (pageChange)="pageChanged($event)" autoHide="true" responsive="true"></pagination-controls>
+  </div>
+</div>

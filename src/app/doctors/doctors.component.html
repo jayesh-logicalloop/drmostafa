@@ -1,0 +1,247 @@
+<div class="page-header">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-6">
+        <h3 class="page-title">Doctors</h3>
+      </div>
+      <div class="col-sm-6">
+        <div class="row">
+          <div class="col-sm-10 text-right">
+            <div class="popover__wrapper">
+              <button type="button" class="btn theme-btn mr-3 popover__title" (click)="togglePopover()">
+                <i class="mdi mdi-filter-variant btn-icon-prepend"></i> Filter</button>
+              <form [formGroup]="searchForm" (ngSubmit)="onSubmitSearchForm()">
+                <div class="popover__content" [ngClass]="{'active':popoverToggle}">
+                  <div class="filter-popover">
+                    <div class="cp float-right text-Astral" (click)="clearFilter()">Clear Filter</div>
+                    <h3 class="text-Astral">Filter By</h3>
+                    <div class="page-header">
+                      <div class="search-field">
+                        <div class="input-group input-group-sm">
+                          <div class="input-group-prepend bg-transparent">
+                            <i class="input-group-text border-0 mdi mdi-magnify"></i>
+                          </div>
+                          <input type="text" formControlName="search" class="form-control bg-transparent border-0" 
+                            placeholder="{{'search_by_name_email_or_mobile_number' | translate}}">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="col-sm-12">
+                      <div class="input-group input-group-sm">
+                        <select formControlName="specialization_id" class="form-control">
+                          <option value="">Select Specialization</option>
+                          <option *ngFor="let specialization of specializations ; let j = index"
+                            [value]='specialization.specialization_id'>{{specialization.specialization_name}}</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="female-male">
+                      <div class="form-check">
+                        <label class="cp form-check-label">
+                          <input type="radio" class="form-check-input gender" formControlName="gender" value="Female"> Female <i class="input-helper"></i>
+                        </label>
+                      </div>
+                      <div class="form-check">
+                        <label class="cp form-check-label">
+                          <input type="radio" class="form-check-input gender" formControlName="gender" value="Male"> Male <i class="input-helper"></i>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="female-male">
+                      <div class="form-check">
+                        <label class="cp form-check-label">
+                          <input type="radio" class="form-check-input" formControlName="status" value="Active"> Active <i class="input-helper"></i>
+                        </label>
+                      </div>
+                      <div class="form-check">
+                        <label class="cp form-check-label">
+                          <input type="radio" class="form-check-input" formControlName="status" value="Inactive"> Inactive <i class="input-helper"></i>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="female-male">
+                      <div class="form-check">
+                        <label class="cp form-check-label">
+                          <input type="radio" class="form-check-input" formControlName="account_status" value="Verified"> Verified <i class="input-helper"></i>
+                        </label>
+                      </div>
+                      <div class="form-check">
+                        <label class="cp form-check-label">
+                          <input type="radio" class="form-check-input" formControlName="account_status" value="Not Verified"> Not Verified <i class="input-helper"></i>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="ratings">
+                    <div class="cp rating-star" (click)="changeRating(1)" [ngClass]="{'active':this.searchForm.value.rating==1}">
+                      <i class="mdi mdi-star mdi-24px"></i>
+                      <span>1.0</span>
+                    </div>
+                    <div class="cp rating-star" (click)="changeRating(2)" [ngClass]="{'active':this.searchForm.value.rating==2}">
+                      <i class="mdi mdi-star mdi-24px"></i>
+                      <span>2.0</span>
+                    </div>
+                    <div class="cp rating-star" (click)="changeRating(3)" [ngClass]="{'active':this.searchForm.value.rating==3}">
+                      <i class="mdi mdi-star mdi-24px"></i>
+                      <span>3.0</span>
+                    </div>
+                    <div class="cp rating-star" (click)="changeRating(4)" [ngClass]="{'active':this.searchForm.value.rating==4}">
+                      <i class="mdi mdi-star mdi-24px"></i>
+                      <span>4.0</span>
+                    </div>
+                    <div class="cp rating-star" (click)="changeRating(5)" [ngClass]="{'active':this.searchForm.value.rating==5}">
+                      <i class="mdi mdi-star mdi-24px"></i>
+                      <span>5.0</span>
+                    </div>
+                  </div>
+                  <div class="apply-cancel">
+                    <button type="submit" class="btn theme-btn">Apply</button>&nbsp;
+                    <button type="button" class="btn btn-brown" (click)="togglePopover()">Cancel</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <button type="button" *ngIf="userType=='Clinic'" class="btn theme-btn" (click)="openAddDoctorForm()">
+            <i class="mdi mdi-plus-circle btn-icon-prepend"></i> Add Doctor</button>
+          </div>
+          <div class="col-sm-2 pl-1 views-btn">
+            <button type="button" class="btn tiles-view" [ngClass]="{'icon-active':viewType=='box'}"
+              (click)="changeViewType('box')">
+              <i class="mdi mdi-apps mdi-36px"></i>
+            </button>
+            <button type="button" class="btn list-view" [ngClass]="{'icon-active':viewType=='list'}"
+              (click)="changeViewType('list')">
+              <i class="mdi mdi-format-list-bulleted mdi-36px"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-doctor-card [viewType]="viewType" [search]="search" [gender]="gender" [rating]="rating"
+  [specialization_id]="specialization_id" [status]="status" [account_status]="account_status"></app-doctor-card>
+
+<div class="modal fade actionModal" id="addDoctorFormModal" tabindex="-1" role="dialog" aria-labelledby="addDoctorFormModal" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':addDoctorFormLoader}">
+      <div class="modal-header">
+        <h4 class="modal-title">Add Doctor</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="addDoctorForm" (ngSubmit)="onSubmitAddDoctorForm()" #ngadddoctorform="ngForm" autocomplete="off">
+        <div class="modal-body">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-4">
+                <div class="edit-pfrl-img-sec text-right">
+                  <div class="A-profile">
+                    <img [src]="profile_image_src" alt="profile-image" class="rounded-circle" />
+                    <button type="button" class="btn btn-rounded btn-icon bg-Astral" (click)="ngprofilimagefileinput.click()">
+                      <i class="mdi mdi-camera"></i>
+                      <input #ngprofilimagefileinput type="file" (change)="onChangeProfileImage($event)" style="display:none;" accept="image/*" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-8 intro-sec">
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label>{{'enter_last_name' | translate}} <span class="symbol required"></span></label>
+                    <input type="text" class="form-control" placeholder="{{'enter_first_name' | translate}}" formControlName="first_name">
+                    <div class="invalid-feedback" *ngIf="addDoctorForm.controls.first_name.invalid &&
+                        (addDoctorForm.controls.first_name.dirty || addDoctorForm.controls.first_name.touched || ngadddoctorform.submitted)">
+                      <div *ngIf="addDoctorForm.controls.first_name.errors.required">{{'this_field_is_required' | translate}}</div>
+                      <div *ngIf="addDoctorForm.controls.first_name.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                      <div *ngIf="addDoctorForm.controls.first_name.errors.maxlength">{{'maximum_50_characters_allowed' | translate}}</div>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label>{{'last_name' | translate}} <span class="symbol required"></span></label>
+                    <input type="text" class="form-control" placeholder="{{'enter_last_name' | translate}}" formControlName="last_name">
+                    <div class="invalid-feedback" *ngIf="addDoctorForm.controls.last_name.invalid &&
+                        (addDoctorForm.controls.last_name.dirty || addDoctorForm.controls.last_name.touched || ngadddoctorform.submitted)">
+                      <div *ngIf="addDoctorForm.controls.last_name.errors.required">{{'this_field_is_required' | translate}}</div>
+                      <div *ngIf="addDoctorForm.controls.last_name.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                      <div *ngIf="addDoctorForm.controls.last_name.errors.maxlength">{{'maximum_50_characters_allowed' | translate}}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Email <span class="symbol required"></span></label>
+                  <input type="text" class="form-control" placeholder="Enter Email" formControlName="email" autocomplete="off">
+                  <div class="invalid-feedback" *ngIf="addDoctorForm.controls.email.invalid &&
+                    (addDoctorForm.controls.email.dirty || addDoctorForm.controls.email.touched || ngadddoctorform.submitted)"
+                  >
+                    <div *ngIf="addDoctorForm.controls.email.errors.required">{{'this_field_is_required' | translate}}</div>
+                    <div *ngIf="addDoctorForm.controls.email.errors.email || addDoctorForm.controls.email.errors.pattern">{{'valid_email_is_required' | translate}}</div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label>Gender <span class="symbol required"></span></label>
+                    <select class="form-control" formControlName="gender">
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                    </select>
+                    <div class="invalid-feedback" *ngIf="addDoctorForm.controls.gender.invalid &&
+                      (addDoctorForm.controls.gender.dirty || addDoctorForm.controls.gender.touched || ngadddoctorform.submitted)"
+                    >
+                      <div *ngIf="addDoctorForm.controls.gender.errors.required">{{'this_field_is_required' | translate}}</div>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label>{{'mobile_number' | translate}} <span class="symbol required"></span></label>
+                    <input type="text" class="form-control" placeholder="{{'mobile_number' | translate}}" formControlName="mobile_number">
+                    <div class="invalid-feedback" *ngIf="addDoctorForm.controls.mobile_number.invalid &&
+                      (addDoctorForm.controls.mobile_number.dirty || addDoctorForm.controls.mobile_number.touched ||
+                      ngadddoctorform.submitted)"
+                    >
+                      <div *ngIf="addDoctorForm.controls.mobile_number.errors.required">{{'this_field_is_required' | translate}}</div>
+                      <div *ngIf="addDoctorForm.controls.mobile_number.errors.minlength">{{'minimum_10_characters_required' | translate}}</div>
+                      <div *ngIf="addDoctorForm.controls.mobile_number.errors.maxlength">{{'maximum_15_characters_allowed' | translate}}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Introduction</label>
+                  <textarea class="form-control" rows="4" formControlName="introduction"></textarea>
+                  <div class="invalid-feedback" *ngIf="addDoctorForm.controls.introduction.invalid &&
+                    (addDoctorForm.controls.introduction.dirty || addDoctorForm.controls.introduction.touched || ngadddoctorform.submitted)"
+                  >
+                    <div *ngIf="addDoctorForm.controls.introduction.errors.maxlength">{{'maximum_1000_characters_allowed' | translate}}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <div class="container">
+            <div class="form-row">
+              <div class="form-group col-md-6 my-auto text-left">
+                {{'fields_marked_with_star_is_required' | translate}}
+              </div>
+              <div class="form-group col-md-6 my-auto text-right">
+                <button type="submit" [disabled]="addDoctorFormLoader" class="btn theme-btn mx-auto">
+                  <span [ngClass]="{'spinner-border spinner-border-sm':addDoctorFormLoader}"></span> Save
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

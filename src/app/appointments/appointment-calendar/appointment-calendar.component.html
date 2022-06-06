@@ -1,0 +1,30 @@
+<div class="page-header">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4 txt-arabic">
+        <h2 class="page-title">{{'calendar' | translate}}</h2>
+      </div>
+      <div class="col-sm-8 mt-2 text-right-1">
+        <label class="badge badge-info bg-gradient-info border-0 mb-0">{{'upcoming' | translate}}</label>
+        <label class="badge badge-success bg-gradient-success border-0 mb-0">{{'completed' | translate}}</label>
+        <label class="badge badge-warning bg-gradient-warning border-0 mb-0">{{'canceled' | translate}}</label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="col-sm-12 mt-3" [ngClass]="{'csspinner load1':showAppointmentCalendarLoader}">
+  <full-calendar #calendar class="appointment-calendar"
+    [eventLimit]="5"
+    [defaultView]="calendarDefaultView"
+    [plugins]="calendarPlugins"
+    [events]="userAppointmentEvents"
+    [header]="headerToolbar"
+    slotDuration="00:05:00"
+    [locale]="langCode"
+    (eventClick)="onViewAppointmentDetail($event)"
+    contentHeight="auto">
+  </full-calendar>
+</div>
+
+<app-detail [appointmentDetail]="appointmentDetail" [openModalFlag]="openModalFlag"></app-detail>

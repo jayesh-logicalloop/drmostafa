@@ -1,0 +1,69 @@
+<div class="page-header">
+    <div class="col-sm-12">
+        <div class="row">
+            <div class="col-sm-12 txt-arabic">
+                <h2 class="page-title">{{'notification' | translate}}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-body p-2">
+                <ng-template [ngIf]="dataLoader">
+                    <div class="col-sm-12">
+                        <div class="pacient-list note-list" *ngFor="let i of [1,2,3,4]">
+                            <content-loader speed=2 width=1090 height=80 primaryColor="#dfdfdf" secondaryColor="#b2b2b2">
+                                <svg:rect x="105" y="28" rx="3" ry="3" width="511" height="13" />
+                                <svg:circle cx="40" cy="44" r="26" />
+                                <svg:rect x="105" y="49" rx="3" ry="3" width="83" height="12" />
+                                <svg:rect x="899" y="39" rx="3" ry="3" width="83" height="12" />
+                            </content-loader>
+                        </div>
+                    </div>
+                </ng-template>
+
+                <ng-template [ngIf]="!dataLoader && notifications.length">
+                    <div class="col-sm-12" *ngFor="let notification of notifications | paginate: { itemsPerPage: limit, currentPage: page, totalItems: total }; let i = index">
+                        <div class="pacient-list note-list">
+                            <div class="row">
+                                <div class="col-sm-1">
+                                    <div class="asign-d-profile mx-auto mr-3">
+                                        <a href=""><img [src]="notification.image" class="img-fluid"> </a>
+                                    </div>
+                                </div>
+                                <div class="col-sm-9 text-left mt-1">
+                                    <p class="mb-0"> {{notification.activity}}</p>
+                                    <span>{{notification.time}}</span>
+                                </div>
+                                <div class="col-sm-2 mt-3">
+                                    <div class="d-flex align-items-center">
+                                        <a routerLink="/{{notification.url}}" class="cp text-astral mr-2">View</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+
+                <ng-template [ngIf]="!dataLoader && notifications.length == 0">
+                    <div class="col-sm-12">
+                        <div class="alert alert-danger">
+                            No notifications found
+                        </div>
+                    </div>
+                </ng-template>
+            </div>
+            <div class="card-footer p-2" *ngIf="notifications.length">
+                <div class="row">
+                <div class="col-sm-12 mt-3 text-center">
+                    <pagination-controls (pageChange)="pageChanged($event)" autoHide="true" responsive="true">>
+                    </pagination-controls>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

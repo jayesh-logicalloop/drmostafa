@@ -1,0 +1,64 @@
+<div class="page-header">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-9">
+        <h2 class="page-title">{{'payouts' | translate}}</h2>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body p-2 table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>{{'name' | translate}}</th>
+              <th>{{'order_id' | translate}}</th>
+              <th>{{'order_for' | translate}}</th>
+              <th>{{'date' | translate}}</th>
+              <th>{{'amount' | translate}}</th>
+              <th>{{'payment_status' | translate}}</th>
+              <th>{{'status' | translate}}</th>
+              <th>{{'action' | translate}}</th>
+            </tr>
+          </thead>
+          <tbody>
+          <ng-template [ngIf]="totalItems > 0">
+            <tr *ngFor ="let item of ordersData | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }; let i = index">
+              <th>{{i+1}}</th>
+              <td>{{item.user_name}}</td>
+              <td>{{item.order_id}}</td>
+              <td>{{item.order_for}}</td>
+              <td>{{item.order_date | date:'dd-MMM-y h:mm a'}}</td>
+              <td>$ {{item.order_amount}}</td>
+              <td>{{item.payment_status}}</td>
+              <td>{{item.status}}</td>
+              <td>
+                <div class="icon-block">
+                  <a class="cp" routerLink="/orders/detail/{{item.order_id}}"><i class="mdi mdi-eye b-gry" aria-hidden="true"></i></a>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template [ngIf]="totalItems == 0">
+          <tr>
+            <td colspan="9"><div class="alert alert-danger text-center">{{'no_data_found' | translate}}</div></td>
+          </tr>
+          </ng-template>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer p-2">
+        <div class="row" *ngIf="ordersData.length">
+          <div class="col-sm-12 mt-3 text-center">
+            <pagination-controls (pageChange)="pageChanged($event)" autoHide="true" responsive="true">></pagination-controls>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

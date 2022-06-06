@@ -1,0 +1,253 @@
+<div class="page-header">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-3">
+        <h2 class="page-title">Specialization</h2>
+      </div>
+      <div class="col-sm-6">
+        <div class="search-field">
+          <form class="d-flex align-items-center">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend bg-transparent">
+                <i class="input-group-text border-0 mdi mdi-magnify"></i>
+              </div>
+              <input type="text" #ngsearchinput class="form-control bg-transparent border-0" placeholder="{{'search_by_name' | translate}}">
+              <div class="input-group-append bg-transparent" *ngIf="search.length > 0">
+                <i class="cp input-group-text border-0 mr-3" title="{{'clear_search' | translate}}" (click)="clearSearch()">×</i>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="col-sm-3 text-right">
+        <button type="button" class="btn theme-btn" (click)="openAddSpecializationForm()">
+          <i class="mdi mdi-plus-circle"></i> Add Specialization
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row" [ngClass]="{'csspinner load1':dataLoader}">
+  <div class="col-sm-12" *ngFor="let item of specializations |
+    paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }; let i = index"
+  >
+    <div class="text-center shadow p-3 mb-3 bg-white rounded" *ngIf="item.parent_id == 0">
+      <div class="row">
+        <div class="col-sm-6 my-auto text-left">
+          <h5 class="mt-2 px-2">{{item.specialization_name}}</h5>
+        </div>
+        <div class="col-sm-3 my-auto">{{item.status}}</div>
+        <div class="col-sm-3">
+          <div class="icon-block text-right">
+            <a class="cp" (click)="openUpdateSpecializationForm(item.specialization_id, i)">
+              <i class="mdi mdi-pencil b-gry"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" *ngFor="let sub_item of item.sub_specialization; let j= index">
+        <div class="col-sm-6 my-auto text-left">
+          <span class="mt-2 px-2">{{sub_item.specialization_name}}</span>
+        </div>
+        <div class="col-sm-3 my-auto">{{sub_item.status}}</div>
+        <div class="col-sm-3">
+          <div class="icon-block text-right">
+            <a class="cp" (click)="openUpdateSpecializationForm(sub_item.specialization_id, i, j)">
+              <i class="mdi mdi-pencil b-gry"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-12 mt-3 text-center" *ngIf="specializations.length">
+    <pagination-controls (pageChange)="pageChanged($event)" autoHide="true" responsive="true"></pagination-controls>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="addFormModal" tabindex="-1" role="dialog" aria-labelledby="addFormModal" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':specializationAddUpdateFormLoader}">
+      <div class="modal-header">
+        <h4 class="modal-title">Add Specialization</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="specializationAddUpdateForm" (ngSubmit)="onSubmitSpecializationAddForm()" #ngspecializationaddupdateform="ngForm">
+        <div class="modal-body">
+          <div class="container">
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label>Parent</label>
+                <select class="form-control" formControlName="parent_id">
+                  <option value="0">Parent Specialization</option>
+                  <option *ngFor="let item of allParentSpecializations" [value]='item.specialization_id'>{{item.specialization_name}}</option>
+                </select>
+              </div>
+              <div class="form-group col-md-4">
+                <label>Specialization <span class="symbol required"></span></label>
+                <input type="text" class="form-control" placeholder="{{'enter_name' | translate}}" formControlName="specialization_name">
+                <div class="invalid-feedback" *ngIf="specializationAddUpdateForm.controls.specialization_name.invalid &&
+                  (specializationAddUpdateForm.controls.specialization_name.dirty || specializationAddUpdateForm.controls.specialization_name.touched || ngspecializationaddupdateform.submitted)"
+                >
+                  <div *ngIf="specializationAddUpdateForm.controls.specialization_name.errors.required">{{'this_field_is_required' | translate}}</div>
+                  <div *ngIf="specializationAddUpdateForm.controls.specialization_name.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                  <div *ngIf="specializationAddUpdateForm.controls.specialization_name.errors.maxlength">{{'maximum_50_characters_allowed' | translate}}</div>
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <label>Status <span class="symbol required"></span></label>
+                <select class="form-control" formControlName="status">
+                  <option selected value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                </select>
+                <div class="invalid-feedback" *ngIf="specializationAddUpdateForm.controls.status.invalid &&
+                  (specializationAddUpdateForm.controls.status.dirty || specializationAddUpdateForm.controls.status.touched || ngspecializationaddupdateform.submitted)"
+                >
+                  <div *ngIf="specializationAddUpdateForm.controls.status.errors.required">{{'this_field_is_required' | translate}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Image
+                  <div class="text-danger">
+                    <div><small>{{'only_jpg_png_files_allowed' | translate}}</small></div>
+                    <div><small>{{'file_size_should_not_be_greater_than_2_mb' | translate}}</small></div>
+                  </div>
+                </label>
+                <div class="custom-file">
+                  <input #ngspecializationimageinput type="file" (change)="onChangeSpecializationImage($event)" accept="image/*" class="custom-file-input">
+                  <label class="custom-file-label" for="customFile">{{'choose_image' | translate}}</label>
+                </div>
+              </div>
+              <div class="form-group col-sm-6 text-center" *ngIf="specializationImageSrc">
+                <div class="img-item">
+                  <button type="button" class="btn btn-outline-secondary btn-rounded btn-icon img-delete">
+                    <i class="mdi mdi-delete mdi-18px" (click)="removeSpecializationImage()"></i>
+                  </button>
+                  <img [src]="specializationImageSrc" alt="image" class="img-ele img-fluid">
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Diseases</label>
+              <ng-select2 [options]="select2Options" [data]="select2Data" [width]="500" formControlName="diseases"></ng-select2>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <div class="container">
+            <div class="form-row">
+              <div class="form-group col-md-6 my-auto text-left">
+                {{'fields_marked_with_star_is_required' | translate}}
+              </div>
+              <div class="form-group col-md-6 my-auto text-right">
+                <button type="submit" [disabled]="specializationAddUpdateFormLoader" class="btn theme-btn mx-auto">
+                  <span [ngClass]="{'spinner-border spinner-border-sm':specializationAddUpdateFormLoader}"></span> Save
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade actionModal" id="updateFormModal" tabindex="-1" role="dialog" aria-labelledby="updateFormModal" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content bg-white" [ngClass]="{'csspinner load1':specializationAddUpdateFormLoader}">
+      <div class="modal-header">
+        <h4 class="modal-title">Update Specialization</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="specializationAddUpdateForm" (ngSubmit)="onSubmitSpecializationUpdateForm()" #ngspecializationaddupdateform="ngForm">
+        <div class="modal-body">
+          <div class="container">
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label>Parent</label>
+                <select class="form-control" formControlName="parent_id">
+                  <option value="0">Parent Specialization</option>
+                  <ng-container *ngFor="let specialization of allParentSpecializations ; let j = index">
+                    <option *ngIf="specialization.specialization_id != specialization_id" [value]='specialization.specialization_id'>{{specialization.specialization_name}}</option>
+                  </ng-container>
+                </select>
+              </div>
+              <div class="form-group col-md-4">
+                <label>Specialization <span class="symbol required"></span></label>
+                <input type="text" class="form-control" placeholder="{{'enter_name' | translate}}" formControlName="specialization_name">
+                <div class="invalid-feedback" *ngIf="specializationAddUpdateForm.controls.specialization_name.invalid &&
+                  (specializationAddUpdateForm.controls.specialization_name.dirty || specializationAddUpdateForm.controls.specialization_name.touched || ngspecializationaddupdateform.submitted)"
+                >
+                  <div *ngIf="specializationAddUpdateForm.controls.specialization_name.errors.required">{{'this_field_is_required' | translate}}</div>
+                  <div *ngIf="specializationAddUpdateForm.controls.specialization_name.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
+                  <div *ngIf="specializationAddUpdateForm.controls.specialization_name.errors.maxlength">{{'maximum_50_characters_allowed' | translate}}</div>
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <label>Status <span class="symbol required"></span></label>
+                <select formControlName="status" class="form-control">
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                </select>
+                <div class="invalid-feedback" *ngIf="specializationAddUpdateForm.controls.status.invalid &&
+                  (specializationAddUpdateForm.controls.status.dirty || specializationAddUpdateForm.controls.status.touched || ngspecializationaddupdateform.submitted)"
+                >
+                  <div *ngIf="specializationAddUpdateForm.controls.status.errors.required">{{'this_field_is_required' | translate}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Image
+                  <div class="text-danger">
+                    <div><small>{{'only_jpg_png_files_allowed' | translate}}</small></div>
+                    <div><small>{{'file_size_should_not_be_greater_than_2_mb' | translate}}</small></div>
+                  </div>
+                </label>
+                <div class="custom-file">
+                  <input #ngspecializationimageinput type="file" (change)="onChangeSpecializationImage($event)" accept="image/*" class="custom-file-input">
+                  <label class="custom-file-label" for="customFile">{{'choose_image' | translate}}</label>
+                </div>
+              </div>
+              <div class="form-group col-sm-6 text-center" *ngIf="specializationImageSrc">
+                <div class="img-item">
+                  <button type="button" class="btn btn-outline-secondary btn-rounded btn-icon img-delete">
+                    <i class="mdi mdi-delete mdi-18px" (click)="deleteSpecializationImage()"></i>
+                  </button>
+                  <img [src]="specializationImageSrc" alt="image" class="img-ele img-fluid">
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Diseases</label>
+              <ng-select2 [data]="select2Data" [options]="select2Options" [width]="500" formControlName="diseases"></ng-select2>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <div class="container">
+            <div class="form-row">
+              <div class="form-group col-md-6 my-auto text-left">
+                {{'fields_marked_with_star_is_required' | translate}}
+              </div>
+              <div class="form-group col-md-6 my-auto text-right">
+                <button type="submit" [disabled]="specializationAddUpdateFormLoader" class="btn theme-btn mx-auto">
+                  <span [ngClass]="{'spinner-border spinner-border-sm':specializationAddUpdateFormLoader}"></span> Update
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

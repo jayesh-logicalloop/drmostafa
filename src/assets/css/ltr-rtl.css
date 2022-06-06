@@ -1,0 +1,59 @@
+
+.rtlClass .sidebar .nav{
+padding-left: 0px;
+padding-right: 0px;
+}
+.rtlClass .sidebar .nav .nav-item.active {
+    background: #eff4f6;
+    border-right: 0px solid #061465;
+    border-left: 4px solid #061465;
+}
+.rtlClass .sidebar .nav .nav-item{
+    direction: ltr;
+}
+.rtlClass .navbar .navbar-menu-wrapper .navbar-nav .nav-item.nav-profile .nav-link .nav-profile-text {
+    margin-right: 1.25rem;
+    margin-left: 0rem;
+    direction: ltr;
+}
+.rtlClass .text-left{
+    text-align: right !important;
+}
+.rtlClass .text-right-1, .rtlClass .text-right{
+    text-align: left !important;
+}
+.rtlClass .ml-auto-1 {
+    margin-right: auto;
+}
+.rtlClass .txt-arabic{
+    text-align: right;
+}
+.rtlClass .card-title, .rtlClass .page-title {
+    text-align: right;
+}
+/* .rtlClass .mr-auto, .rtl .list-wrapper .remove, .mx-auto {
+    margin-left: auto;
+} */
+@media screen and (max-width: 991px) {
+    .rtlClass .sidebar-offcanvas {
+      position: fixed;
+      max-height: calc(100vh - 70px);
+      top: 70px;
+      bottom: 0;
+      overflow: auto;
+      right: -260px;
+      -webkit-transition: all 0.25s ease-out;
+      transition: all 0.25s ease-out; }
+      .sidebar-offcanvas.active {
+        right: 0; } }
+        @media screen and (max-width: 450px) {
+        .rtlClass .text-left{
+            text-align: left !important;
+        }
+        .rtlClass .text-right-1, .rtlClass .text-right{
+            text-align: right !important;
+        }
+        .ltrClass .text-right-1 {
+            text-align: left;
+        }
+    }

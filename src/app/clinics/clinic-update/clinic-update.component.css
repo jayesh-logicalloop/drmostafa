@@ -1,0 +1,14 @@
+agm-map {
+  height: 300px;
+}
+
+.img-set-default {
+  top: 40px !important;
+  position: absolute;
+  right: 10px;
+  border: 1px solid #fff;
+  border-radius: 15px;
+  background-color: #fff;
+  top: 10px;
+  cursor: pointer;
+}

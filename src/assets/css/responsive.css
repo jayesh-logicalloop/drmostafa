@@ -1,0 +1,132 @@
+.ltrClass .ml-auto-1{
+  margin-left: auto;
+}
+@media (min-width: 992px){
+.navbar .navbar-menu-wrapper .navbar-nav.navbar-nav-right {
+    margin: 0;
+}
+}
+@media screen and (max-width: 991px){
+.sidebar-offcanvas.active {
+    margin-top: 64px;
+}
+.sidebar-offcanvas{
+  margin-top: 64px;
+}
+}
+
+@media only screen and (min-width: 768px) {
+/* .navbar .navbar-brand-wrapper {
+    width: 100%!important;
+    padding: 10px;
+} */
+.navbar .navbar-brand-wrapper .navbar-brand.brand-logo-mini img {
+  height: 55px!important;
+}
+/* nav#sidebar{
+  margin-top: 80px;;
+} */
+    .hamburger {
+      display: block;
+      cursor: pointer;
+    }
+    
+    .hamburger.active .bar:nth-child(2) {
+      opacity: 0;
+    }
+    
+    .hamburger.active .bar:nth-child(1) {
+      transform: translateY(8px) rotate(45deg);
+    }
+    
+    .hamburger.active .bar:nth-child(3) {
+      transform: translateY(-8px) rotate(-45deg);
+    }
+    
+    /* .sidebar-offcanvas {
+      position: absolute!important;
+      left: -260px!important;
+    } */
+    .sidebar-offcanvas.active {
+        left: 0;
+    }
+    
+}
+@media screen and (max-width: 450px) {
+  .fc-unthemed th, .fc-unthemed td, .fc-unthemed thead, .fc-unthemed tbody, .fc-unthemed .fc-divider, .fc-unthemed .fc-row, .fc-unthemed .fc-content, .fc-unthemed .fc-popover, .fc-unthemed .fc-list-view, .fc-unthemed .fc-list-heading td {
+    font-size: 12px;
+}
+.fc-dayGrid-view .fc-week-number, .fc-dayGrid-view .fc-day-number {
+  font-size: 12px!important;
+}
+  .page-header .page-title {
+     line-height: 1rem; 
+}
+.page-title {
+  font-size: 16px;
+}
+.fc-toolbar > * > :not(:first-child) {
+  margin-left: 0em;
+  margin-top: 5px;
+}
+  .navbar .navbar-brand-wrapper .navbar-brand.brand-logo-mini img {
+    height: 55px!important;
+}
+  .navbar .navbar-brand-wrapper {
+    width: 100%!important;
+    padding: 10px;
+}
+  .intro-sec {
+    margin: 15px;
+}
+     /* .main-panel {
+     padding-top: 45px;
+  }  */
+    .hamburger {
+      display: block;
+      cursor: pointer;
+    }
+    nav#sidebar{
+        margin-top: 80px;;
+      }
+      .sidebar-offcanvas.active {
+        left: 0;
+    }
+    .about-doctor-section .nav-tabs .nav-link {
+      padding: 10px 10px;
+  }
+  .about-doctor-section .nav-tabs .nav-link {
+    font-size: 12px;
+}
+.last-seen {
+  min-width: 10px !important;
+}
+.list-view .card-grid .card-profile-content {
+  padding-right: 8px;
+}
+.icon-block i {
+  font-size: 14px;
+  color: #fff;
+  width: 25px;
+  height: 25px;
+  line-height: 25px;
+  margin: 3px 0px
+  
+}
+.list-view .card-grid .card-profile, .card-grid .card-profile {
+  width: 60px;
+}
+.mt-22{
+  margin-top: 13px;
+}
+.page-header .search-field {
+  margin: 10px 0px;
+}
+.theme-btn {
+  font-size: 14px !important;
+}
+.page-header .btn.theme-btn {
+  padding: 8px 7px;
+}
+
+}

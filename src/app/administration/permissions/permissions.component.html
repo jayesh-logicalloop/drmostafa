@@ -1,0 +1,125 @@
+<div class="page-header">
+    <div class="col-sm-12">
+        <div class="row">
+            <div class="col-sm-12">
+                <h2 class="page-title">{{'manage_permissions' | translate}}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">  
+    <div class="col-lg-12"> 
+        <div class="card">
+            <div class="card-body p-3">
+                <div class="row"> 
+
+                    <div class="col-lg-3" > 
+                        <div [ngClass]="{'csspinner load1': dataLoader}">
+                            <ul class="list-group single" *ngIf="totalGroups"> 
+                                <li class="list-group-item" *ngFor="let usergroup of user_groups">
+                                    <a href="javascript:void(0);" class="text-link" (click)="fetchGroupPermissions(usergroup.group_id)"> {{usergroup.group_name}}  </a> 
+                                </li> 
+                            </ul>
+                        </div> 
+                    </div>
+
+
+                    <div class="col-lg-9"> 
+                        <div [ngClass]="{'csspinner load1': dataLoader}">
+                            <p>{{'autosave_the_choosen_permission' | translate}}</p>
+                            <ul class="treeview">
+                                <!-- 
+                                <li>
+                                    <a class="plus" href="javascript:void(0)">
+                                        <span class="mdi mdi-plus"></span>
+                                    </a>
+                                    <label>
+                                        <input type="checkbox" value="12" name="menu[name][]">
+                                        Dashboard
+                                    </label>
+                                    <ul class="treeview_actions">
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" value="31" name="menu"> Create 
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" value="31" name="menu"> Read 
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" value="31" name="menu"> Edit 
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" value="31" name="menu"> Delete 
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </li>   -->
+                                
+                                <ng-template [ngIf]="all_menu_list_items.length">
+                                <li *ngFor="let item of all_menu_list_items">
+                                    <a class="plus" href="javascript:void(0)">
+                                        <span class="mdi mdi-circle"></span>
+                                    </a>
+                                    <!-- {{ item | json }} -->
+                                    <!-- {{ assigned_menu_list[item.page_menu_id].actions.split('|') | json }} -->
+                                    <label>
+                                        <input type="hidden" value="12" name="menu[name][]">
+                                        {{item.menu_title}}
+                                    </label>
+                                    <ul class="treeview_actions">
+                                        <li *ngFor="let action of item.menu_actions">
+                                            <label>
+                                                <!-- <input type="checkbox" value="31" name="menu" [checked]="assigned_menu_list[item.page_menu_id].actions.split('|').includes(action)"> -->
+                                                <input (change)="setMenuPermission($event, item.page_menu_id)" type="checkbox" value="{{action}}" name="menu" [checked]="assigned_menu_list[item.page_menu_id]?.actions.split('|').includes(action)"> {{action | titlecase}}
+                                            </label>
+                                        </li>
+                                        <!-- <li>
+                                            <label>
+                                                <input type="checkbox" value="31" name="menu"> Create 
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" value="31" name="menu"> Read 
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" value="31" name="menu"> Edit 
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" value="31" name="menu"> Delete 
+                                            </label>
+                                        </li> -->
+                                    </ul>
+                                </li>
+                                </ng-template>
+                            </ul>
+                        </div>
+
+                       <!-- 
+                        <div class="form-check form-check-inline optionRow">
+                            <div class="custom-control custom-checkbox mt-1 mb-1">
+                                <input type="checkbox" name="option[24]" class="custom-control-input" value="304" id="inp-304">
+                                <label class="custom-control-label" for="inp-304"> Female </label>
+                            </div>
+                        </div>
+                       -->                   
+                        
+
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

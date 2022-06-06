@@ -1,0 +1,57 @@
+<div class="container login-container">
+  <div class="row">
+    <div class="col-md-6 login-form-1">
+      <a routerLink="/login"><img class="img-fluid" src="assets/images/login.png" /></a>
+    </div>
+    <div class="col-md-6 login-form-2">
+      <div class="top-head">
+        <h1>Welcome</h1>
+        <h4>PLEASE LOGIN TO WEB INTERFACE</h4>
+      </div>
+      <div *ngIf="errorMsg!=''" class="alert alert-danger">
+        <button class="close" data-dismiss="alert">×</button> {{errorMsg}}
+      </div>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmitLoginForm()" #myform="ngForm">
+        <div class="form-group">
+            <input type="email" class="form-control" placeholder="Email Address *" formControlName="email" [formGroup]="loginForm">
+            <div class="invalid-feedback" *ngIf="loginForm.controls.email.invalid && (loginForm.controls.email.dirty || loginForm.controls.email.touched || myform.submitted)"
+            >
+              <div *ngIf="loginForm.controls.email.errors.required">Email is required.</div>
+              <div *ngIf="loginForm.controls.email.errors.email || loginForm.controls.email.errors.pattern">
+                {{'valid_email_is_required' | translate}}
+              </div>
+            </div>
+        </div>
+        <div class="form-group" style="position:relative">
+          <input [type]="passwordType" class="form-control" placeholder="Password *" formControlName="password" [formGroup]="loginForm">
+          <i class="view password-show-hide cp mdi" (click)="showHidePassword(passwordType)"
+          [ngClass]="{'mdi-eye':passwordType == 'password', 'mdi-eye-off':passwordType == 'text'}"></i>
+          <div class="invalid-feedback" *ngIf="loginForm.controls.password.invalid &&
+            (loginForm.controls.password.dirty ||
+            loginForm.controls.password.touched || myform.submitted)"
+          >
+            <div *ngIf="loginForm.controls.password.errors.required">Password is required.</div>
+          </div>
+        </div>
+        <div class="form-group d-flex">
+          <a class="btnForgetPwd small">
+            <div class="form-check form-check-info cp">
+              <label class="form-check-label cp">
+                <input type="checkbox" formControlName="remember_me" [formGroup]="loginForm" class="form-check-input">
+                Remember me<i class="input-helper"></i>
+              </label>
+            </div>
+          </a>
+          <a class="btnForgetPwd cp small float-right frget-password text-Astral" routerLink="/forgot-password">
+            <i class="mdi mdi-lock-open mdi-18px" aria-hidden="true"></i>&nbsp;Forgot Password?
+          </a>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-block theme-btn" [disabled]="loginFormLoader">
+            <span [ngClass]="{'spinner-border spinner-border-sm':loginFormLoader}"></span> LOGIN
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
