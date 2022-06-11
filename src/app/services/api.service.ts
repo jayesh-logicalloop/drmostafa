@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
@@ -22,12 +22,12 @@ export class ApiService {
     private userClinicsService: UserClinicsService,
   ) {
     this.apiBaseUrl = environment.api_url;
-    if(!firebase.app) {
+    if (!firebase.app) {
       firebase.initializeApp(environment.firebase);
     }
   }
 
-  login(postData: FormData, remember_me=false) {
+  login(postData: FormData, remember_me = false) {
     let apiURL = this.apiBaseUrl + '/login';
     return this.httpClient.post(apiURL, postData).pipe(
       map(
@@ -45,38 +45,52 @@ export class ApiService {
   }
 
   logout() {
+
     let userToken = this.commonService.getUserData('token');
     let userId = this.commonService.getUserData('user_id');
     let userType = this.commonService.getUserData('group_name');
+
     if (userToken) {
+
       console.log('if userToken', userToken);
+
+      // let apiURL = this.apiBaseUrl + '/logout?token=' + userToken;
+      // this.httpClient.get(apiURL).subscribe(() => {
+      //   window.location.href = environment.site_url;
+      // });
+
       let apiURL = this.apiBaseUrl + '/logout?token=' + userToken;
-      this.httpClient.get(apiURL).subscribe(() => {
-        window.location.href = environment.site_url;
+      this.httpClient.get(apiURL).subscribe((res) => {
+        this.router.navigate(['/']);
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000);
       });
+
 
       let params = {
         token: this.commonService.getUserData('token'),
         clinic_id: null,
         status: 'Offline'
       };
-      this.userClinicsService.online(params).subscribe(
-        (response: any) => {
-          if (response.status) {
-            firebase.database().ref('/users/' + userId).update({ "status": 'Offline' });
-            this.userData.unsubscribe();
-            localStorage.clear();
-            localStorage.removeItem('userData');
-            sessionStorage.removeItem('userData');
-            localStorage.removeItem('find_in');
-            sessionStorage.removeItem('find_in');
-            this.commonService.setLoggedInObservable(false);
-          }
-        });
+      firebase.database().ref('/users/' + userId).update({ "status": 'Offline' });
+      localStorage.clear();
+      // localStorage.removeItem('userData');
+      sessionStorage.removeItem('userData');
+      // localStorage.removeItem('find_in');
+      sessionStorage.removeItem('find_in');
+
+
+      this.userClinicsService.online(params).subscribe((response: any) => {
+        if (response.status) {
+          this.userData.unsubscribe();
+          this.commonService.setLoggedInObservable(false);
+        }
+      });
 
     }
 
-    // window.location.href = environment.site_url;
+
   }
 
 }

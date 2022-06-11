@@ -289,8 +289,11 @@ export class AppointmentsComponent implements OnInit {
     this.showContentLoader = true;
     this.appointmentService.appointments(params).subscribe(
       (response: any) => {
+
         if (response.status) {
           this.upcoming_appointments = response.data;
+        } else {
+          this.upcoming_appointments = [];
         }
         this.showContentLoader = false;
       },
@@ -449,8 +452,11 @@ export class AppointmentsComponent implements OnInit {
     this.showContentLoader = true;
     this.appointmentService.appointments(params).subscribe(
       (response: any) => {
+
         if (response.status) {
           this.past_appointments = response.data;
+        } else {
+          this.past_appointments = [];
         }
         this.showContentLoader = false;
       },
@@ -708,7 +714,7 @@ export class AppointmentsComponent implements OnInit {
         this.appointmentService.complete_appointment(putData).subscribe(
           (response: any) => {
             if (response.status) {
-              this.total_past_appointments();
+              // this.total_past_appointments();
               this.get_upcoming_appointments();
               this.get_past_appointments();
               this.alertService.show_alert(response.message);
