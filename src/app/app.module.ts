@@ -26,7 +26,7 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 import { DeviceDetectorModule } from 'ngx-device-detector';
 import { MomentTimezonePickerModule } from 'moment-timezone-picker';
 import { NgxAgoraModule, AgoraConfig } from 'ngx-agora';
-const agoraConfig: AgoraConfig = {AppID: environment.agoraAppID};
+const agoraConfig: AgoraConfig = { AppID: environment.agoraAppID };
 
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -130,15 +130,15 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     ApiService,
     MessagingService,
     AsyncPipe,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: ServiceInterceptor,
-      multi: true
-    },
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: ServiceInterceptor,
+    //   multi: true
+    // },
     ExcelService,
   ],
   bootstrap: [AppComponent],
-  schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 
 })
 export class AppModule { }

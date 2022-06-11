@@ -1,9 +1,8 @@
-
 <!-- START: TOP NAVIGATION -->
 <nav class="navbar default-layout-navbar p-0 fixed-top" *ngIf="isloggedInObservable$ | async as isloggedInObservable">
   <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
     <a class="navbar-brand brand-logo">
-      <img src="assets/images/logo.png" alt="logo" class="brand-logo"/></a>
+      <img src="assets/images/logo.png" alt="logo" class="brand-logo" /></a>
     <a class="navbar-brand brand-logo-mini">
       <img src="assets/images/logo.png" alt="logo" /></a>
   </div>
@@ -13,21 +12,24 @@
       <li class="nav-item" *ngIf="userType=='Doctor'">
         <select class="form-control" (change)="changeOnlineStatus($event.target.value)" style="border:none !important;">
           <option [selected]="online_status=='Offline'" value="Offline">Offline</option>
-          <option *ngFor="let clinic of clinics; let i = index" [value]="i" [selected]="online_status=='Online' && clinic.online=='Yes'">
+          <option *ngFor="let clinic of clinics; let i = index" [value]="i"
+            [selected]="online_status=='Online' && clinic.online=='Yes'">
             {{clinic.clinic_name}}
           </option>
         </select>
       </li>
       <li class="nav-item dropdown">
-        <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
-          <i class="mdi mdi-bell-outline"></i>
-          <span *ngIf="notificationData.length > 0" class="count-symbol bg-danger"></span>
+        <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown"
+          (click)="updateNotificationStatus();">
+          <i class="mdi mdi-bell-outline" *ngIf="notificationData.length > 0 && notificationData"></i>
+          <span *ngIf="notificationData.length > 0 && isReadNotification" class="count-symbol bg-danger"></span>
         </a>
-        <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+        <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
+          aria-labelledby="notificationDropdown">
           <h6 class="p-3 mb-0">{{'notifications' | translate}}</h6>
           <div *ngFor="let item of notificationData">
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item preview-item" routerLink="/{{item.url}}" >
+            <a class="dropdown-item preview-item" routerLink="/{{item.url}}">
               <div class="preview-thumbnail">
                 <div class="preview-icon bg-success">
                   <i class="mdi mdi-calendar"></i>
@@ -42,7 +44,7 @@
           </div>
           <div *ngIf="notificationData.length == 0">
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item preview-item" >
+            <a class="dropdown-item preview-item">
               <div class="preview-thumbnail">
                 <div class="preview-icon bg-success">
                   <i class="mdi mdi-calendar"></i>

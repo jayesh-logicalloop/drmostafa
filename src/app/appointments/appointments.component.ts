@@ -155,7 +155,7 @@ export class AppointmentsComponent implements OnInit {
   patient_id = '';
 
   constructor(
-	  private translate: TranslateService,
+    private translate: TranslateService,
     private title: Title,
     private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
@@ -166,7 +166,7 @@ export class AppointmentsComponent implements OnInit {
     private modalService: ModalService,
     private alertService: AlertService
   ) {
-	  const lang = localStorage.getItem('lang') ? localStorage.getItem('lang') : this.commonService.lang;
+    const lang = localStorage.getItem('lang') ? localStorage.getItem('lang') : this.commonService.lang;
     translate.setDefaultLang(lang);
     translate.use(lang);
     this.title.setTitle('Appointments');
@@ -257,6 +257,7 @@ export class AppointmentsComponent implements OnInit {
   currentPageUp = 1;
   totalUpcomingItems: number;
   upcoming_appointments = [];
+
   total_upcoming_appointments() {
     let params = {
       appointment_type: 'upcoming',
@@ -303,7 +304,7 @@ export class AppointmentsComponent implements OnInit {
   }
 
   currentPageIn = 1;
-  totalInstantItems:number;
+  totalInstantItems: number;
   instant_appointments = [];
   getTotalInstantAppointments() {
     let params = {
@@ -378,7 +379,7 @@ export class AppointmentsComponent implements OnInit {
     this.appointmentService.total_appointments(params).subscribe(
       (response: any) => {
         this.totalPendingItems = response.data;
-        if (this.totalPendingItems > 0){
+        if (this.totalPendingItems > 0) {
           this.get_pending_appointments();
         }
       }
@@ -464,7 +465,7 @@ export class AppointmentsComponent implements OnInit {
 
   getAppointment(appointment_id = '') {
     this.addFormAction = true;
-    this.appointmentService.appointments({appointment_id: appointment_id}).subscribe(
+    this.appointmentService.appointments({ appointment_id: appointment_id }).subscribe(
       (response: any) => {
         if (response.status) {
           this.addFormAction = false;
@@ -476,7 +477,7 @@ export class AppointmentsComponent implements OnInit {
   }
 
   openReschuledAppointmentModal(appointment_id: any) {
-    if(this.userType == 'Super Admin') {
+    if (this.userType == 'Super Admin') {
       Swal.fire({
         title: this.request_patient_to_reschedule_appointment,
         text: this.are_you_sure,
@@ -560,7 +561,7 @@ export class AppointmentsComponent implements OnInit {
         "appointment_id": this.appointmentDetail.appointment_id,
         "appointment_date": this.commonService.dateFormat(this.rescheduleForm.value.appointment_date),
         "appointment_from_time": this.rescheduleForm.value.appointment_time,
-        "appointment_to_time" : this.rescheduleForm.value.appointment_time,
+        "appointment_to_time": this.rescheduleForm.value.appointment_time,
         "reason": this.rescheduleForm.value.reason
       };
       this.appointmentService.reschedule_appointment(putData).subscribe(
@@ -580,7 +581,7 @@ export class AppointmentsComponent implements OnInit {
   }
 
   openAppointmentDetailModal = false;
-  onViewAppointmentDetail(appointment_id:string, i:number, appointment_type:string) {
+  onViewAppointmentDetail(appointment_id: string, i: number, appointment_type: string) {
     /*this.openAppointmentDetailModal = false;
     if(appointment_type == 'pending') {
       this.appointmentDetail = this.pending_appointments[i];
@@ -597,7 +598,7 @@ export class AppointmentsComponent implements OnInit {
 
     this.addFormAction = true;
     this.openAppointmentDetailModal = false;
-    this.appointmentService.appointments({appointment_id: appointment_id}).subscribe(
+    this.appointmentService.appointments({ appointment_id: appointment_id }).subscribe(
       (response: any) => {
         if (response.status) {
           this.appointmentDetail = response.data;
@@ -605,7 +606,7 @@ export class AppointmentsComponent implements OnInit {
         }
         this.addFormAction = false;
       },
-      (error) => { this.addFormAction = false;}
+      (error) => { this.addFormAction = false; }
     )
   }
 
@@ -658,7 +659,7 @@ export class AppointmentsComponent implements OnInit {
     this.viewType = viewType;
   }
 
-  confirmAppointment(appointment_id:string) {
+  confirmAppointment(appointment_id: string) {
     Swal.fire({
       title: this.confirm_appointment_label,
       text: this.are_you_sure,
@@ -688,7 +689,8 @@ export class AppointmentsComponent implements OnInit {
     });
   }
 
-  completeAppointment(appointment_id:string){
+  completeAppointment(appointment_id: string) {
+
     Swal.fire({
       title: this.complete_appointment_label,
       text: this.are_you_sure,
@@ -707,17 +709,18 @@ export class AppointmentsComponent implements OnInit {
           (response: any) => {
             if (response.status) {
               this.total_past_appointments();
+              this.get_upcoming_appointments();
+              this.get_past_appointments();
               this.alertService.show_alert(response.message);
             }
             this.addFormAction = false;
-          },
-          (error) => { this.addFormAction = false; }
+          }, (error) => { this.addFormAction = false; }
         )
       }
     });
   }
 
-  cancelAppointment(appointment_id:string) {
+  cancelAppointment(appointment_id: string) {
     Swal.fire({
       title: this.cancel_appointment_label,
       text: this.are_you_sure,
@@ -747,7 +750,7 @@ export class AppointmentsComponent implements OnInit {
     });
   }
 
-  declineAppointment(appointment_id:string) {
+  declineAppointment(appointment_id: string) {
     Swal.fire({
       title: this.decline_appointment_label,
       text: this.are_you_sure,
@@ -781,19 +784,20 @@ export class AppointmentsComponent implements OnInit {
   addFeedbackFormLoader = false;
   feedbackSelect2Options: Options = { width: '100%', multiple: true, tags: false };
   feedbackSelect2Data: Select2OptionData[] = [
-    {id: "Doctor friendliness", text: "Doctor friendliness"},
-    {id: "Explanation of the health issue", text: "Explanation of the health issue"},
-    {id: "Treatment satisfaction", text: "Treatment satisfaction"},
-    {id: "Value for money", text: "Value for money"},
-    {id: "Wait time", text: "Wait time"}
+    { id: "Doctor friendliness", text: "Doctor friendliness" },
+    { id: "Explanation of the health issue", text: "Explanation of the health issue" },
+    { id: "Treatment satisfaction", text: "Treatment satisfaction" },
+    { id: "Value for money", text: "Value for money" },
+    { id: "Wait time", text: "Wait time" }
   ];
   activeRating: number = 0;
   is_yes = false;
   is_no = false;
   feedbackAlreadyGiven = false;
-  openFeedbackModal(appointment_id: string, i:number) {
+
+  openFeedbackModal(appointment_id: string, i: number) {
     this.feedbackAlreadyGiven = false;
-    if("feedback_id" in this.past_appointments[i].feedback) {
+    if ("feedback_id" in this.past_appointments[i].feedback) {
       this.feedbackAlreadyGiven = true;
     }
     this.appointment_id = appointment_id;
@@ -821,7 +825,7 @@ export class AppointmentsComponent implements OnInit {
             this.modalService.close_modal("#feedbackModal");
             this.alertService.show_alert(response.message);
             let index = this.past_appointments.findIndex(x => x.appointment_id == this.appointment_id);
-            this.past_appointments[index]['feedback'] = {'feedback_id': response.data};
+            this.past_appointments[index]['feedback'] = { 'feedback_id': response.data };
           }
           this.addFeedbackFormLoader = false;
         },
@@ -843,26 +847,27 @@ export class AppointmentsComponent implements OnInit {
     }
   }
 
-  recommendDoc(type='') {
+  recommendDoc(type = '') {
     if (type == 'Yes') {
-      this.addFeedbackForm.patchValue({recommendation: 'Yes'});
+      this.addFeedbackForm.patchValue({ recommendation: 'Yes' });
       this.is_yes = true;
       this.is_no = false;
     } else {
-      this.addFeedbackForm.patchValue({recommendation: 'No'});
+      this.addFeedbackForm.patchValue({ recommendation: 'No' });
       this.is_yes = false;
       this.is_no = true;
     }
   }
 
   alreadyMarkCompleted = false;
-  openMarkCompleteModal(appointment_id: string, i:number, appointment_type:string) {
+
+  openMarkCompleteModal(appointment_id: string, i: number, appointment_type: string) {
     this.alreadyMarkCompleted = false;
-    if(appointment_type == 'upcoming' && this.upcoming_appointments[i].prescriptions.Report.length) {
+    if (appointment_type == 'upcoming' && this.upcoming_appointments[i].prescriptions.Report.length) {
       this.alreadyMarkCompleted = true;
-    } else if(appointment_type == 'instant' && this.instant_appointments[i].prescriptions.Report.length) {
+    } else if (appointment_type == 'instant' && this.instant_appointments[i].prescriptions.Report.length) {
       this.alreadyMarkCompleted = true;
-    } else if(appointment_type == 'past' && this.past_appointments[i].prescriptions.Report.length) {
+    } else if (appointment_type == 'past' && this.past_appointments[i].prescriptions.Report.length) {
       this.alreadyMarkCompleted = true;
     }
     this.appointment_id = appointment_id;

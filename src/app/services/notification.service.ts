@@ -35,5 +35,13 @@ export class NotificationService {
     return this.httpClient.get(apiURL);
   }
 
+  put(params: object = {}) {
+    let apiURL = this.apiBaseUrl + '/notifications/mark_read?token=' + this.commonService.getUserData('token');
+    apiURL += this.commonService.queryParams(params);
+    return this.httpClient.get(apiURL);
+
+  }
+
+
 
 }
