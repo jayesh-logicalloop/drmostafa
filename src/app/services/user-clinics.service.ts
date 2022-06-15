@@ -16,7 +16,7 @@ export class UserClinicsService {
     this.apiBaseUrl = environment.api_url;
   }
 
-  get(postData :any) {
+  get(postData: any) {
     let apiURL = this.apiBaseUrl + '/user_clinics?token=' + this.commonService.getUserData('token');
     apiURL += this.commonService.queryParams(postData);
     return this.httpClient.get(apiURL);
@@ -38,7 +38,7 @@ export class UserClinicsService {
     return this.httpClient.post(apiURL, postData);
   }
 
-  delete(postData={}) {
+  delete(postData = {}) {
     let apiURL = this.apiBaseUrl + '/user_clinics?token=' + this.commonService.getUserData('token');
     apiURL += this.commonService.queryParams(postData);
     return this.httpClient.delete(apiURL);
@@ -91,7 +91,7 @@ export class UserClinicsService {
     return this.httpClient.delete(apiURL, postData);
   }
 
-  add_slot_management(postData = {}){
+  add_slot_management(postData = {}) {
     let apiURL = this.apiBaseUrl + '/user_clinics/Slotmanage';
     return this.httpClient.post(apiURL, postData);
   }

@@ -80,12 +80,15 @@ export class ApiService {
       // localStorage.removeItem('find_in');
       sessionStorage.removeItem('find_in');
 
+      this.userData.unsubscribe();
+      this.commonService.setLoggedInObservable(false);
 
       this.userClinicsService.online(params).subscribe((response: any) => {
         if (response.status) {
-          this.userData.unsubscribe();
-          this.commonService.setLoggedInObservable(false);
+          console.log(response)
         }
+      }, (err) => {
+        console.log("Error", err.message)
       });
 
     }
