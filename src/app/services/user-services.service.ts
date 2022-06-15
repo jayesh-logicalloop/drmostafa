@@ -49,12 +49,12 @@ export class UserServicesService {
     return this.httpClient.delete(apiURL, formData);
   }
 
-  update_media(id:string, params: FormData) {
-    let apiURL = this.apiBaseUrl + '/user_services/media/'+id;
+  update_media(id: string, params: FormData) {
+    let apiURL = this.apiBaseUrl + '/user_services/media/' + id;
     return this.httpClient.post(apiURL, params);
   }
 
-  delete_media(id:string, params: object) {
+  delete_media(id: string, params: object) {
     let apiURL = this.apiBaseUrl + '/user_services/media/' + id + '?token=' + this.commonService.getUserData('token');
     apiURL += this.commonService.queryParams(params);
     return this.httpClient.delete(apiURL);

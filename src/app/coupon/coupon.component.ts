@@ -26,18 +26,19 @@ export class CouponComponent implements OnInit {
   itemsPerPage = 10;
   totalItems: number;
 
-  @ViewChild('searchEle', {static: false}) searchEle: ElementRef;
+  @ViewChild('searchEle', { static: false }) searchEle: ElementRef;
   search = '';
   status = '';
   dataLoader = false;
-  coupons:any = [];
+  coupons: any = [];
+  services: any = [];
 
-  @ViewChild('ngaddform', {static: false}) ngaddform: NgForm;
+  @ViewChild('ngaddform', { static: false }) ngaddform: NgForm;
   addForm: FormGroup;
   addFormLoader = false;
 
   constructor(
-	private translate: TranslateService,
+    private translate: TranslateService,
     private title: Title,
     private formBuilder: FormBuilder,
     private router: Router,
@@ -45,9 +46,11 @@ export class CouponComponent implements OnInit {
     private commonService: CommonService,
     private couponService: CouponService,
     private modalService: ModalService,
-    private alertService: AlertService
+    private alertService: AlertService,
+
+
   ) {
-	const lang = localStorage.getItem('lang') ? localStorage.getItem('lang') : this.commonService.lang;
+    const lang = localStorage.getItem('lang') ? localStorage.getItem('lang') : this.commonService.lang;
     translate.setDefaultLang(lang);
     translate.use(lang);
     this.title.setTitle('Manage Coupons');
@@ -69,10 +72,10 @@ export class CouponComponent implements OnInit {
     });
   }
 
-  deleteLabel='Delete';
-  areYouSureLabel='Are you sure?';
-  okLabel='OK';
-  cancelLabel='Cancel';
+  deleteLabel = 'Delete';
+  areYouSureLabel = 'Are you sure?';
+  okLabel = 'OK';
+  cancelLabel = 'Cancel';
   ngOnInit() {
     this.commonService.localeEvent.subscribe(locale => this.translate.use(locale));
     this.translate.stream(['']).subscribe(translations => {
@@ -86,7 +89,7 @@ export class CouponComponent implements OnInit {
 
   ngAfterViewInit(): void {
     fromEvent(this.searchEle.nativeElement, 'keyup').pipe(
-      map((event: any) => {return event.target.value;}), debounceTime(1000)
+      map((event: any) => { return event.target.value; }), debounceTime(1000)
     ).subscribe((text: string) => {
       this.search = text;
       if (this.search.length > 1) {
@@ -96,7 +99,7 @@ export class CouponComponent implements OnInit {
   }
 
   getTotalItems() {
-    this.couponService.total({search: this.search, status: this.status}).subscribe(
+    this.couponService.total({ search: this.search, status: this.status }).subscribe(
       (response: any) => {
         this.totalItems = response.data;
         if (this.totalItems > 0) {
@@ -125,6 +128,8 @@ export class CouponComponent implements OnInit {
     )
   }
 
+
+
   openAddForm() {
     this.ngaddform.resetForm();
     this.addForm.reset();
@@ -141,7 +146,7 @@ export class CouponComponent implements OnInit {
         (response: any) => {
           this.modalService.close_modal("#addFormModal");
           this.alertService.show_alert(response.message);
-          this.router.navigate(['/coupons/'+response.data]);
+          this.router.navigate(['/coupons/' + response.data]);
           this.addFormLoader = false;
         },
         (error) => { this.addFormLoader = false; }
@@ -149,7 +154,7 @@ export class CouponComponent implements OnInit {
     }
   }
 
-  deleteItem(coupon_id:string, i:number) {
+  deleteItem(coupon_id: string, i: number) {
     Swal.fire({
       title: this.deleteLabel,
       text: this.areYouSureLabel,

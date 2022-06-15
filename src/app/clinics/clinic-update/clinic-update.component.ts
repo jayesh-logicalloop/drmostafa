@@ -39,7 +39,7 @@ export class ClinicUpdateComponent implements OnInit {
   activeTab = '';
 
   dataLoader = true;
-  clinicDetail:iClinic;
+  clinicDetail: iClinic;
 
   @ViewChild('ngimagesfileinput', { static: false }) ngimagesfileinput: ElementRef;
   filesB64SrcArray = [];
@@ -47,15 +47,15 @@ export class ClinicUpdateComponent implements OnInit {
   infoForm: FormGroup;
   infoFormLoader = false;
   emailRegex = this.commonService.emailRegex;
-  @ViewChild('nginfoform', { static: false} ) nginfoform: NgForm;
+  @ViewChild('nginfoform', { static: false }) nginfoform: NgForm;
   @ViewChild('nglogofileinput', { static: false }) nglogofileinput: ElementRef;
   logo_image_src = '';
-  amenitiesSelect2Options: Options = {width: '100%', multiple: true, tags: true};
+  amenitiesSelect2Options: Options = { width: '100%', multiple: true, tags: true };
   amenitiesSelect2Data: Select2OptionData[];
 
   locationFormLoader = false;
   @ViewChild('search', { static: false }) searchElementRef: ElementRef;
-  @ViewChild('nglocationform', { static: false} ) nglocationform: NgForm;
+  @ViewChild('nglocationform', { static: false }) nglocationform: NgForm;
   latitude = 20.5937;
   longitude = 78.9629;
   zoom = 15;
@@ -64,34 +64,34 @@ export class ClinicUpdateComponent implements OnInit {
   locationForm: FormGroup;
 
   documentFormLoader = false;
-  requiredDocs:iRequiredDocs[];
+  requiredDocs: iRequiredDocs[];
 
   rejectDocumentFormLoader = false;
   rejectDocumentForm: FormGroup;
-  @ViewChild('ngrejectdocumentform', {static: false}) ngrejectdocumentform: NgForm;
+  @ViewChild('ngrejectdocumentform', { static: false }) ngrejectdocumentform: NgForm;
 
   @ViewChild('nggalleryfileinput', { static: false }) nggalleryfileinput: ElementRef;
   galleryFormLoader = false;
-  clinicAttachments:iClinicAttachment[];
+  clinicAttachments: iClinicAttachment[];
 
   serviceDataLoader = false;
   serviceFormLoader = false;
-  @ViewChild('ng_add_update_service_form', { static: false}) ng_add_update_service_form: NgForm;
+  @ViewChild('ng_add_update_service_form', { static: false }) ng_add_update_service_form: NgForm;
   addUpdateServiceForm: FormGroup;
-  @ViewChild('ng_service_image_input', {static: false}) ng_image_input: ElementRef;
+  @ViewChild('ng_service_image_input', { static: false }) ng_image_input: ElementRef;
   serviceImageSrc = '';
   serviceImageFileInput: File;
-  serviceTypes:string[] = [];
-  service_id:string;
-  service_index:number;
-  services:iService[] = [];
+  serviceTypes: string[] = [];
+  service_id: string;
+  service_index: number;
+  services: iService[] = [];
 
   bankDataLoader = false;
   bankFormLoader = false;
-  @ViewChild('ngaddbankform', { static: false}) ngaddbankform: NgForm;
+  @ViewChild('ngaddbankform', { static: false }) ngaddbankform: NgForm;
   addBankForm: FormGroup;
-  bank_id:string;
-  banks:iBank[];
+  bank_id: string;
+  banks: iBank[];
 
   slotSubmmited = false;
   slotFormLoader = false;
@@ -145,7 +145,7 @@ export class ClinicUpdateComponent implements OnInit {
       this.user_id = params.get('user_id');
     });
 
-    if(this.userType == 'Clinic' && this.clinic_id == '') {
+    if (this.userType == 'Clinic' && this.clinic_id == '') {
       this.clinic_id = clinic_id;
     }
 
@@ -260,7 +260,7 @@ export class ClinicUpdateComponent implements OnInit {
     })
   }
 
-  ngOnInit():void {
+  ngOnInit(): void {
     this.initializeMap();
     this.getServiceTypes();
     this.getClinicDetail();
@@ -268,7 +268,7 @@ export class ClinicUpdateComponent implements OnInit {
 
   getServiceTypes() {
     this.userServicesService.getServiceTypes().subscribe(
-      (data:string[]) => {
+      (data: string[]) => {
         this.serviceTypes = data;
         //console.log('this.serviceTypes', this.serviceTypes);
       }
@@ -276,8 +276,8 @@ export class ClinicUpdateComponent implements OnInit {
   }
 
   getClinicDetail() {
-    let params = {clinic_id:this.clinic_id};
-    if(this.userType == 'Super Admin') {
+    let params = { clinic_id: this.clinic_id };
+    if (this.userType == 'Super Admin') {
       params['user_id'] = this.user_id;
     }
     this.userClinicsService.get(params).subscribe(
@@ -392,7 +392,7 @@ export class ClinicUpdateComponent implements OnInit {
       navigator.geolocation.getCurrentPosition((position) => {
         let latitude = this.latitude ? this.latitude : position.coords.latitude;
         let longitude = this.longitude ? this.longitude : position.coords.longitude;
-        if(latitude && longitude) {
+        if (latitude && longitude) {
           this.latitude = latitude;
           this.longitude = longitude;
         }
@@ -490,7 +490,7 @@ export class ClinicUpdateComponent implements OnInit {
             (response: any) => {
               if (response.status) {
                 this.logo_image_src = response.data;
-                this.infoForm.patchValue({'logo_image': response.data});
+                this.infoForm.patchValue({ 'logo_image': response.data });
               }
               this.dataLoader = false;
             },
@@ -517,7 +517,7 @@ export class ClinicUpdateComponent implements OnInit {
         'status': this.infoForm.value.status,
         'set_default': this.infoForm.value.set_default
       };
-      if(this.userType == 'Super Amdin') {
+      if (this.userType == 'Super Amdin') {
         postData['user_id'] = this.user_id;
       }
       this.infoFormLoader = true;
@@ -546,7 +546,7 @@ export class ClinicUpdateComponent implements OnInit {
         clinic_latitude: this.locationForm.value.clinic_latitude,
         clinic_longitude: this.locationForm.value.clinic_longitude
       };
-      if(this.userType == 'Super Admin') {
+      if (this.userType == 'Super Admin') {
         postData['user_id'] = this.user_id;
       }
       this.locationFormLoader = true;
@@ -564,12 +564,12 @@ export class ClinicUpdateComponent implements OnInit {
 
   getRequiredDocs() {
     this.documentFormLoader = true;
-    let params = {type:'Clinic', clinic_id:this.clinic_id};
-    if(this.userType == 'Super Admin') {
+    let params = { type: 'Clinic', clinic_id: this.clinic_id };
+    if (this.userType == 'Super Admin') {
       params['user_id'] = this.user_id;
     }
     this.userDocumentsService.get(params).subscribe(
-      (response:any) => {
+      (response: any) => {
         this.requiredDocs = response;
         this.documentFormLoader = false;
       },
@@ -577,7 +577,7 @@ export class ClinicUpdateComponent implements OnInit {
     );
   }
 
-  onChangeDocument(files: any, key:string) {
+  onChangeDocument(files: any, key: string) {
     if (files.target.files && files.target.files[0]) {
       const allowed_max_size = 20 * 1024 * 1024; //20 MB
       const allowed_types = ['image/png', 'image/jpeg', 'image/jpg'];
@@ -631,7 +631,7 @@ export class ClinicUpdateComponent implements OnInit {
     }
   }
 
-  deleteDocument(document_id:string) {
+  deleteDocument(document_id: string) {
     Swal.fire({
       title: 'Delete',
       text: 'Are you sure?',
@@ -659,13 +659,13 @@ export class ClinicUpdateComponent implements OnInit {
     });
   }
 
-  document_id='';
-  verification_status='';
-  updateVerification(document_id:string, verification_status:string) {
+  document_id = '';
+  verification_status = '';
+  updateVerification(document_id: string, verification_status: string) {
     this.document_id = document_id;
     this.verification_status = verification_status;
 
-    if(verification_status == 'Rejected') {
+    if (verification_status == 'Rejected') {
       this.ngrejectdocumentform.resetForm();
       this.modalService.open_modal('#rejectDocumentFormModal');
       return false;
@@ -723,9 +723,9 @@ export class ClinicUpdateComponent implements OnInit {
 
   getGalleryImages() {
     this.galleryFormLoader = true;
-    this.userClinicsService.get_attachment({'clinic_id':this.clinic_id}).subscribe(
-      (response:any) => {
-        if(response.status) {
+    this.userClinicsService.get_attachment({ 'clinic_id': this.clinic_id }).subscribe(
+      (response: any) => {
+        if (response.status) {
           this.clinicAttachments = response.data;
         }
         this.galleryFormLoader = false;
@@ -737,7 +737,7 @@ export class ClinicUpdateComponent implements OnInit {
     let formData = new FormData();
     formData.append('token', this.commonService.getUserData('token'));
     formData.append('clinic_id', this.clinic_id);
-    for(let i=0; i<files.target.files.length; i++) {
+    for (let i = 0; i < files.target.files.length; i++) {
       const allowed_max_size = 2 * 1024 * 1024; //2 MB
       const allowed_types = ['image/png', 'image/jpeg', 'image/jpg'];
       const allowed_max_height = 2000;
@@ -771,18 +771,18 @@ export class ClinicUpdateComponent implements OnInit {
     );
   }
 
-  deleteGalleryImage(id:string, i:number) {
+  deleteGalleryImage(id: string, i: number) {
     let formData = {
       'clinic_id': this.clinic_id,
       'id': id
     }
-    if(this.userType == 'Super Admin') {
+    if (this.userType == 'Super Admin') {
       formData['user_id'] = this.user_id;
     }
     this.galleryFormLoader = true;
     this.userClinicsService.delete_attachment(formData).subscribe(
-      (response:any) => {
-        if(response.status) {
+      (response: any) => {
+        if (response.status) {
           this.clinicAttachments.splice(i, 1);
         }
         this.galleryFormLoader = false;
@@ -794,18 +794,16 @@ export class ClinicUpdateComponent implements OnInit {
   getServices() {
     this.services = [];
     this.serviceDataLoader = true;
-    let params = {clinic_id:this.clinic_id};
-    if(this.userType == 'Super Admin') {
+    let params = { clinic_id: this.clinic_id };
+    if (this.userType == 'Super Admin') {
       params['user_id'] = this.user_id;
     }
-    this.userServicesService.get(params).subscribe(
-      (response: any) => {
-        if(response.status) {
-          this.services = response.data;
-        }
-        this.serviceDataLoader = false;
+    this.userServicesService.get(params).subscribe((response: any) => {
+      if (response.status) {
+        this.services = response.data;
       }
-    );
+      this.serviceDataLoader = false;
+    });
   }
 
   openAddServiceForm() {
@@ -854,7 +852,7 @@ export class ClinicUpdateComponent implements OnInit {
 
   deleteServiceMedia() {
     this.serviceFormLoader = true;
-    this.userServicesService.delete_media(this.service_id, {file:'image'}).subscribe(
+    this.userServicesService.delete_media(this.service_id, { file: 'image' }).subscribe(
       (response: any) => {
         if (response.status) {
           this.alertService.show_alert(response.message);
@@ -900,13 +898,13 @@ export class ClinicUpdateComponent implements OnInit {
           this.serviceImageSrc = e.target.result;
           this.serviceImageFileInput = file;
 
-          if(this.service_id) {
+          if (this.service_id) {
             this.serviceFormLoader = true;
             let formData = new FormData();
             formData.append('token', this.commonService.getUserData('token'));
             formData.append('image', this.serviceImageFileInput);
             this.userServicesService.update_media(this.service_id, formData).subscribe(
-              (response:any) => {
+              (response: any) => {
                 this.alertService.show_alert(response.message);
                 this.serviceFormLoader = false;
                 this.getServices();
@@ -931,14 +929,14 @@ export class ClinicUpdateComponent implements OnInit {
 
   onSubmitAddUpdateServiceForm() {
     if (this.addUpdateServiceForm.valid) {
-      if(this.service_id) {
+      if (this.service_id) {
         this.onSubmitServiceUpdateForm();
       } else {
         let postData = new FormData();
         postData.append('token', this.commonService.getUserData('token'));
         postData.append('clinic_id', this.clinic_id);
         postData.append('service_id', this.service_id);
-        if(this.userType == 'Super Admin') {
+        if (this.userType == 'Super Admin') {
           postData.append('user_id', this.user_id);
         }
         postData.append('title', this.addUpdateServiceForm.value.title);
@@ -976,8 +974,8 @@ export class ClinicUpdateComponent implements OnInit {
       };
       let items = this.addUpdateServiceForm.value.items;
 
-      if(items.length) {
-        for(let i=0; i<items.length; i++) {
+      if (items.length) {
+        for (let i = 0; i < items.length; i++) {
           params['items'].push({
             title: items[i].title,
             limit: items[i].limit,
@@ -1000,7 +998,7 @@ export class ClinicUpdateComponent implements OnInit {
     }
   }
 
-  onDeleteService(service_id:string) {
+  onDeleteService(service_id: string) {
     Swal.fire({
       title: 'Delete',
       text: 'Are you sure?',
@@ -1011,7 +1009,7 @@ export class ClinicUpdateComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         this.serviceDataLoader = true;
-        this.userServicesService.delete({service_id: service_id}).subscribe(
+        this.userServicesService.delete({ service_id: service_id }).subscribe(
           (response: any) => {
             if (response.status) {
               this.alertService.show_alert(response.message);
@@ -1026,13 +1024,13 @@ export class ClinicUpdateComponent implements OnInit {
 
   getBanks() {
     this.bankDataLoader = true;
-    let params = {clinic_id:this.clinic_id};
-    if(this.userType == 'Super Admin') {
+    let params = { clinic_id: this.clinic_id };
+    if (this.userType == 'Super Admin') {
       params['user_id'] = this.user_id;
     }
     this.bankService.get(params).subscribe(
       (response: any) => {
-        if(response.status) {
+        if (response.status) {
           this.banks = response.data;
         }
         this.bankDataLoader = false;
@@ -1040,9 +1038,9 @@ export class ClinicUpdateComponent implements OnInit {
     );
   }
 
-  setDefaultBank(bank_id: string, clinic_id:string) {
+  setDefaultBank(bank_id: string, clinic_id: string) {
     this.bankDataLoader = true;
-    this.bankService.set_default({'bank_id': bank_id, 'clinic_id': clinic_id}).subscribe(
+    this.bankService.set_default({ 'bank_id': bank_id, 'clinic_id': clinic_id }).subscribe(
       (response: any) => {
         if (response.status) {
           this.alertService.show_alert(response.message);
@@ -1086,7 +1084,7 @@ export class ClinicUpdateComponent implements OnInit {
     }
   }
 
-  onDeleteBank(bank_id:string, i:number) {
+  onDeleteBank(bank_id: string, i: number) {
     Swal.fire({
       title: 'Delete',
       text: 'Are you sure?',
@@ -1097,7 +1095,7 @@ export class ClinicUpdateComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         this.dataLoader = true;
-        this.bankService.delete({"bank_id": bank_id}).subscribe(
+        this.bankService.delete({ "bank_id": bank_id }).subscribe(
           (response: any) => {
             if (response.status) {
               this.alertService.show_alert(response.message);
@@ -1110,15 +1108,15 @@ export class ClinicUpdateComponent implements OnInit {
     });
   }
 
-  createSlotItem(){
+  createSlotItem() {
     return this.formBuilder.group({
-      slotDate:['',[Validators.required]],
-      slotFromTime: ['',[Validators.required]],
-      slotToTime: ['',[Validators.required]]
+      slotDate: ['', [Validators.required]],
+      slotFromTime: ['', [Validators.required]],
+      slotToTime: ['', [Validators.required]]
     })
   }
 
-  addSlotItem(){
+  addSlotItem() {
     this.slotSubmmited = true;
     if (this.slotManagementForm.valid) {
       this.slotManagementFormArray = this.slotManagementForm.get('slotManagementFormArray') as FormArray;
@@ -1127,7 +1125,7 @@ export class ClinicUpdateComponent implements OnInit {
     }
   }
 
-  onAddExistingDateItem(item,j,event){
+  onAddExistingDateItem(item, j, event) {
     event.stopPropagation();
     this.addSlotItem();
     this.slotManagementFormArray = this.slotManagementForm.get('slotManagementFormArray') as FormArray;
@@ -1172,7 +1170,7 @@ export class ClinicUpdateComponent implements OnInit {
         }
       }
     }
-    else if(element.slotDate.value && i >= 1) {
+    else if (element.slotDate.value && i >= 1) {
       for (let j = 0; j < this.slotManagementFormArray.length; j++) {
         const eleValue = this.slotManagementFormArray.controls[j]['controls'];
         if (element.slotDate.value == eleValue.slotDate.value && (element.slotFromTime.value == eleValue.slotFromTime.value || element.slotToTime.value == eleValue.slotToTime.value)) {
@@ -1186,7 +1184,7 @@ export class ClinicUpdateComponent implements OnInit {
   }
 
 
-   onDeleteItem(i,event){
+  onDeleteItem(i, event) {
     event.stopPropagation();
     this.slotManagementFormArray = this.slotManagementForm.get('slotManagementFormArray') as FormArray;
     this.slotManagementFormArray.removeAt(i)
@@ -1195,7 +1193,7 @@ export class ClinicUpdateComponent implements OnInit {
   onSubmitSlotForm() {
     this.slotSubmmited = true;
     if (this.slotManagementForm.valid) {
-      let postData : any;
+      let postData: any;
       const array = this.slotManagementForm.get('slotManagementFormArray') as FormArray
       const slotManagementArray = array.getRawValue();
       postData = {

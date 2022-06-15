@@ -130,11 +130,11 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     ApiService,
     MessagingService,
     AsyncPipe,
-    // {
-    //   provide: HTTP_INTERCEPTORS,
-    //   useClass: ServiceInterceptor,
-    //   multi: true
-    // },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ServiceInterceptor,
+      multi: true
+    },
     ExcelService,
   ],
   bootstrap: [AppComponent],

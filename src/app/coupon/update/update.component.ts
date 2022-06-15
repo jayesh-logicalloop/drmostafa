@@ -14,6 +14,9 @@ import { AlertService } from '../../services/alert.service';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import * as _moment from 'moment';
+import { UserServicesService } from './../../services/user-services.service';
+
+
 const moment = _moment;
 export const MY_FORMATS = {
   parse: {
@@ -44,21 +47,22 @@ export const MY_FORMATS = {
 export class UpdateComponent implements OnInit {
 
   coupon_id = '';
-  coupon:any;
-  image_src='';
+  coupon: any;
+  image_src = '';
 
   books = [];
   courses = [];
   sessions = [];
   products = [];
+  services: any = [];
 
-  @ViewChild('ngimagefileinput', {static: false}) ngimagefileinput: ElementRef;
-  @ViewChild('ngupdateform', {static: false}) ngupdateform: NgForm;
+  @ViewChild('ngimagefileinput', { static: false }) ngimagefileinput: ElementRef;
+  @ViewChild('ngupdateform', { static: false }) ngupdateform: NgForm;
   updateForm: FormGroup;
   updateFormLoader = false;
 
   constructor(
-	private translate: TranslateService,
+    private translate: TranslateService,
     private title: Title,
     private formBuilder: FormBuilder,
     private router: Router,
@@ -68,9 +72,11 @@ export class UpdateComponent implements OnInit {
     private courseService: CourseService,
     private sessionService: SessionService,
     private couponService: CouponService,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private userServicesService: UserServicesService,
+
   ) {
-	const lang = localStorage.getItem('lang') ? localStorage.getItem('lang') : this.commonService.lang;
+    const lang = localStorage.getItem('lang') ? localStorage.getItem('lang') : this.commonService.lang;
     translate.setDefaultLang(lang);
     translate.use(lang);
     this.title.setTitle('Update Course');
@@ -131,7 +137,7 @@ export class UpdateComponent implements OnInit {
     this.updateFormLoader = true;
     this.couponService.get(this.coupon_id).subscribe(
       (response: any) => {
-        if(response.status) {
+        if (response.status) {
           this.coupon = response.data;
           this.products = response.data.products;
           this.getAllProducts();
@@ -158,34 +164,61 @@ export class UpdateComponent implements OnInit {
   }
 
   getAllProducts() {
-    this.bookService.get().subscribe(
-      (response:any) => {
-        if(response.status) {
-          this.books = response.data;
-          if(this.books.length && this.products.length) {
-            for(let i=0; i<this.books.length; i++) {
-              let book_id = this.books[i].book_id;
-              for(let j=0; j<this.products.length; j++) {
-                if(this.products[j].product_type == 'Book' && book_id == this.products[j].product_id) {
-                  this.books[i]['checked'] = true;
-                }
+
+    this.services = [];
+    let clinic_id = this.commonService.getUserData('clinic_id');
+    let params = { clinic_id: clinic_id };
+
+    this.userServicesService.get(params).subscribe((response: any) => {
+      if (response.status) {
+        this.services = response.data;
+        console.log(this.products);
+
+        if (this.services.length && this.products.length) {
+          for (let i = 0; i < this.services.length; i++) {
+            let service_id = this.services[i].service_id;
+            for (let j = 0; j < this.products.length; j++) {
+
+              if (this.products[j].product_type == 'Service' && service_id == this.products[j].product_id) {
+                this.services[i]['checked'] = true;
               }
             }
           }
-          //console.log('this.books', this.books);
         }
+
       }
+    });
+
+    this.bookService.get().subscribe((response: any) => {
+      if (response.status) {
+        this.books = response.data;
+        if (this.books.length && this.products.length) {
+          for (let i = 0; i < this.books.length; i++) {
+            let book_id = this.books[i].book_id;
+            for (let j = 0; j < this.products.length; j++) {
+              if (this.products[j].product_type == 'Book' && book_id == this.products[j].product_id) {
+                this.books[i]['checked'] = true;
+              }
+            }
+          }
+        }
+        //console.log('this.books', this.books);
+      }
+    }
     );
 
+
+
+
     this.courseService.get().subscribe(
-      (response:any) => {
-        if(response.status) {
+      (response: any) => {
+        if (response.status) {
           this.courses = response.data;
-          if(this.courses.length && this.products.length) {
-            for(let i=0; i<this.courses.length; i++) {
+          if (this.courses.length && this.products.length) {
+            for (let i = 0; i < this.courses.length; i++) {
               let course_id = this.courses[i].course_id;
-              for(let j=0; j<this.products.length; j++) {
-                if(this.products[j].product_type == 'Course' && course_id == this.products[j].product_id) {
+              for (let j = 0; j < this.products.length; j++) {
+                if (this.products[j].product_type == 'Course' && course_id == this.products[j].product_id) {
                   this.courses[i]['checked'] = true;
                 }
               }
@@ -197,14 +230,14 @@ export class UpdateComponent implements OnInit {
     );
 
     this.sessionService.get().subscribe(
-      (response:any) => {
-        if(response.status) {
+      (response: any) => {
+        if (response.status) {
           this.sessions = response.data;
-          if(this.sessions.length && this.products.length) {
-            for(let i=0; i<this.sessions.length; i++) {
+          if (this.sessions.length && this.products.length) {
+            for (let i = 0; i < this.sessions.length; i++) {
               let session_id = this.sessions[i].session_id;
-              for(let j=0; j<this.products.length; j++) {
-                if(this.products[j].product_type == 'Session' && session_id == this.products[j].product_id) {
+              for (let j = 0; j < this.products.length; j++) {
+                if (this.products[j].product_type == 'Session' && session_id == this.products[j].product_id) {
                   this.sessions[i]['checked'] = true;
                 }
               }
@@ -216,16 +249,16 @@ export class UpdateComponent implements OnInit {
     );
   }
 
-  addUpdateProduct($event:boolean, product_type:string, product_id:string) {
-    if($event) {
+  addUpdateProduct($event: boolean, product_type: string, product_id: string) {
+    if ($event) {
       let product = {
         product_type: product_type,
         product_id: product_id
       }
       this.products.push(product);
-    } else if(this.products.length) {
-      for(let i=0; i<this.products.length; i++) {
-        if(this.products[i].product_type == product_type && this.products[i].product_id == product_id) {
+    } else if (this.products.length) {
+      for (let i = 0; i < this.products.length; i++) {
+        if (this.products[i].product_type == product_type && this.products[i].product_id == product_id) {
           this.products.splice(i, 1);
         }
       }
@@ -248,7 +281,7 @@ export class UpdateComponent implements OnInit {
         description: this.updateForm.value.description,
         status: this.updateForm.value.status,
         products: this.products,
-        coupon_id : this.coupon_id
+        coupon_id: this.coupon_id
       }
 
       this.updateFormLoader = true;
@@ -267,7 +300,7 @@ export class UpdateComponent implements OnInit {
 
   onChangeImage(fileInput: any) {
     if (fileInput.target.files && fileInput.target.files[0]) {
-      let file:File = fileInput.target.files[0];
+      let file: File = fileInput.target.files[0];
       const max_height = 2000;
       const max_width = 2000;
 
@@ -303,9 +336,9 @@ export class UpdateComponent implements OnInit {
           this.updateFormLoader = true;
           this.couponService.update_media(this.coupon_id, formData).subscribe(
             (response: any) => {
-              if(response.status) {
+              if (response.status) {
                 this.image_src = response.data;
-                this.updateForm.patchValue({image:this.image_src});
+                this.updateForm.patchValue({ image: this.image_src });
               }
               this.updateFormLoader = false;
             },
@@ -320,12 +353,12 @@ export class UpdateComponent implements OnInit {
 
   removeImage() {
     this.updateFormLoader = true;
-    this.couponService.delete_media(this.coupon_id, {file:'image'}).subscribe(
+    this.couponService.delete_media(this.coupon_id, { file: 'image' }).subscribe(
       (response: any) => {
-        if(response.status) {
+        if (response.status) {
           this.image_src = '';
           this.ngimagefileinput.nativeElement.value = '';
-          this.updateForm.patchValue({image:''});
+          this.updateForm.patchValue({ image: '' });
         }
         this.updateFormLoader = false;
       },

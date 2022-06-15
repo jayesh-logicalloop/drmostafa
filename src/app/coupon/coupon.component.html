@@ -7,20 +7,22 @@
       <div class="col-sm-6 py-2 py-sm-0">
         <div class="search-field">
           <form class="d-flex align-items-center">
-          <div class="input-group input-group-sm">
-            <div class="input-group-prepend bg-transparent">
-            <i class="input-group-text border-0 mdi mdi-magnify"></i>
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend bg-transparent">
+                <i class="input-group-text border-0 mdi mdi-magnify"></i>
+              </div>
+              <input type="text" #searchEle class="form-control bg-transparent border-0"
+                placeholder="{{'search_by_name' | translate}}">
+              <div class="input-group-append bg-transparent" *ngIf="search.length > 0">
+                <i class="cp input-group-text border-0 mr-3" title="{{'clear_search' | translate}}"
+                  (click)="clearSearch()">×</i>
+              </div>
             </div>
-            <input type="text" #searchEle class="form-control bg-transparent border-0" placeholder="{{'search_by_name' | translate}}">
-            <div class="input-group-append bg-transparent" *ngIf="search.length > 0">
-            <i class="cp input-group-text border-0 mr-3" title="{{'clear_search' | translate}}" (click)="clearSearch()">×</i>
-            </div>
-          </div>
           </form>
         </div>
-        </div>
+      </div>
       <div class="col-sm-3 text-right-1">
-        <button type="button" class="btn theme-btn" [routerLink]="'/coupon/'+ 0">
+        <button type="button" class="btn theme-btn" (click)="openAddForm();">
           <i class="mdi mdi-plus-circle mr-1"></i> {{'add_coupon' | translate}}
         </button>
       </div>
@@ -49,7 +51,8 @@
           </thead>
           <tbody [ngClass]="{'csspinner load1': dataLoader}">
             <ng-container *ngIf="totalItems">
-              <tr *ngFor="let item of coupons | paginate: {itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems}; let i = index">
+              <tr
+                *ngFor="let item of coupons | paginate: {itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems}; let i = index">
                 <td>{{i+1}}</td>
                 <td>{{item.coupon_code}}</td>
                 <td>{{item.coupon_for}}</td>
@@ -84,7 +87,8 @@
       <div class="card-footer p-2" *ngIf="coupons.length">
         <div class="row">
           <div class="col-sm-12 mt-3 text-center">
-            <pagination-controls (pageChange)="pageChanged($event)" autoHide="true" responsive="true"></pagination-controls>
+            <pagination-controls (pageChange)="pageChanged($event)" autoHide="true" responsive="true">
+            </pagination-controls>
           </div>
         </div>
       </div>
@@ -92,7 +96,8 @@
   </div>
 </div>
 
-<div class="modal fade actionModal" id="addFormModal" tabindex="-1" role="dialog" aria-labelledby="addFormModal" aria-hidden="true" data-backdrop="static">
+<div class="modal fade actionModal" id="addFormModal" tabindex="-1" role="dialog" aria-labelledby="addFormModal"
+  aria-hidden="true" data-backdrop="static">
   <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
     <div class="modal-content bg-white" [ngClass]="{'csspinner load1':addFormLoader}">
       <div class="modal-header">
@@ -106,13 +111,15 @@
           <div class="container">
             <div class="form-group">
               <label>{{'coupon_code' | translate}} <span class="symbol required"></span></label>
-              <input type="text" class="form-control" placeholder="{{'enter_coupon_code' | translate}}" formControlName="coupon_code">
+              <input type="text" class="form-control" placeholder="{{'enter_coupon_code' | translate}}"
+                formControlName="coupon_code">
               <div class="invalid-feedback" *ngIf="addForm.controls.coupon_code.invalid &&
-                (addForm.controls.coupon_code.dirty || addForm.controls.coupon_code.touched || ngaddform.submitted)"
-              >
+                (addForm.controls.coupon_code.dirty || addForm.controls.coupon_code.touched || ngaddform.submitted)">
                 <div *ngIf="addForm.controls.coupon_code.errors.required">{{'this_field_is_required' | translate}}</div>
-                <div *ngIf="addForm.controls.coupon_code.errors.minlength">{{'minimum_4_characters_required' | translate}}</div>
-                <div *ngIf="addForm.controls.coupon_code.errors.maxlength">{{'maximum_15_characters_allowed' | translate}}</div>
+                <div *ngIf="addForm.controls.coupon_code.errors.minlength">{{'minimum_4_characters_required' |
+                  translate}}</div>
+                <div *ngIf="addForm.controls.coupon_code.errors.maxlength">{{'maximum_15_characters_allowed' |
+                  translate}}</div>
               </div>
             </div>
           </div>
