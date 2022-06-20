@@ -23,6 +23,7 @@ import { iRequiredDocs } from '../../services/interface/i-required-docs';
 import { iClinicAttachment } from 'src/app/services/interface/i-clinic-attachment';
 import { iBank } from 'src/app/services/interface/i-bank';
 import { iService } from 'src/app/services/interface/i-service';
+import { iSlot } from 'src/app/services/interface/i-slot';
 
 @Component({
   selector: 'app-clinic-update',
@@ -92,7 +93,7 @@ export class ClinicUpdateComponent implements OnInit {
   addBankForm: FormGroup;
   bank_id: string;
   banks: iBank[];
-
+  slots: iSlot[];
   slotSubmmited = false;
   slotFormLoader = false;
   validateCheckSlotFromTime = false;
@@ -264,6 +265,7 @@ export class ClinicUpdateComponent implements OnInit {
     this.initializeMap();
     this.getServiceTypes();
     this.getClinicDetail();
+    this.getSlots();
   }
 
   getServiceTypes() {
@@ -273,6 +275,42 @@ export class ClinicUpdateComponent implements OnInit {
         //console.log('this.serviceTypes', this.serviceTypes);
       }
     )
+  }
+
+  getSlots() {
+    let user_id = this.commonService.getUserData('user_id');
+    let params = { user_id: user_id, type: 'get' };
+    this.userClinicsService.get_slot_management(params).subscribe((data: any) => {
+      if (data.status) {
+        this.slots = data.data;
+      }
+    });
+  }
+
+  onDeleteSlot(service_id: string) {
+
+    Swal.fire({
+      title: 'Delete',
+      text: 'Are you sure?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'OK',
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
+      if (result.value) {
+        this.serviceDataLoader = true;
+        this.userClinicsService.delete_slot({ record_id: service_id }).subscribe(
+          (response: any) => {
+            if (response.status) {
+              this.alertService.show_alert(response.message);
+              this.getSlots();
+            }
+            this.serviceDataLoader = false;
+          }
+        );
+      }
+    });
+
   }
 
   getClinicDetail() {
@@ -1201,17 +1239,19 @@ export class ClinicUpdateComponent implements OnInit {
         user_id: this.user_id,
         data: slotManagementArray
       };
+
       this.slotFormLoader = true;
-      this.userClinicsService.add_slot_management(postData).subscribe(
-        (response: any) => {
-          if (response.status) {
-            this.alertService.show_alert(response.message);
-          }
-          this.slotFormLoader = false;
-          this.slotSubmmited = false;
-        },
-        (error) => { this.slotFormLoader = false; this.slotSubmmited = false; }
-      );
+      this.userClinicsService.add_slot_management(postData).subscribe((response: any) => {
+        if (response.status) {
+          this.alertService.show_alert(response.message);
+          this.slotManagementForm.reset();
+        }
+        this.slotFormLoader = false;
+        this.slotSubmmited = false;
+      }, (error) => {
+        this.slotFormLoader = false;
+        this.slotSubmmited = false;
+      });
     }
   }
 }

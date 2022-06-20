@@ -2,7 +2,8 @@
   <div class="col-sm-12">
     <div class="row">
       <div class="col-sm-3 txt-arabic">
-        <a *ngIf="userType!='Super Admin'" routerLink="/my-establishments">{{'back_to_clinics_hospitals' | translate}}</a>
+        <a *ngIf="userType!='Super Admin'" routerLink="/my-establishments">{{'back_to_clinics_hospitals' |
+          translate}}</a>
         <a *ngIf="userType=='Super Admin'" routerLink="/establishments">{{'back_to_clinics_hospitals' | translate}}</a>
       </div>
     </div>
@@ -23,17 +24,22 @@
         <div class="card-body p-2 text-center">
           <h6 class="card-title mb-1">{{clinicDetail.clinic_name}}</h6>
           <div class="mb-1"><small>{{clinicDetail.clinic_email}}</small></div>
-          <div class="mb-1"><small><i class="mdi mdi-cellphone-android"></i> {{clinicDetail.clinic_phone_number}}</small></div>
+          <div class="mb-1"><small><i class="mdi mdi-cellphone-android"></i>
+              {{clinicDetail.clinic_phone_number}}</small></div>
         </div>
       </div>
     </div>
     <div class="form-group edit-pfrl-img-sec">
       <ul class="nav flex-column nav-pills nav-justified" role="tablist">
         <li class="nav-item text-left">
-          <a class="nav-link" [ngClass]="{'active':activeTab=='info'}" id="info-tab" data-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="true"><i class="mdi mdi-information-variant"></i> {{'basic_info' | translate}}</a>
+          <a class="nav-link" [ngClass]="{'active':activeTab=='info'}" id="info-tab" data-toggle="tab" href="#info"
+            role="tab" aria-controls="info" aria-selected="true"><i class="mdi mdi-information-variant"></i>
+            {{'basic_info' | translate}}</a>
         </li>
         <li class="nav-item text-left">
-          <a class="nav-link" [ngClass]="{'active':activeTab=='location'}" id="location-tab" data-toggle="tab" href="#location" role="tab" aria-controls="location" aria-selected="false"><i class="mdi mdi-map-marker"></i> {{'location' | translate}}</a>
+          <a class="nav-link" [ngClass]="{'active':activeTab=='location'}" id="location-tab" data-toggle="tab"
+            href="#location" role="tab" aria-controls="location" aria-selected="false"><i
+              class="mdi mdi-map-marker"></i> {{'location' | translate}}</a>
         </li>
         <!-- <li class="nav-item text-left">
           <a class="nav-link" [ngClass]="{'active':activeTab=='documents'}" id="documents-tab" data-toggle="tab" href="#documents" role="tab" aria-controls="documents" aria-selected="false"><i class="mdi mdi-file-document"></i> {{'documents' | translate}}</a>
@@ -42,10 +48,14 @@
           <a class="nav-link" [ngClass]="{'active':activeTab=='gallery'}" id="gallery-tab" data-toggle="tab" href="#gallery" role="tab" aria-controls="gallery" aria-selected="false"><i class="mdi mdi-image-filter"></i> {{'gallery' | translate}}</a>
         </li> -->
         <li class="nav-item text-left">
-          <a class="nav-link" [ngClass]="{'active':activeTab=='services'}" id="services-tab" data-toggle="tab" href="#services" role="tab" aria-controls="services" aria-selected="false"><i class="mdi mdi-book"></i> {{'services' | translate}}</a>
+          <a class="nav-link" [ngClass]="{'active':activeTab=='services'}" id="services-tab" data-toggle="tab"
+            href="#services" role="tab" aria-controls="services" aria-selected="false"><i class="mdi mdi-book"></i>
+            {{'services' | translate}}</a>
         </li>
         <li class="nav-item text-left">
-          <a class="nav-link" [ngClass]="{'active':activeTab=='slot'}" id="slot-tab" data-toggle="tab" href="#slots" role="tab" aria-controls="slot" aria-selected="false"><i class="mdi mdi-view-sequential"></i> {{'slot_management' | translate}}</a>
+          <a class="nav-link" [ngClass]="{'active':activeTab=='slot'}" id="slot-tab" data-toggle="tab" href="#slots"
+            role="tab" aria-controls="slot" aria-selected="false"><i class="mdi mdi-view-sequential"></i>
+            {{'slot_management' | translate}}</a>
         </li>
         <!-- <li class="nav-item text-left">
           <a class="nav-link" [ngClass]="{'active':activeTab=='bank'}" id="bank-tab" data-toggle="tab" href="#bank" role="tab" aria-controls="bank" aria-selected="false"><i class="mdi mdi-bank"></i> {{'bank' | translate}}</a>
@@ -57,28 +67,35 @@
           <a class="nav-link" [ngClass]="{'active':activeTab=='patients'}" id="patients-tab" data-toggle="tab" href="#patients" role="tab" aria-controls="patients" aria-selected="false"><i class="mdi mdi-account-multiple"></i> {{'patients' | translate}}</a>
         </li> -->
         <li class="nav-item text-left" *ngIf="userType != 'Doctor'">
-          <a class="nav-link" [ngClass]="{'active':activeTab=='doctors'}" id="doctors-tab" data-toggle="tab" href="#doctors" role="tab" aria-controls="doctors" aria-selected="false"><i class="mdi mdi-account-multiple-outline"></i> {{'doctors' | translate}}</a>
+          <a class="nav-link" [ngClass]="{'active':activeTab=='doctors'}" id="doctors-tab" data-toggle="tab"
+            href="#doctors" role="tab" aria-controls="doctors" aria-selected="false"><i
+              class="mdi mdi-account-multiple-outline"></i> {{'doctors' | translate}}</a>
         </li>
       </ul>
     </div>
   </div>
   <div class="col-md-9 intro-sec">
     <div class="tab-content">
-      <div class="tab-pane" [ngClass]="{'active':activeTab=='info'}" id="info" role="tabpanel" aria-labelledby="info-tab">
+      <div class="tab-pane" [ngClass]="{'active':activeTab=='info'}" id="info" role="tabpanel"
+        aria-labelledby="info-tab">
         <div class="card">
           <div class="card-body p-2" [ngClass]="{'csspinner load1':infoFormLoader}">
-            <div class="card-title"><h3>{{'basic_info' | translate}}</h3></div>
+            <div class="card-title">
+              <h3>{{'basic_info' | translate}}</h3>
+            </div>
             <form [formGroup]="infoForm" (ngSubmit)="onSubmitInfoForm()" #nginfoform="ngForm">
               <div class="form-row">
                 <div class="form-group col-md-10">
                   <label>{{'name' | translate}} <span class="symbol required"></span></label>
-                  <input type="text" class="form-control" placeholder="{{'enter_name' | translate}}" formControlName="name">
+                  <input type="text" class="form-control" placeholder="{{'enter_name' | translate}}"
+                    formControlName="name">
                   <div class="invalid-feedback" *ngIf="infoForm.controls.name.invalid &&
-                    (infoForm.controls.name.dirty || infoForm.controls.name.touched || nginfoform.submitted)"
-                  >
+                    (infoForm.controls.name.dirty || infoForm.controls.name.touched || nginfoform.submitted)">
                     <div *ngIf="infoForm.controls.name.errors.required">{{'this_field_is_required' | translate}}</div>
-                    <div *ngIf="infoForm.controls.name.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
-                    <div *ngIf="infoForm.controls.name.errors.maxlength">{{'maximum_150_characters_allowed' | translate}}</div>
+                    <div *ngIf="infoForm.controls.name.errors.minlength">{{'minimum_2_characters_required' | translate}}
+                    </div>
+                    <div *ngIf="infoForm.controls.name.errors.maxlength">{{'maximum_150_characters_allowed' |
+                      translate}}</div>
                   </div>
                 </div>
                 <div class="form-group col-md-2">
@@ -88,8 +105,7 @@
                     <option value="Inactive">Inactive</option>
                   </select>
                   <div class="invalid-feedback" *ngIf="infoForm.controls.status.invalid &&
-                    (infoForm.controls.status.dirty || infoForm.controls.status.touched || nginfoform.submitted)"
-                  >
+                    (infoForm.controls.status.dirty || infoForm.controls.status.touched || nginfoform.submitted)">
                     <div *ngIf="infoForm.controls.status.errors.required">{{'this_field_is_required' | translate}}</div>
                   </div>
                 </div>
@@ -97,25 +113,30 @@
               <div class="form-row">
                 <div class="form-group col-md-4">
                   <label>{{'email' | translate}} <span class="symbol required"></span></label>
-                  <input type="text" class="form-control" placeholder="{{'enter_email' | translate}}" formControlName="email">
+                  <input type="text" class="form-control" placeholder="{{'enter_email' | translate}}"
+                    formControlName="email">
                   <div class="invalid-feedback" *ngIf="infoForm.controls.email.invalid &&
                     (infoForm.controls.email.dirty || infoForm.controls.email.touched ||
-                    nginfoform.submitted)"
-                  >
+                    nginfoform.submitted)">
                     <div *ngIf="infoForm.controls.email.errors.required">{{'this_field_is_required' | translate}}</div>
-                    <div *ngIf="infoForm.controls.email.errors.email || infoForm.controls.email.errors.pattern">{{'valid_email_is_required' | translate}}</div>
-                    <div *ngIf="infoForm.controls.email.errors.maxlength">{{'maximum_100_characters_allowed' | translate}}</div>
+                    <div *ngIf="infoForm.controls.email.errors.email || infoForm.controls.email.errors.pattern">
+                      {{'valid_email_is_required' | translate}}</div>
+                    <div *ngIf="infoForm.controls.email.errors.maxlength">{{'maximum_100_characters_allowed' |
+                      translate}}</div>
                   </div>
                 </div>
                 <div class="form-group col-md-4">
                   <label>{{'phone_number' | translate}} <span class="symbol required"></span></label>
                   <input type="text" class="form-control" placeholder="Enter Phone No." formControlName="phone_number">
-                  <div class="invalid-feedback" *ngIf="infoForm.controls.phone_number.invalid &&
-                    (infoForm.controls.phone_number.dirty || infoForm.controls.phone_number.touched || nginfoform.submitted)"
-                  >
-                    <div *ngIf="infoForm.controls.phone_number.errors.required">{{'this_field_is_required' | translate}}</div>
-                    <div *ngIf="infoForm.controls.phone_number.errors.minlength">{{'minimum_6_characters_required' | translate}}</div>
-                    <div *ngIf="infoForm.controls.phone_number.errors.maxlength">{{'maximum_15_characters_allowed' | translate}}</div>
+                  <div class="invalid-feedback"
+                    *ngIf="infoForm.controls.phone_number.invalid &&
+                    (infoForm.controls.phone_number.dirty || infoForm.controls.phone_number.touched || nginfoform.submitted)">
+                    <div *ngIf="infoForm.controls.phone_number.errors.required">{{'this_field_is_required' | translate}}
+                    </div>
+                    <div *ngIf="infoForm.controls.phone_number.errors.minlength">{{'minimum_6_characters_required' |
+                      translate}}</div>
+                    <div *ngIf="infoForm.controls.phone_number.errors.maxlength">{{'maximum_15_characters_allowed' |
+                      translate}}</div>
                   </div>
                 </div>
                 <div class="form-group col-md-4">
@@ -124,39 +145,46 @@
                     <option value="Yes">Yes</option>
                     <option value="No">No</option>
                   </select>
-                  <div class="invalid-feedback" *ngIf="infoForm.controls.set_default.invalid &&
-                    (infoForm.controls.set_default.dirty || infoForm.controls.set_default.touched || nginfoform.submitted)"
-                  >
-                    <div *ngIf="infoForm.controls.set_default.errors.required">{{'this_field_is_required' | translate}}</div>
+                  <div class="invalid-feedback"
+                    *ngIf="infoForm.controls.set_default.invalid &&
+                    (infoForm.controls.set_default.dirty || infoForm.controls.set_default.touched || nginfoform.submitted)">
+                    <div *ngIf="infoForm.controls.set_default.errors.required">{{'this_field_is_required' | translate}}
+                    </div>
                   </div>
                 </div>
               </div>
               <div class="form-group">
                 <label>{{'introduction' | translate}} <span class="symbol required"></span></label>
-                <textarea class="form-control" formControlName="introduction" rows="3" ></textarea>
-                <div class="invalid-feedback" *ngIf="infoForm.controls.introduction.invalid &&
-                  (infoForm.controls.introduction.dirty || infoForm.controls.introduction.touched || nginfoform.submitted)"
-                >
-                  <div *ngIf="infoForm.controls.introduction.errors.required">{{'this_field_is_required' | translate}}</div>
-                  <div *ngIf="infoForm.controls.introduction.errors.minlength">{{'minimum_20_characters_required' | translate}}</div>
-                  <div *ngIf="infoForm.controls.introduction.errors.maxlength">{{'maximum_1000_characters_allowed' | translate}}</div>
+                <textarea class="form-control" formControlName="introduction" rows="3"></textarea>
+                <div class="invalid-feedback"
+                  *ngIf="infoForm.controls.introduction.invalid &&
+                  (infoForm.controls.introduction.dirty || infoForm.controls.introduction.touched || nginfoform.submitted)">
+                  <div *ngIf="infoForm.controls.introduction.errors.required">{{'this_field_is_required' | translate}}
+                  </div>
+                  <div *ngIf="infoForm.controls.introduction.errors.minlength">{{'minimum_20_characters_required' |
+                    translate}}</div>
+                  <div *ngIf="infoForm.controls.introduction.errors.maxlength">{{'maximum_1000_characters_allowed' |
+                    translate}}</div>
                 </div>
               </div>
               <div class="form-group">
                 <label>{{'work_schedule' | translate}} <span class="symbol required"></span></label>
-                <textarea class="form-control" placeholder="{{'enter_work_schedule' | translate}}" formControlName="work_schedule" rows="3"></textarea>
+                <textarea class="form-control" placeholder="{{'enter_work_schedule' | translate}}"
+                  formControlName="work_schedule" rows="3"></textarea>
                 <div class="invalid-feedback" *ngIf="infoForm.controls.work_schedule.invalid &&
                   (infoForm.controls.work_schedule.dirty || infoForm.controls.work_schedule.touched ||
-                  nginfoform.submitted)"
-                >
-                  <div *ngIf="infoForm.controls.work_schedule.errors.required">{{'this_field_is_required' | translate}}</div>
-                  <div *ngIf="infoForm.controls.work_schedule.errors.maxlength">{{'maximum_250_characters_allowed' | translate}}</div>
+                  nginfoform.submitted)">
+                  <div *ngIf="infoForm.controls.work_schedule.errors.required">{{'this_field_is_required' | translate}}
+                  </div>
+                  <div *ngIf="infoForm.controls.work_schedule.errors.maxlength">{{'maximum_250_characters_allowed' |
+                    translate}}</div>
                 </div>
               </div>
               <div class="form-group">
-                <label>{{'amenities' | translate}} <small>({{'press_enter_after_each_amenity' | translate}})</small></label>
+                <label>{{'amenities' | translate}} <small>({{'press_enter_after_each_amenity' |
+                    translate}})</small></label>
                 <ng-select2 [data]="amenitiesSelect2Data" [options]="amenitiesSelect2Options"
-                formControlName="amenities"></ng-select2>
+                  formControlName="amenities"></ng-select2>
               </div>
               <hr>
               <div class="form-row">
@@ -165,7 +193,8 @@
                 </div>
                 <div class="form-group col-md-6 text-right">
                   <button type="submit" [disabled]="infoFormLoader" class="btn theme-btn mx-auto">
-                    <span [ngClass]="{'spinner-border spinner-border-sm':infoFormLoader}"></span> {{'update' | translate}}
+                    <span [ngClass]="{'spinner-border spinner-border-sm':infoFormLoader}"></span> {{'update' |
+                    translate}}
                   </button>
                 </div>
               </div>
@@ -173,57 +202,69 @@
           </div>
         </div>
       </div>
-      <div class="tab-pane" [ngClass]="{'active':activeTab=='location'}" id="location" role="tabpanel" aria-labelledby="location-tab">
+      <div class="tab-pane" [ngClass]="{'active':activeTab=='location'}" id="location" role="tabpanel"
+        aria-labelledby="location-tab">
         <div class="card">
           <div class="card-body p-2" [ngClass]="{'csspinner load1':locationFormLoader}">
-            <div class="card-title"><h3>{{'location' | translate}}</h3></div>
+            <div class="card-title">
+              <h3>{{'location' | translate}}</h3>
+            </div>
             <form [formGroup]="locationForm" (ngSubmit)="onSubmitLocationForm()" #nglocationform="ngForm">
               <div class="form-row">
                 <div class="form-group col-md-3">
                   <label>{{'country' | translate}} <span class="symbol required"></span></label>
-                  <input type="text" class="form-control" placeholder="{{'enter_country' | translate}}" formControlName="clinic_country">
+                  <input type="text" class="form-control" placeholder="{{'enter_country' | translate}}"
+                    formControlName="clinic_country">
                   <div class="invalid-feedback" *ngIf="locationForm.controls.clinic_country.invalid &&
                     (locationForm.controls.clinic_country.dirty || locationForm.controls.clinic_country.touched ||
-                    nglocationform.submitted)"
-                  >
-                    <div *ngIf="locationForm.controls.clinic_country.errors.required">{{'this_field_is_required' | translate}}</div>
-                    <div *ngIf="locationForm.controls.clinic_country.errors.maxlength">{{'maximum_50_characters_allowed' | translate}}</div>
+                    nglocationform.submitted)">
+                    <div *ngIf="locationForm.controls.clinic_country.errors.required">{{'this_field_is_required' |
+                      translate}}</div>
+                    <div *ngIf="locationForm.controls.clinic_country.errors.maxlength">{{'maximum_50_characters_allowed'
+                      | translate}}</div>
                   </div>
                 </div>
                 <div class="form-group col-md-3">
                   <label>{{'state' | translate}} <span class="symbol required"></span></label>
-                  <input type="text" class="form-control" placeholder="{{'enter_state' | translate}}" formControlName="clinic_region">
+                  <input type="text" class="form-control" placeholder="{{'enter_state' | translate}}"
+                    formControlName="clinic_region">
                   <div class="invalid-feedback" *ngIf="locationForm.controls.clinic_region.invalid &&
                     (locationForm.controls.clinic_region.dirty || locationForm.controls.clinic_region.touched ||
-                    nglocationform.submitted)"
-                  >
-                    <div *ngIf="locationForm.controls.clinic_region.errors.required">{{'this_field_is_required' | translate}}</div>
-                    <div *ngIf="locationForm.controls.clinic_region.errors.maxlength">{{'maximum_50_characters_allowed' | translate}}</div>
+                    nglocationform.submitted)">
+                    <div *ngIf="locationForm.controls.clinic_region.errors.required">{{'this_field_is_required' |
+                      translate}}</div>
+                    <div *ngIf="locationForm.controls.clinic_region.errors.maxlength">{{'maximum_50_characters_allowed'
+                      | translate}}</div>
                   </div>
                 </div>
                 <div class="form-group col-md-3">
                   <label>{{'city' | translate}} <span class="symbol required"></span></label>
-                  <input type="text" class="form-control" placeholder="{{'enter_city' | translate}}" formControlName="clinic_city">
+                  <input type="text" class="form-control" placeholder="{{'enter_city' | translate}}"
+                    formControlName="clinic_city">
                   <div class="invalid-feedback" *ngIf="locationForm.controls.clinic_city.invalid &&
                     (locationForm.controls.clinic_city.dirty || locationForm.controls.clinic_city.touched ||
-                    nglocationform.submitted)"
-                  >
-                    <div *ngIf="locationForm.controls.clinic_city.errors.required">{{'this_field_is_required' | translate}}</div>
-                    <div *ngIf="locationForm.controls.clinic_city.errors.maxlength">{{'maximum_100_characters_allowed' | translate}}</div>
+                    nglocationform.submitted)">
+                    <div *ngIf="locationForm.controls.clinic_city.errors.required">{{'this_field_is_required' |
+                      translate}}</div>
+                    <div *ngIf="locationForm.controls.clinic_city.errors.maxlength">{{'maximum_100_characters_allowed' |
+                      translate}}</div>
                   </div>
                 </div>
                 <div class="form-group col-md-3">
                   <label>{{'postal_code' | translate}} <span class="symbol required"></span></label>
-                  <input type="text" class="form-control" placeholder="{{'enter_postal_code' | translate}}" formControlName="clinic_postal_code">
+                  <input type="text" class="form-control" placeholder="{{'enter_postal_code' | translate}}"
+                    formControlName="clinic_postal_code">
                   <div class="invalid-feedback" *ngIf="locationForm.controls.clinic_postal_code.invalid &&
                     (locationForm.controls.clinic_postal_code.dirty || locationForm.controls.clinic_postal_code.touched
                     || nglocationform.submitted)
                   ">
-                    <div *ngIf="locationForm.controls.clinic_postal_code.errors.required">{{'this_field_is_required' | translate}}</div>
+                    <div *ngIf="locationForm.controls.clinic_postal_code.errors.required">{{'this_field_is_required' |
+                      translate}}</div>
                     <div *ngIf="locationForm.controls.clinic_postal_code.errors.minlength">
                       {{'minimum_6_characters_required' | translate}}
                     </div>
-                    <div *ngIf="locationForm.controls.clinic_postal_code.errors.maxlength">{{'maximum_6_characters_allowed' | translate}}</div>
+                    <div *ngIf="locationForm.controls.clinic_postal_code.errors.maxlength">
+                      {{'maximum_6_characters_allowed' | translate}}</div>
                   </div>
                 </div>
               </div>
@@ -231,14 +272,15 @@
                 <label>{{'address' | translate}} <span class="symbol required"></span></label>
                 <input type="text" class="form-control" [value]="address" (keydown.enter)="$event.preventDefault()"
                   placeholder="{{'enter_address' | translate}}" formControlName="clinic_address" autocorrect="off"
-                  autocapitalize="off" autocomplete="off" autocomplete="chrome-off" spellcheck="off" type="text" #search autocomplete="new-password"
-                >
+                  autocapitalize="off" autocomplete="off" autocomplete="chrome-off" spellcheck="off" type="text" #search
+                  autocomplete="new-password">
                 <div class="invalid-feedback" *ngIf="locationForm.controls.clinic_address.invalid &&
                   (locationForm.controls.clinic_address.dirty || locationForm.controls.clinic_address.touched ||
-                  nglocationform.submitted)"
-                >
-                  <div *ngIf="locationForm.controls.clinic_address.errors.required">{{'this_field_is_required' | translate}}</div>
-                  <div *ngIf="locationForm.controls.clinic_address.errors.maxlength">{{'maximum_250_characters_allowed' | translate}}</div>
+                  nglocationform.submitted)">
+                  <div *ngIf="locationForm.controls.clinic_address.errors.required">{{'this_field_is_required' |
+                    translate}}</div>
+                  <div *ngIf="locationForm.controls.clinic_address.errors.maxlength">{{'maximum_250_characters_allowed'
+                    | translate}}</div>
                 </div>
               </div>
               <div class="form-group">
@@ -264,7 +306,8 @@
                 </div>
                 <div class="form-group col-md-6 text-right">
                   <button type="submit" [disabled]="locationFormLoader" class="btn theme-btn mx-auto">
-                    <span [ngClass]="{'spinner-border spinner-border-sm':locationFormLoader}"></span> {{'update' | translate}}
+                    <span [ngClass]="{'spinner-border spinner-border-sm':locationFormLoader}"></span> {{'update' |
+                    translate}}
                   </button>
                 </div>
               </div>
@@ -364,7 +407,8 @@
           </div>
         </div>
       </div> -->
-      <div class="tab-pane" [ngClass]="{'active':activeTab=='services'}" id="services" role="tabpanel" aria-labelledby="services-tab">
+      <div class="tab-pane" [ngClass]="{'active':activeTab=='services'}" id="services" role="tabpanel"
+        aria-labelledby="services-tab">
         <div class="card">
           <div class="card-body p-2 table-responsive" [ngClass]="{'csspinner load1':serviceDataLoader}">
             <div class="card-title">
@@ -389,9 +433,8 @@
                     <td>{{service.status}}</td>
                     <td>
                       <div class="icon-block">
-                        <a class="cp" (click)="openServiceUpdateForm(service.service_id, i)"
-                          matTooltip="Update" matTooltipClass="primary-tooltip"
-                        >
+                        <a class="cp" (click)="openServiceUpdateForm(service.service_id, i)" matTooltip="Update"
+                          matTooltipClass="primary-tooltip">
                           <i class="mdi mdi-pencil b-blue" aria-hidden="true"></i>
                         </a>
                       </div>
@@ -400,7 +443,9 @@
                 </ng-container>
                 <ng-container *ngIf="!services.length">
                   <tr class="text-center">
-                    <td colspan="5"><div class="alert alert-danger">{{'no_data_found' | translate}}</div></td>
+                    <td colspan="5">
+                      <div class="alert alert-danger">{{'no_data_found' | translate}}</div>
+                    </td>
                   </tr>
                 </ng-container>
               </tbody>
@@ -450,7 +495,8 @@
                       </div>
                       <div class="invalid-feedback" *ngIf="item['controls'].slotFromTime?.value">
                         <div *ngIf="item['controls'].slotFromTime?.value">
-                          <div *ngIf="validateCheckSlotFromTime" style="font-size: 12px;">{{validateCheckTimeString}}</div>
+                          <div *ngIf="validateCheckSlotFromTime" style="font-size: 12px;">{{validateCheckTimeString}}
+                          </div>
                           <div *ngIf="validateCheckSameTime" style="font-size: 12px;">{{validateCheckTimeString}}</div>
                         </div>
                       </div>
@@ -458,8 +504,9 @@
                     <div class="form-group col-3">
                       <label>{{'slot_to_time' | translate}} <small>(HH:MM a)</small> <span
                           class="symbol required"></span></label>
-                      <input type="time" class="form-control" formControlName="slotToTime" (change)="slotTimeChangeEvent(i , 'to')" placeholder="From Time"
-                        autocomplete="off" min="06:00 am" max="11:59 am">
+                      <input type="time" class="form-control" formControlName="slotToTime"
+                        (change)="slotTimeChangeEvent(i , 'to')" placeholder="From Time" autocomplete="off"
+                        min="06:00 am" max="11:59 am">
                       <div class="invalid-feedback" *ngIf="slotSubmmited && item['controls'].slotToTime?.errors">
                         <div *ngIf="item['controls'].slotToTime?.errors.required">
                           {{'this_field_is_required' | translate}}</div>
@@ -470,14 +517,15 @@
                       </div>
                     </div>
                     <div class="form-group col-2 d-flex">
-                      <a class="cp icon-block" style="width: 45px !important;" matTooltip="{{'delete' | translate}}" matTooltipClass="primary-tooltip"
-                        (click)="onDeleteItem(i,$event)">
+                      <a class="cp icon-block" style="width: 45px !important;" matTooltip="{{'delete' | translate}}"
+                        matTooltipClass="primary-tooltip" (click)="onDeleteItem(i,$event)">
                         <i class="mdi mdi-delete b-brown" aria-hidden="true"></i>
                       </a>
-                      <a class="cp mt-1" matTooltip="{{'add' | translate}}" *ngIf="item['controls'].slotDate.value && item['controls'].slotFromTime.value && item['controls'].slotToTime.value" matTooltipClass="primary-tooltip"
-                      (click)="onAddExistingDateItem(item,i,$event)">
+                      <a class="cp mt-1" matTooltip="{{'add' | translate}}"
+                        *ngIf="item['controls'].slotDate.value && item['controls'].slotFromTime.value && item['controls'].slotToTime.value"
+                        matTooltipClass="primary-tooltip" (click)="onAddExistingDateItem(item,i,$event)">
                         <i class="mdi mdi-plus-circle mr-1" style="font-size: 32px;"></i>
-                    </a>
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -494,6 +542,39 @@
                     </button>
                   </div>
                 </div>
+                <div class="card-title">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <!-- <h3>{{'slot_management' | translate}} </h3> -->
+                    </div>
+                  </div>
+                </div>
+                <table class="table table-hover">
+                  <thead>
+                    <tr class="text-center">
+                      <th>{{'slot_date' | translate}}</th>
+                      <th>{{'slot_from_time' | translate}}</th>
+                      <th>{{'slot_to_time' | translate}}</th>
+                      <th>{{'action' | translate}}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="text-center" *ngFor="let slot of slots; let i = index;">
+                      <td>{{slot.date}}</td>
+                      <td>{{slot.from_time}}</td>
+                      <td>{{slot.to_time}}</td>
+                      <td>
+                        <div class="icon-block">
+                          <a class="cp" (click)="onDeleteSlot(slot.id)" matTooltip="{{'delete' | translate}}"
+                            matTooltipClass="primary-tooltip">
+                            <i class="mdi mdi-delete b-brown" aria-hidden="true"></i>
+                          </a>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
               </div>
             </div>
           </div>
@@ -555,14 +636,16 @@
       <!-- <div class="tab-pane" [ngClass]="{'active':activeTab=='patients'}" id="patients" role="tabpanel" aria-labelledby="patients-tab">
         <app-patients></app-patients>
       </div> -->
-      <div class="tab-pane" [ngClass]="{'active':activeTab=='doctors'}" id="doctors" role="tabpanel" aria-labelledby="doctors-tab" *ngIf="userType != 'Doctor'">
+      <div class="tab-pane" [ngClass]="{'active':activeTab=='doctors'}" id="doctors" role="tabpanel"
+        aria-labelledby="doctors-tab" *ngIf="userType != 'Doctor'">
         <app-doctors></app-doctors>
       </div>
     </div>
   </div>
 </div>
 
-<div class="modal fade actionModal" id="addUpdateServiceFormModal" tabindex="-1" role="dialog" aria-labelledby="addUpdateServiceFormModal" aria-hidden="true" data-backdrop="static">
+<div class="modal fade actionModal" id="addUpdateServiceFormModal" tabindex="-1" role="dialog"
+  aria-labelledby="addUpdateServiceFormModal" aria-hidden="true" data-backdrop="static">
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content bg-white" [ngClass]="{'csspinner load1':serviceFormLoader}">
       <div class="modal-header">
@@ -571,18 +654,22 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form [formGroup]="addUpdateServiceForm" (ngSubmit)="onSubmitAddUpdateServiceForm()" #ng_add_update_service_form="ngForm">
+      <form [formGroup]="addUpdateServiceForm" (ngSubmit)="onSubmitAddUpdateServiceForm()"
+        #ng_add_update_service_form="ngForm">
         <div class="modal-body">
           <div class="container">
             <div class="form-group">
               <label>{{'service' | translate}} <span class="symbol required"></span></label>
               <input type="text" class="form-control" placeholder="{{'service' | translate}}" formControlName="title">
-              <div class="invalid-feedback" *ngIf="addUpdateServiceForm.controls.title.invalid &&
-                (addUpdateServiceForm.controls.title.dirty || addUpdateServiceForm.controls.title.touched || ng_add_update_service_form.submitted)"
-              >
-                <div *ngIf="addUpdateServiceForm.controls.title.errors.required">{{'this_field_is_required' | translate}}</div>
-                <div *ngIf="addUpdateServiceForm.controls.title.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
-                <div *ngIf="addUpdateServiceForm.controls.title.errors.maxlength">{{'maximum_200_characters_allowed' | translate}}</div>
+              <div class="invalid-feedback"
+                *ngIf="addUpdateServiceForm.controls.title.invalid &&
+                (addUpdateServiceForm.controls.title.dirty || addUpdateServiceForm.controls.title.touched || ng_add_update_service_form.submitted)">
+                <div *ngIf="addUpdateServiceForm.controls.title.errors.required">{{'this_field_is_required' |
+                  translate}}</div>
+                <div *ngIf="addUpdateServiceForm.controls.title.errors.minlength">{{'minimum_2_characters_required' |
+                  translate}}</div>
+                <div *ngIf="addUpdateServiceForm.controls.title.errors.maxlength">{{'maximum_200_characters_allowed' |
+                  translate}}</div>
               </div>
             </div>
             <div class="form-row">
@@ -592,20 +679,24 @@
                   <option value="">{{'choose_service_type' | translate}}</option>
                   <option *ngFor="let serviceType of serviceTypes" [value]="serviceType">{{serviceType}}</option>
                 </select>
-                <div class="invalid-feedback" *ngIf="addUpdateServiceForm.controls.service_type.invalid &&
-                  (addUpdateServiceForm.controls.service_type.dirty || addUpdateServiceForm.controls.service_type.touched || ng_add_update_service_form.submitted)"
-                >
-                  <div *ngIf="addUpdateServiceForm.controls.service_type.errors.required">{{'this_field_is_required' | translate}}</div>
+                <div class="invalid-feedback"
+                  *ngIf="addUpdateServiceForm.controls.service_type.invalid &&
+                  (addUpdateServiceForm.controls.service_type.dirty || addUpdateServiceForm.controls.service_type.touched || ng_add_update_service_form.submitted)">
+                  <div *ngIf="addUpdateServiceForm.controls.service_type.errors.required">{{'this_field_is_required' |
+                    translate}}</div>
                 </div>
               </div>
               <div class="form-group col-md-4">
                 <label>{{'fee' | translate}} <span class="symbol required"></span></label>
-                <input type="text" class="form-control strict_numeric" placeholder="{{'fee' | translate}}" formControlName="service_fee">
-                <div class="invalid-feedback" *ngIf="addUpdateServiceForm.controls.service_fee.invalid &&
-                  (addUpdateServiceForm.controls.service_fee.dirty || addUpdateServiceForm.controls.service_fee.touched || ng_add_update_service_form.submitted)"
-                >
-                  <div *ngIf="addUpdateServiceForm.controls.service_fee.errors.required">{{'this_field_is_required' | translate}}</div>
-                  <div *ngIf="addUpdateServiceForm.controls.service_fee.errors.maxlength">{{'maximum_8_characters_allowed' | translate}}</div>
+                <input type="text" class="form-control strict_numeric" placeholder="{{'fee' | translate}}"
+                  formControlName="service_fee">
+                <div class="invalid-feedback"
+                  *ngIf="addUpdateServiceForm.controls.service_fee.invalid &&
+                  (addUpdateServiceForm.controls.service_fee.dirty || addUpdateServiceForm.controls.service_fee.touched || ng_add_update_service_form.submitted)">
+                  <div *ngIf="addUpdateServiceForm.controls.service_fee.errors.required">{{'this_field_is_required' |
+                    translate}}</div>
+                  <div *ngIf="addUpdateServiceForm.controls.service_fee.errors.maxlength">
+                    {{'maximum_8_characters_allowed' | translate}}</div>
                 </div>
               </div>
               <div class="form-group col-md-4">
@@ -614,15 +705,18 @@
                   <option value="Active">Active</option>
                   <option value="Inactive">Inactive</option>
                 </select>
-                <div class="invalid-feedback" *ngIf="addUpdateServiceForm.controls.status.invalid &&
-                  (addUpdateServiceForm.controls.status.dirty || addUpdateServiceForm.controls.status.touched || ng_add_update_service_form.submitted)"
-                >
-                  <div *ngIf="addUpdateServiceForm.controls.status.errors.required">{{'this_field_is_required' | translate}}</div>
+                <div class="invalid-feedback"
+                  *ngIf="addUpdateServiceForm.controls.status.invalid &&
+                  (addUpdateServiceForm.controls.status.dirty || addUpdateServiceForm.controls.status.touched || ng_add_update_service_form.submitted)">
+                  <div *ngIf="addUpdateServiceForm.controls.status.errors.required">{{'this_field_is_required' |
+                    translate}}</div>
                 </div>
               </div>
             </div>
             <div class="form-row" formArrayName="items">
-              <ng-container *ngFor="let item of addUpdateServiceFormItemsArray.controls; let i=index; let first = first; let last = last" [formGroupName]="i">
+              <ng-container
+                *ngFor="let item of addUpdateServiceFormItemsArray.controls; let i=index; let first = first; let last = last"
+                [formGroupName]="i">
                 <div class="form-group col-md-2 my-auto">
                   <label>{{item.value.title}} <span class="symbol required"></span></label>
                   <input type="text" class="form-control" formControlName="title" style="display: none;">
@@ -631,7 +725,8 @@
                   <input type="text" class="form-control strict_numeric" placeholder="Limit" formControlName="limit">
                 </div>
                 <div class="form-group col-md-5">
-                  <input type="text" class="form-control strict_numeric" placeholder="Fee" formControlName="service_fee">
+                  <input type="text" class="form-control strict_numeric" placeholder="Fee"
+                    formControlName="service_fee">
                 </div>
               </ng-container>
             </div>
@@ -644,16 +739,19 @@
                   </div>
                 </label>
                 <div class="custom-file">
-                  <input #ng_service_image_input type="file" (change)="onChangeServiceImage($event)" accept="image/*" class="custom-file-input">
+                  <input #ng_service_image_input type="file" (change)="onChangeServiceImage($event)" accept="image/*"
+                    class="custom-file-input">
                   <label class="custom-file-label" for="customFile">{{'choose_image' | translate}}</label>
                 </div>
               </div>
               <div class="form-group col-md-6 text-center" *ngIf="serviceImageSrc">
                 <div class="img-item">
-                  <button *ngIf="!this.service_id" type="button" class="btn btn-outline-secondary btn-rounded btn-icon img-delete">
+                  <button *ngIf="!this.service_id" type="button"
+                    class="btn btn-outline-secondary btn-rounded btn-icon img-delete">
                     <i class="mdi mdi-delete mdi-18px" (click)="clearServiceImage()"></i>
                   </button>
-                  <button *ngIf="this.service_id" type="button" class="btn btn-outline-secondary btn-rounded btn-icon img-delete">
+                  <button *ngIf="this.service_id" type="button"
+                    class="btn btn-outline-secondary btn-rounded btn-icon img-delete">
                     <i class="mdi mdi-delete mdi-18px" (click)="deleteServiceMedia()"></i>
                   </button>
                   <img [src]="serviceImageSrc" alt="image" class="img-ele img-fluid">
@@ -680,7 +778,8 @@
               </div>
               <div class="form-group col-md-6 my-auto text-right">
                 <button type="submit" [disabled]="serviceFormLoader" class="btn theme-btn mx-auto">
-                  <span [ngClass]="{'spinner-border spinner-border-sm':serviceFormLoader}"></span> {{'save' | translate}}
+                  <span [ngClass]="{'spinner-border spinner-border-sm':serviceFormLoader}"></span> {{'save' |
+                  translate}}
                 </button>
               </div>
             </div>
@@ -691,7 +790,8 @@
   </div>
 </div>
 
-<div class="modal fade actionModal" id="addBankModal" tabindex="-1" role="dialog" aria-labelledby="addBankModal" aria-hidden="true" data-backdrop="static">
+<div class="modal fade actionModal" id="addBankModal" tabindex="-1" role="dialog" aria-labelledby="addBankModal"
+  aria-hidden="true" data-backdrop="static">
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content bg-white" [ngClass]="{'csspinner load1':bankFormLoader}">
       <div class="modal-header">
@@ -706,53 +806,64 @@
             <div class="form-row">
               <div class="form-group col-md-6">
                 <label>{{'bank_name' | translate}} <span class="symbol required"></span></label>
-                <input type="text" class="form-control" placeholder="{{'bank_name' | translate}}" formControlName="bank_name">
+                <input type="text" class="form-control" placeholder="{{'bank_name' | translate}}"
+                  formControlName="bank_name">
                 <div class="invalid-feedback" *ngIf="addBankForm.controls.bank_name.invalid &&
                   (addBankForm.controls.bank_name.dirty || addBankForm.controls.bank_name.touched ||
-                  ngaddbankform.submitted)"
-                >
-                  <div *ngIf="addBankForm.controls.bank_name.errors.required">{{'this_field_is_required' | translate}}</div>
-                  <div *ngIf="addBankForm.controls.bank_name.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
-                  <div *ngIf="addBankForm.controls.bank_name.errors.maxlength">{{'maximum_100_characters_allowed' | translate}}</div>
+                  ngaddbankform.submitted)">
+                  <div *ngIf="addBankForm.controls.bank_name.errors.required">{{'this_field_is_required' | translate}}
+                  </div>
+                  <div *ngIf="addBankForm.controls.bank_name.errors.minlength">{{'minimum_2_characters_required' |
+                    translate}}</div>
+                  <div *ngIf="addBankForm.controls.bank_name.errors.maxlength">{{'maximum_100_characters_allowed' |
+                    translate}}</div>
                 </div>
               </div>
               <div class="form-group col-md-6">
                 <label>{{'account_holder_name' | translate}} <span class="symbol required"></span></label>
                 <input type="text" class="form-control" placeholder="{{'account_holder_name' | translate}}"
-                  formControlName="account_holder_name"
-                >
-                <div class="invalid-feedback" *ngIf="addBankForm.controls.account_holder_name.invalid &&
-                  (addBankForm.controls.account_holder_name.dirty || addBankForm.controls.account_holder_name.touched || ngaddbankform.submitted)"
-                >
-                  <div *ngIf="addBankForm.controls.account_holder_name.errors.required">{{'this_field_is_required' | translate}}</div>
-                  <div *ngIf="addBankForm.controls.account_holder_name.errors.minlength">{{'minimum_4_characters_required' | translate}}</div>
-                  <div *ngIf="addBankForm.controls.account_holder_name.errors.maxlength">{{'maximum_100_characters_allowed' | translate}}</div>
+                  formControlName="account_holder_name">
+                <div class="invalid-feedback"
+                  *ngIf="addBankForm.controls.account_holder_name.invalid &&
+                  (addBankForm.controls.account_holder_name.dirty || addBankForm.controls.account_holder_name.touched || ngaddbankform.submitted)">
+                  <div *ngIf="addBankForm.controls.account_holder_name.errors.required">{{'this_field_is_required' |
+                    translate}}</div>
+                  <div *ngIf="addBankForm.controls.account_holder_name.errors.minlength">
+                    {{'minimum_4_characters_required' | translate}}</div>
+                  <div *ngIf="addBankForm.controls.account_holder_name.errors.maxlength">
+                    {{'maximum_100_characters_allowed' | translate}}</div>
                 </div>
               </div>
             </div>
             <div class="form-row">
               <div class="form-group col-md-6">
                 <label>{{'account_number' | translate}} <span class="symbol required"></span></label>
-                <input type="text" class="form-control" placeholder="{{'account_number' | translate}}" formControlName="account_number">
+                <input type="text" class="form-control" placeholder="{{'account_number' | translate}}"
+                  formControlName="account_number">
                 <div class="invalid-feedback" *ngIf="addBankForm.controls.account_number.invalid &&
                   (addBankForm.controls.account_number.dirty || addBankForm.controls.account_number.touched ||
-                  ngaddbankform.submitted)"
-                >
-                  <div *ngIf="addBankForm.controls.account_number.errors.required">{{'this_field_is_required' | translate}}</div>
-                  <div *ngIf="addBankForm.controls.account_number.errors.minlength">{{'minimum_8_characters_required' | translate}}</div>
-                  <div *ngIf="addBankForm.controls.account_number.errors.maxlength">{{'maximum_20_characters_allowed' | translate}}</div>
+                  ngaddbankform.submitted)">
+                  <div *ngIf="addBankForm.controls.account_number.errors.required">{{'this_field_is_required' |
+                    translate}}</div>
+                  <div *ngIf="addBankForm.controls.account_number.errors.minlength">{{'minimum_8_characters_required' |
+                    translate}}</div>
+                  <div *ngIf="addBankForm.controls.account_number.errors.maxlength">{{'maximum_20_characters_allowed' |
+                    translate}}</div>
                 </div>
               </div>
               <div class="form-group col-md-6">
                 <label>{{'bank_code' | translate}} <span class="symbol required"></span></label>
-                <input type="text" class="form-control" placeholder="{{'bank_code' | translate}}" formControlName="bank_code">
+                <input type="text" class="form-control" placeholder="{{'bank_code' | translate}}"
+                  formControlName="bank_code">
                 <div class="invalid-feedback" *ngIf="addBankForm.controls.bank_code.invalid &&
                   (addBankForm.controls.bank_code.dirty || addBankForm.controls.bank_code.touched ||
-                  ngaddbankform.submitted)"
-                >
-                  <div *ngIf="addBankForm.controls.bank_code.errors.required">{{'this_field_is_required' | translate}}</div>
-                  <div *ngIf="addBankForm.controls.bank_code.errors.minlength">{{'minimum_8_characters_required' | translate}}</div>
-                  <div *ngIf="addBankForm.controls.bank_code.errors.maxlength">{{'maximum_15_characters_allowed' | translate}}</div>
+                  ngaddbankform.submitted)">
+                  <div *ngIf="addBankForm.controls.bank_code.errors.required">{{'this_field_is_required' | translate}}
+                  </div>
+                  <div *ngIf="addBankForm.controls.bank_code.errors.minlength">{{'minimum_8_characters_required' |
+                    translate}}</div>
+                  <div *ngIf="addBankForm.controls.bank_code.errors.maxlength">{{'maximum_15_characters_allowed' |
+                    translate}}</div>
                 </div>
               </div>
             </div>
@@ -761,19 +872,21 @@
                 <label>{{'default' | translate}} ? <span class="symbol required"></span></label>
                 <div class="form-check">
                   <label class="cp form-check-label">
-                    <input type="radio" class="form-check-input" formControlName="is_default" value="Yes"> {{'yes' | translate}} <i class="input-helper"></i>
+                    <input type="radio" class="form-check-input" formControlName="is_default" value="Yes"> {{'yes' |
+                    translate}} <i class="input-helper"></i>
                   </label>
                 </div>
                 <div class="form-check">
                   <label class="cp form-check-label">
-                    <input type="radio" class="form-check-input" formControlName="is_default" value="No"> {{'no' | translate}} <i class="input-helper"></i>
+                    <input type="radio" class="form-check-input" formControlName="is_default" value="No"> {{'no' |
+                    translate}} <i class="input-helper"></i>
                   </label>
                 </div>
                 <div class="invalid-feedback" *ngIf="addBankForm.controls.is_default.invalid &&
                   (addBankForm.controls.is_default.dirty || addBankForm.controls.is_default.touched ||
-                  ngaddbankform.submitted)"
-                >
-                  <div *ngIf="addBankForm.controls.is_default.errors.required">{{'this_field_is_required' | translate}}</div>
+                  ngaddbankform.submitted)">
+                  <div *ngIf="addBankForm.controls.is_default.errors.required">{{'this_field_is_required' | translate}}
+                  </div>
                 </div>
               </div>
             </div>
@@ -798,8 +911,8 @@
   </div>
 </div>
 
-<div class="modal fade actionModal" id="rejectDocumentFormModal" tabindex="-1" role="dialog" aria-labelledby="rejectDocumentFormModal"
-  aria-hidden="true" data-backdrop="static">
+<div class="modal fade actionModal" id="rejectDocumentFormModal" tabindex="-1" role="dialog"
+  aria-labelledby="rejectDocumentFormModal" aria-hidden="true" data-backdrop="static">
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content bg-white" [ngClass]="{'csspinner load1':rejectDocumentFormLoader}">
       <div class="modal-header">
@@ -817,11 +930,13 @@
             <div class="form-group">
               <label>{{'reason' | translate}} <span class="symbol required"></span></label>
               <textarea class="form-control" formControlName="reason"></textarea>
-              <div class="invalid-feedback" *ngIf="rejectDocumentForm.controls.reason.invalid &&
-                (rejectDocumentForm.controls.reason.dirty || rejectDocumentForm.controls.reason.touched || ngrejectdocumentform.submitted)"
-              >
-                <div *ngIf="rejectDocumentForm.controls.reason.errors.required">{{'this_field_is_required' | translate}}</div>
-                <div *ngIf="rejectDocumentForm.controls.reason.errors.maxlength">{{'maximum_250_characters_allowed' | translate}}</div>
+              <div class="invalid-feedback"
+                *ngIf="rejectDocumentForm.controls.reason.invalid &&
+                (rejectDocumentForm.controls.reason.dirty || rejectDocumentForm.controls.reason.touched || ngrejectdocumentform.submitted)">
+                <div *ngIf="rejectDocumentForm.controls.reason.errors.required">{{'this_field_is_required' | translate}}
+                </div>
+                <div *ngIf="rejectDocumentForm.controls.reason.errors.maxlength">{{'maximum_250_characters_allowed' |
+                  translate}}</div>
               </div>
             </div>
           </div>
@@ -834,7 +949,8 @@
               </div>
               <div class="form-group col-md-6 text-right">
                 <button type="submit" [disabled]="rejectDocumentFormLoader" class="btn theme-btn mx-auto">
-                  <span [ngClass]="{'spinner-border spinner-border-sm':rejectDocumentFormLoader}"></span> {{'submit' | translate}}
+                  <span [ngClass]="{'spinner-border spinner-border-sm':rejectDocumentFormLoader}"></span> {{'submit' |
+                  translate}}
                 </button>
               </div>
             </div>

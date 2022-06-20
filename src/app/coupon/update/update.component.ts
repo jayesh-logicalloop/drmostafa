@@ -179,7 +179,7 @@ export class UpdateComponent implements OnInit {
             let service_id = this.services[i].service_id;
             for (let j = 0; j < this.products.length; j++) {
 
-              if (this.products[j].product_type == 'Service' && service_id == this.products[j].product_id) {
+              if (this.products[j].product_type == 'Appointment' && service_id == this.products[j].product_id) {
                 this.services[i]['checked'] = true;
               }
             }

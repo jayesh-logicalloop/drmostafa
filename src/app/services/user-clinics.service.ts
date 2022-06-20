@@ -92,8 +92,20 @@ export class UserClinicsService {
   }
 
   add_slot_management(postData = {}) {
-    let apiURL = this.apiBaseUrl + '/user_clinics/Slotmanage';
+    let apiURL = this.apiBaseUrl + '/Slotmanage?token=' + this.commonService.getUserData('token');
     return this.httpClient.post(apiURL, postData);
+  }
+
+  get_slot_management(postData = {}) {
+    let apiURL = this.apiBaseUrl + '/Slotmanage?token=' + this.commonService.getUserData('token');
+    apiURL += this.commonService.queryParams(postData);
+    return this.httpClient.get(apiURL);
+  }
+
+  delete_slot(postData = {}) {
+    let apiURL = this.apiBaseUrl + '/Slotmanage?token=' + this.commonService.getUserData('token');
+    apiURL += this.commonService.queryParams(postData);
+    return this.httpClient.delete(apiURL);
   }
 
 }

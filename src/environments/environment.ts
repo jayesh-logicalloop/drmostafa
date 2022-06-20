@@ -8,7 +8,7 @@ export const environment = {
   api_url: 'https://drmostafa.net/api',
   site_url: 'http://localhost:4200',
   admin_url: 'http://localhost:4200',
-  firebase:{
+  firebase: {
     apiKey: "AIzaSyAinIMdbOdg1N2hCXyGQDJkgZFIDH4FUY0",
     authDomain: "mostafa-a4b2c.firebaseapp.com",
     databaseURL: "https://mostafa-a4b2c-default-rtdb.firebaseio.com",

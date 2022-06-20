@@ -34,7 +34,7 @@ export class ServiceInterceptor implements HttpInterceptor {
           (err: any) => {
             if (err instanceof HttpErrorResponse) {
               if (err.status === 401) {
-                this.apiService.logout();
+                // this.apiService.logout();
               }
               if (err.status === 400 || err.status === 403 || err.status === 417) {
                 if (err.error.error) {
