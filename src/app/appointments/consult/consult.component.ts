@@ -38,7 +38,7 @@ import { DrugService } from '../../services/drug.service';
 import { AlertService } from '../../services/alert.service';
 import { ModalService } from '../../services/modal.service';
 import { iHealthRecord } from 'src/app/services/interface/i-health-record';
-declare var jQuery:any;
+declare var jQuery: any;
 
 import * as RecordRTC from 'recordrtc';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -70,7 +70,7 @@ export class ConsultComponent implements OnInit {
   appointment_id = '';
   appointmentDetail: any;
   attachments = [];
-  userID='';
+  userID = '';
   userType = '';
   index: number;
   prescription_id = '';
@@ -80,7 +80,7 @@ export class ConsultComponent implements OnInit {
   @ViewChild('ngprescriptionform', { static: false }) ngprescriptionform: NgForm;
   prescriptionForm: FormGroup;
   prescriptionFormLoader = false;
-  drugsSelect2Options: Options = {width: '100%', multiple: false, tags: false};
+  drugsSelect2Options: Options = { width: '100%', multiple: false, tags: false };
   drugsSelect2Data: Select2OptionData[];
   dataLoader = false;
 
@@ -88,7 +88,7 @@ export class ConsultComponent implements OnInit {
   chatForm: FormGroup;
   chatFormLoader = false;
 
-  messages:any[] = [];
+  messages: any[] = [];
 
   prescriptions = {
     'Medicine': [],
@@ -130,7 +130,7 @@ export class ConsultComponent implements OnInit {
   };
 
   constructor(
-	private translate: TranslateService,
+    private translate: TranslateService,
     private ngxAgoraService: NgxAgoraService,
     private title: Title,
     private formBuilder: FormBuilder,
@@ -148,7 +148,7 @@ export class ConsultComponent implements OnInit {
     private notificationService: NotificationService,
     private domSanitizer: DomSanitizer
   ) {
-	const lang = localStorage.getItem('lang') ? localStorage.getItem('lang') : this.commonService.lang;
+    const lang = localStorage.getItem('lang') ? localStorage.getItem('lang') : this.commonService.lang;
     translate.setDefaultLang(lang);
     translate.use(lang);
     this.title.setTitle('Consultation');
@@ -283,7 +283,7 @@ export class ConsultComponent implements OnInit {
     postData.append('user_id', this.appointmentDetail.user_id);
 
     this.messagesService.create(postData).subscribe(
-      (response:any) => {
+      (response: any) => {
         this.chatFormLoader = false;
         this.messages.push(response.data);
         this.resetRecording();
@@ -332,7 +332,7 @@ export class ConsultComponent implements OnInit {
   }
 
   appointment_detail() {
-    this.appointmentService.appointments({'appointment_id': this.appointment_id}).subscribe(
+    this.appointmentService.appointments({ 'appointment_id': this.appointment_id }).subscribe(
       (response: any) => {
         if (response.status) {
           this.appointmentDetail = response.data;
@@ -340,7 +340,7 @@ export class ConsultComponent implements OnInit {
           this.attachments = this.appointmentDetail.attachments;
           this.channelName = this.appointmentDetail.channelName;
           this.agoraToken = this.appointmentDetail.token;
-          if(this.userType == 'Doctor') {
+          if (this.userType == 'Doctor') {
             this.userID = this.appointmentDetail.doctor_id;
           } else {
             this.userID = this.appointmentDetail.user_id;
@@ -376,9 +376,9 @@ export class ConsultComponent implements OnInit {
         Validators.required
       ]]
     });
-    this.healthRecordService.get({patient_id:this.appointmentDetail.patient_id}).subscribe(
-      (response:any) => {
-        if(response.status) {
+    this.healthRecordService.get({ patient_id: this.appointmentDetail.patient_id }).subscribe(
+      (response: any) => {
+        if (response.status) {
           this.healthRecords = response.data;
           this.healthRecords.forEach(() => this.recordsFormArray.push(new FormControl(false)));
         }
@@ -388,13 +388,13 @@ export class ConsultComponent implements OnInit {
 
   createGroup() {
     const doctorGroup = {
-      'user_name' : this.appointmentDetail.user_name,
+      'user_name': this.appointmentDetail.user_name,
       'user_image': this.appointmentDetail.patient_image_url
     };
     firebase.database().ref('group/' + this.appointmentDetail.doctor_id + '/' + this.appointmentDetail.user_id + '/').set(doctorGroup);
 
     const userGroup = {
-      'user_name' : this.appointmentDetail.doctor_name,
+      'user_name': this.appointmentDetail.doctor_name,
       'user_image': this.appointmentDetail.doctor_image_url
     };
     firebase.database().ref('group/' + this.appointmentDetail.user_id + '/' + this.appointmentDetail.doctor_id + '/').set(userGroup);
@@ -402,7 +402,7 @@ export class ConsultComponent implements OnInit {
 
 
   getAppointmentChats() {
-    this.messagesService.get({'user_id':this.appointmentDetail.user_id}).subscribe((response:any) => {
+    this.messagesService.get({ 'user_id': this.appointmentDetail.user_id }).subscribe((response: any) => {
       //console.log(this.messages);
       this.messages = response.data;
       this.scrollToBottom();
@@ -416,6 +416,7 @@ export class ConsultComponent implements OnInit {
   }
 
   getAppointmentPrescriptions() {
+    console.log("ssss")
     this.appointmentPrescriptionsRef.orderByChild('appointment_id').equalTo(this.appointment_id).on('value', resp => {
       let prescriptions = this.commonService.fbSnapshotToArray(resp);
       this.prescriptions = {
@@ -427,15 +428,35 @@ export class ConsultComponent implements OnInit {
       };
       //console.log('prescriptions', prescriptions);
       prescriptions.map(x => {
-        if(x.prescription_type == 'Medicine') this.prescriptions.Medicine.push(x);
-        if(x.prescription_type == 'Lab') this.prescriptions.Lab.push(x);
-        if(x.prescription_type == 'Imaging') this.prescriptions.Imaging.push(x);
-        if(x.prescription_type == 'Recommend') this.prescriptions.Recommend.push(x);
-        if(x.prescription_type == 'Report') this.prescriptions.Report.push(x);
+        if (x.prescription_type == 'Medicine') this.prescriptions.Medicine.push(x);
+        if (x.prescription_type == 'Lab') this.prescriptions.Lab.push(x);
+        if (x.prescription_type == 'Imaging') this.prescriptions.Imaging.push(x);
+        if (x.prescription_type == 'Recommend') this.prescriptions.Recommend.push(x);
+        if (x.prescription_type == 'Report') this.prescriptions.Report.push(x);
       });
 
       //console.log('this.prescriptions', this.prescriptions);
     });
+  }
+
+  exportData(arg: any) {
+
+    let data: any = [{
+      'Appointment Id': this.appointmentDetail ? this.appointmentDetail.appointment_id : '',
+      'Appointment Date': this.appointmentDetail ? this.appointmentDetail.appointment_date : '',
+      'Note': this.appointmentDetail ? this.appointmentDetail.appointment_note : '',
+      'Patient Name': this.appointmentDetail.patient_name ? this.appointmentDetail.patient_name : this.appointmentDetail.user_name,
+      '': '',
+    }];
+
+    arg.forEach(element => {
+      data.push({
+        'Appointment id': element.appointment_id,
+        'Item Name': element.item_name.replace(/(<([^>]+)>)/ig, ''),
+      })
+    });
+
+    this.commonService.exportAsExcelFile(data, 'appointments');
   }
 
   getDrugList() {
@@ -464,7 +485,7 @@ export class ConsultComponent implements OnInit {
       postData.append("item_name", this.prescriptionForm.value.item_name);
       postData.append("dosage", "0");
       postData.append("frequency", "na");
-      postData.append("intake","After Food");
+      postData.append("intake", "After Food");
       postData.append("duration", "0");
       postData.append("duration_type", "Day")
       postData.append("prescribe_note", null);
@@ -488,7 +509,7 @@ export class ConsultComponent implements OnInit {
               "prescribe_note": response.data.prescribe_note,
             }
             const newMessage = this.appointmentPrescriptionsRef.push();
-            newMessage.set(fbPreparedPrescription).then((resp:any) => {});
+            newMessage.set(fbPreparedPrescription).then((resp: any) => { });
             this.prescriptionForm.reset();
           }
         },
@@ -498,7 +519,7 @@ export class ConsultComponent implements OnInit {
     }
   }
 
-  resetPrescriptionForm(prescription_type:string) {
+  resetPrescriptionForm(prescription_type: string) {
     this.ngprescriptionform.resetForm();
     this.prescriptionForm.patchValue({
       prescription_type: prescription_type,
@@ -511,7 +532,7 @@ export class ConsultComponent implements OnInit {
     this.index = null;
   }
 
-  onEditPrescription(item:any, i:number) {
+  onEditPrescription(item: any, i: number) {
     this.prescription_id = item.prescription_id;
     this.index = i;
     this.fb_key = item.key;
@@ -548,12 +569,12 @@ export class ConsultComponent implements OnInit {
             delete postData["token"];
             firebase.database().ref('/appointmentPrescriptions/' + this.fb_key).update(postData);
           };
-         this.prescriptionForm.reset();
+          this.prescriptionForm.reset();
           this.editButton = false;
           this.prescriptionFormLoader = false;
         },
-        (error)=>{this.prescriptionFormLoader = false;},
-        ()=>{this.prescriptionFormLoader = false;}
+        (error) => { this.prescriptionFormLoader = false; },
+        () => { this.prescriptionFormLoader = false; }
       )
     }
   }
@@ -602,7 +623,7 @@ export class ConsultComponent implements OnInit {
     postData.append('user_id', this.appointmentDetail.user_id);
 
     this.messagesService.create(postData).subscribe(
-      (response:any) => {
+      (response: any) => {
         this.chatForm.patchValue({ 'message': '' });
         this.chatFormLoader = false;
         this.messages.push(response.data);
@@ -641,9 +662,9 @@ export class ConsultComponent implements OnInit {
     }); */
   }
 
-  fullscreenOnOff(onOff:boolean) {
+  fullscreenOnOff(onOff: boolean) {
     this.fullscreen = onOff;
-    if(this.fullscreen) {
+    if (this.fullscreen) {
       jQuery('.navbar').addClass("hide");
     } else {
       jQuery('.navbar').removeClass("hide");
@@ -659,10 +680,10 @@ export class ConsultComponent implements OnInit {
       cancelButtonText: 'No'
     }).then((result) => {
       if (result.value) {
-        this.notificationService.sendCallNotification({appointment_id: this.appointment_id}).subscribe();
+        this.notificationService.sendCallNotification({ appointment_id: this.appointment_id }).subscribe();
       }
       //console.log('this.client', this.client);
-      if(this.client != undefined) {
+      if (this.client != undefined) {
         return false;
       }
       this.client = this.ngxAgoraService.createClient({ mode: 'rtc', codec: 'h264' });
@@ -771,23 +792,23 @@ export class ConsultComponent implements OnInit {
   publish(): void {
     //console.log('publish');
     this.client.publish(this.localStream, err => {
-        //console.log('Publish local stream error: ' + err);
-      }
+      //console.log('Publish local stream error: ' + err);
+    }
     );
   }
 
   unpublish(): void {
     //console.log('unpublish');
     this.client.unpublish(this.localStream, err => {
-        //console.log('Unpublish local stream error: ' + err);
-      }
+      //console.log('Unpublish local stream error: ' + err);
+    }
     );
   }
 
   leaveVideoCall() {
     this.ngxAgoraService.client.leave(() => {
       //console.log(this.localStream.isPlaying());
-      if(this.localStream.isPlaying()) {
+      if (this.localStream.isPlaying()) {
         this.localStream.stop();
       };
       this.localStream.close();
@@ -806,9 +827,9 @@ export class ConsultComponent implements OnInit {
     this.modalService.open_modal('#shareHealthRecordModal');
   }
 
-  onChooseShareHealthRecordAction(action:string) {
+  onChooseShareHealthRecordAction(action: string) {
     this.shareHealthRecordAction = action;
-    if(action == 'new') {
+    if (action == 'new') {
       this.record_type = '';
       this.addHealthRecordFileInput = null;
       this.addHealthRecordFormLoader = false
@@ -823,12 +844,12 @@ export class ConsultComponent implements OnInit {
       .map((checked, i) => checked ? this.healthRecords[i] : null)
       .filter(v => v !== null);
 
-    if(!selectedHealthRecords.length) {
+    if (!selectedHealthRecords.length) {
       this.alertService.showValidationErrors('Select alteast one record to share');
       return false;
     }
 
-    for(let i = 0; i < selectedHealthRecords.length; i++) {
+    for (let i = 0; i < selectedHealthRecords.length; i++) {
       this.chatFormLoader = true;
       let user_id = this.appointmentDetail.user_id;
       let user_name = this.appointmentDetail.user_name;
@@ -839,13 +860,13 @@ export class ConsultComponent implements OnInit {
         user_image = this.appointmentDetail.doctor_image_url;
       }
       const chat_msg = {
-        '_id' : Math.round(Math.random() * 1000000),
-        'createdAt' : new Date().toISOString(),
+        '_id': Math.round(Math.random() * 1000000),
+        'createdAt': new Date().toISOString(),
         'doctor_id': this.appointmentDetail.doctor_id,
         'patient_id': this.appointmentDetail.user_id,
         'text': selectedHealthRecords[i].name,
         'image_url': selectedHealthRecords[i].file_url,
-        'user' : {
+        'user': {
           '_id': user_id,
           'avatar': user_image,
           'name': user_name
@@ -890,7 +911,7 @@ export class ConsultComponent implements OnInit {
     }
   }
 
-  onChangeHealthRecordFile(fileInput:any) {
+  onChangeHealthRecordFile(fileInput: any) {
     if (fileInput.target.files && fileInput.target.files[0]) {
       let file = fileInput.target.files[0];
 
@@ -900,13 +921,13 @@ export class ConsultComponent implements OnInit {
         return false;
       }
 
-      const allowedMaxSize = 5 *1024 * 1024;
+      const allowedMaxSize = 5 * 1024 * 1024;
       if (file.size > allowedMaxSize) {
         this.alertService.showValidationErrors("Maximum 5MB file allowed");
         return false;
       }
 
-      this.addHealthRecordForm.patchValue({file: "yes"})
+      this.addHealthRecordForm.patchValue({ file: "yes" })
       this.addHealthRecordFileInput = file;
       this.ngaddhealthrecordfileinput.nativeElement.value = '';
     }
@@ -914,12 +935,12 @@ export class ConsultComponent implements OnInit {
 
   removeHealthRecordFile() {
     this.addHealthRecordFileInput = null;
-    this.addHealthRecordForm.patchValue({file: ""});
+    this.addHealthRecordForm.patchValue({ file: "" });
     this.ngaddhealthrecordfileinput.nativeElement.value = '';
   }
 
-  onChangeHealthRecordType(record_type:string) {
-    this.addHealthRecordForm.patchValue({record_type: record_type});
+  onChangeHealthRecordType(record_type: string) {
+    this.addHealthRecordForm.patchValue({ record_type: record_type });
     this.record_type = record_type;
   }
 

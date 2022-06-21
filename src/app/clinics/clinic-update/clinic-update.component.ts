@@ -24,7 +24,8 @@ import { iClinicAttachment } from 'src/app/services/interface/i-clinic-attachmen
 import { iBank } from 'src/app/services/interface/i-bank';
 import { iService } from 'src/app/services/interface/i-service';
 import { iSlot } from 'src/app/services/interface/i-slot';
-
+import * as _moment from 'moment';
+const moment = _moment;
 @Component({
   selector: 'app-clinic-update',
   templateUrl: './clinic-update.component.html',
@@ -366,12 +367,12 @@ export class ClinicUpdateComponent implements OnInit {
 
           this.dataLoader = false;
         } else {
-          this.router.navigate(['/my-establishments']);
+          //this.router.navigate(['/my-establishments']);
         }
       },
       (error) => {
         this.dataLoader = false;
-        this.router.navigate(['/my-establishments']);
+        //this.router.navigate(['/my-establishments']);
       }
     );
   }
@@ -1184,6 +1185,7 @@ export class ClinicUpdateComponent implements OnInit {
     this.validateCheckTimeString = '';
     this.slotManagementFormArray = this.slotManagementForm.get('slotManagementFormArray') as FormArray;
     const element = this.slotManagementFormArray.controls[i]['controls'];
+    console.log(element);
     if (element.slotDate.value && element.slotFromTime.value && element.slotToTime.value) {
       if (selectedTime) {
         this.validateCheckTimeString = 'Please selcted proper time.';
@@ -1234,6 +1236,12 @@ export class ClinicUpdateComponent implements OnInit {
       let postData: any;
       const array = this.slotManagementForm.get('slotManagementFormArray') as FormArray
       const slotManagementArray = array.getRawValue();
+
+
+      slotManagementArray.forEach(element => {
+        element.slotDate = _moment(element.slotDate).format('YYYY-MM-DD');
+      });
+
       postData = {
         token: this.commonService.getUserData('token'),
         user_id: this.user_id,
@@ -1245,6 +1253,7 @@ export class ClinicUpdateComponent implements OnInit {
         if (response.status) {
           this.alertService.show_alert(response.message);
           this.slotManagementForm.reset();
+          this.getSlots();
         }
         this.slotFormLoader = false;
         this.slotSubmmited = false;
@@ -1252,6 +1261,7 @@ export class ClinicUpdateComponent implements OnInit {
         this.slotFormLoader = false;
         this.slotSubmmited = false;
       });
+
     }
   }
 }

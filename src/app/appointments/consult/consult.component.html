@@ -12,8 +12,7 @@
   <div class="col-md-6">
     <div class="col-md-12 mb-3 text-center">
       <button type="button" class="btn btn-success btn-rounded btn-icon mr-2" (click)="startVideoCall()"
-        matTooltipClass="primary-tooltip" matTooltip="{{'start_video_call' | translate}}"
-      >
+        matTooltipClass="primary-tooltip" matTooltip="{{'start_video_call' | translate}}">
         <i class="mdi mdi-video cp mdi-24px"></i>
       </button>
       <!-- <button type="button" class="btn btn-success btn-rounded btn-icon mr-2" (click)="startAudioCall()"
@@ -22,8 +21,7 @@
         <i class="mdi mdi-headset cp mdi-24px"></i>
       </button> -->
       <button type="button" class="btn btn-danger btn-rounded btn-icon mr-2" (click)="leaveVideoCall()"
-        matTooltipClass="primary-tooltip" matTooltip="{{'stop_call' | translate}}"
-      >
+        matTooltipClass="primary-tooltip" matTooltip="{{'stop_call' | translate}}">
         <i class="mdi mdi-phone-hangup cp mdi-24px"></i>
       </button>
     </div>
@@ -32,13 +30,11 @@
         <div class="controls d-flex">
           <div class="fs-controls" [ngClass]="{'d-none':!fullscreen}">
             <i class="mdi mdi-fullscreen-exit mdi-24px cp" (click)="fullscreenOnOff(false)"
-              matTooltipClass="primary-tooltip" matTooltip="{{'exit_fullscreen' | translate}}"
-            ></i>
+              matTooltipClass="primary-tooltip" matTooltip="{{'exit_fullscreen' | translate}}"></i>
           </div>
           <div class="nofs-controls" [ngClass]="{'d-none':fullscreen}">
-            <i class="mdi mdi-fullscreen mdi-24px cp" (click)="fullscreenOnOff(true)"
-              matTooltipClass="primary-tooltip" matTooltip="{{'fullscreen' | translate}}"
-            ></i>
+            <i class="mdi mdi-fullscreen mdi-24px cp" (click)="fullscreenOnOff(true)" matTooltipClass="primary-tooltip"
+              matTooltip="{{'fullscreen' | translate}}"></i>
           </div>
         </div>
         <div *ngFor="let callId of remoteCalls" [id]="callId" class="remote"></div>
@@ -81,9 +77,11 @@
           <form [formGroup]="chatForm" (ngSubmit)="onSendMessage()">
             <div class="form-group">
               <div class="input-group">
-                <input type="text" formControlName="message" class="form-control" placeholder="{{'type_your_message' | translate}}">
+                <input type="text" formControlName="message" class="form-control"
+                  placeholder="{{'type_your_message' | translate}}">
                 <div class="input-group-append">
-                  <button class="btn btn-sm btn-gradient-primary" [disabled]="!chatForm.value.message.length" type="submit">{{'send' | translate}}</button>
+                  <button class="btn btn-sm btn-gradient-primary" [disabled]="!chatForm.value.message.length"
+                    type="submit">{{'send' | translate}}</button>
                 </div>
               </div>
             </div>
@@ -99,17 +97,17 @@
                 </audio>
               </div>
               <div class="col-sm-3 text-right">
-                <button class="btn btn-light px-2" (click)="initiateRecording()"
-                  *ngIf="!recording" matTooltipClass="primary-tooltip" matTooltip="{{'record_audio_message' | translate}}">
-                    <i class="mdi mdi-microphone mdi-24px cp"></i>
+                <button class="btn btn-light px-2" (click)="initiateRecording()" *ngIf="!recording"
+                  matTooltipClass="primary-tooltip" matTooltip="{{'record_audio_message' | translate}}">
+                  <i class="mdi mdi-microphone mdi-24px cp"></i>
                 </button>
-                <button class="btn btn-light px-2" (click)="sendAudioMessage()"
-                  *ngIf="!recording && url" matTooltipClass="primary-tooltip" matTooltip="{{'send_audio_message' | translate}}">
-                    <i class="mdi mdi-send mdi-24px cp"></i>
+                <button class="btn btn-light px-2" (click)="sendAudioMessage()" *ngIf="!recording && url"
+                  matTooltipClass="primary-tooltip" matTooltip="{{'send_audio_message' | translate}}">
+                  <i class="mdi mdi-send mdi-24px cp"></i>
                 </button>
-                <button class="btn btn-light px-2" (click)="stopRecording()"
-                  *ngIf="recording" matTooltipClass="primary-tooltip" matTooltip="{{'start_recording' | translate}}">
-                    <i class="mdi mdi mdi-microphone-off mdi-24px cp"></i>
+                <button class="btn btn-light px-2" (click)="stopRecording()" *ngIf="recording"
+                  matTooltipClass="primary-tooltip" matTooltip="{{'start_recording' | translate}}">
+                  <i class="mdi mdi mdi-microphone-off mdi-24px cp"></i>
                 </button>
               </div>
             </div>
@@ -123,7 +121,8 @@
 <div class="row mt-3" [ngClass]="{'d-none':fullscreen}" *ngIf="attachments.length > 0">
   <div class="col-md-12">
     <h5>{{'reports' | translate}}</h5>
-    <div class="mr-3 mt-1" style="display: inline-block; position:relative;" *ngFor="let item of attachments; let i = index;">
+    <div class="mr-3 mt-1" style="display: inline-block; position:relative;"
+      *ngFor="let item of attachments; let i = index;">
       <a data-fancybox [attr.data-caption]="item.name" [href]="item.file_url">
         <span class="badge badge-info">{{item.file_title}}</span>
       </a>
@@ -134,12 +133,14 @@
 <div class="row mt-3" [ngClass]="{'d-none':fullscreen}" *ngIf="userType=='Doctor'">
   <div class="col-md-12">
     <h5>{{'write_prescription' | translate}}</h5>
-    <form class="ap-prescription-fm" [formGroup]="prescriptionForm" (ngSubmit)="onSubmitPrescriptionForm()" #ngprescriptionform="ngForm"
-      [ngClass]="{'csspinner load1':prescriptionFormLoader}">
+    <form class="ap-prescription-fm" [formGroup]="prescriptionForm" (ngSubmit)="onSubmitPrescriptionForm()"
+      #ngprescriptionform="ngForm" [ngClass]="{'csspinner load1':prescriptionFormLoader}">
       <ckeditor formControlName="item_name" [config]="editorConfig"></ckeditor>
       <div class="form-group col-md-1 mt-2">
-        <button *ngIf="!editButton" type="submit" title="{{'add_prescription' | translate}}" class="btn btn-success btn-sm">{{'add' | translate}}</button>
-        <button *ngIf="editButton" (click)="onSubmitPrescriptionUpdateForm()" type="button" title="Update Prescription" class="btn btn-success btn-sm">
+        <button *ngIf="!editButton" type="submit" title="{{'add_prescription' | translate}}"
+          class="btn btn-success btn-sm">{{'add' | translate}}</button>
+        <button *ngIf="editButton" (click)="onSubmitPrescriptionUpdateForm()" type="button" title="Update Prescription"
+          class="btn btn-success btn-sm">
           {{'update' | translate}}
         </button>
       </div>
@@ -250,8 +251,12 @@
 </div>
 
 <div class="row" [ngClass]="{'d-none':fullscreen}" *ngIf="prescriptions.Medicine.length || prescriptions.Lab.length || prescriptions.Imaging.length ||
-  prescriptions.Recommend.length"
->
+  prescriptions.Recommend.length">
+  <div class="col-sm-12 text-right-1">
+    <button class="btn theme-btn ml-2" title="Export Notes Excel File" (click)="exportData(prescriptions.Medicine)"><i
+        class="mdi mdi-export"></i> Export</button>
+  </div>
+
   <div class="col-sm-12">
     <h5>{{'prescriptions' | translate}}</h5>
     <div class="card">
@@ -389,7 +394,8 @@
   </div>
 </div>
 
-<div class="modal fade actionModal" id="shareHealthRecordModal" tabindex="-1" role="dialog" aria-labelledby="shareHealthRecordModal" aria-hidden="true" data-backdrop="static">
+<div class="modal fade actionModal" id="shareHealthRecordModal" tabindex="-1" role="dialog"
+  aria-labelledby="shareHealthRecordModal" aria-hidden="true" data-backdrop="static">
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content bg-white">
       <div class="modal-header">
@@ -399,8 +405,7 @@
         </button>
       </div>
       <form [formGroup]="addHealthRecordForm" (ngSubmit)="onSubmitShareHealthRecordForm()"
-        [ngStyle]="{'display':shareHealthRecordAction === '' ? 'block' : 'none'}"
-      >
+        [ngStyle]="{'display':shareHealthRecordAction === '' ? 'block' : 'none'}">
         <div class="modal-body">
           <div class="container">
             <div class="row">
@@ -421,7 +426,8 @@
               <tbody formArrayName="records">
                 <tr *ngFor="let hr of recordsFormArray.controls; let i = index">
                   <td>{{healthRecords[i].name}}</td>
-                  <td><a data-fancybox [attr.data-caption]="healthRecords[i].name" [href]="healthRecords[i].file_url">{{healthRecords[i].name}}</a></td>
+                  <td><a data-fancybox [attr.data-caption]="healthRecords[i].name"
+                      [href]="healthRecords[i].file_url">{{healthRecords[i].name}}</a></td>
                   <td><label><input type="checkbox" [formControlName]="i"></label></td>
                 </tr>
               </tbody>
@@ -440,8 +446,7 @@
       </form>
 
       <form [formGroup]="addHealthRecordForm" (ngSubmit)="onSubmitAddHealthRecordForm()" #ngaddhealthrecordform="ngForm"
-        [ngStyle]="{'display':shareHealthRecordAction === 'new' ? 'block' : 'none'}"
-      >
+        [ngStyle]="{'display':shareHealthRecordAction === 'new' ? 'block' : 'none'}">
         <div class="modal-body" [ngClass]="{'csspinner load1':addHealthRecordFormLoader}">
           <div class="form-group">
             <label class="cp" (click)="onChooseShareHealthRecordAction('')">
@@ -450,26 +455,31 @@
           </div>
           <div class="form-group">
             <label>{{'report_name' | translate}} <span class="symbol required"></span></label>
-            <input type="text" class="form-control" placeholder="Enter Report Name, eg. Blood Report, MRI, Prescription" formControlName="name">
-            <div class="invalid-feedback" *ngIf="addHealthRecordForm.controls.name.invalid &&
-                (addHealthRecordForm.controls.name.dirty || addHealthRecordForm.controls.name.touched || ngaddhealthrecordform.submitted)"
-            >
-              <div *ngIf="addHealthRecordForm.controls.name.errors.required">{{'this_field_is_required' | translate}}</div>
-              <div *ngIf="addHealthRecordForm.controls.name.errors.minlength">{{'minimum_2_characters_required' | translate}}</div>
-              <div *ngIf="addHealthRecordForm.controls.name.errors.maxlength">{{'maximum_200_characters_allowed' | translate}}</div>
+            <input type="text" class="form-control" placeholder="Enter Report Name, eg. Blood Report, MRI, Prescription"
+              formControlName="name">
+            <div class="invalid-feedback"
+              *ngIf="addHealthRecordForm.controls.name.invalid &&
+                (addHealthRecordForm.controls.name.dirty || addHealthRecordForm.controls.name.touched || ngaddhealthrecordform.submitted)">
+              <div *ngIf="addHealthRecordForm.controls.name.errors.required">{{'this_field_is_required' | translate}}
+              </div>
+              <div *ngIf="addHealthRecordForm.controls.name.errors.minlength">{{'minimum_2_characters_required' |
+                translate}}</div>
+              <div *ngIf="addHealthRecordForm.controls.name.errors.maxlength">{{'maximum_200_characters_allowed' |
+                translate}}</div>
             </div>
           </div>
           <div class="form-row">
             <div class="form-group col-md-6">
               <label>{{'date' | translate}} <small>(Format: D/M/Y)</small> <span class="symbol required"></span></label>
               <input [matDatepicker]="recordDateDatePicker" class="form-control" [max]="maxDateDob"
-                (click)="recordDateDatePicker.open()" placeholder="Date of report/prescription" formControlName="record_date"
-              >
+                (click)="recordDateDatePicker.open()" placeholder="Date of report/prescription"
+                formControlName="record_date">
               <mat-datepicker #recordDateDatePicker></mat-datepicker>
-              <div class="invalid-feedback" *ngIf="addHealthRecordForm.controls.record_date.invalid &&
-                (addHealthRecordForm.controls.record_date.dirty || addHealthRecordForm.controls.record_date.touched || ngaddhealthrecordform.submitted)"
-              >
-                <div *ngIf="addHealthRecordForm.controls.record_date.errors.required">{{'this_field_is_required' | translate}}</div>
+              <div class="invalid-feedback"
+                *ngIf="addHealthRecordForm.controls.record_date.invalid &&
+                (addHealthRecordForm.controls.record_date.dirty || addHealthRecordForm.controls.record_date.touched || ngaddhealthrecordform.submitted)">
+                <div *ngIf="addHealthRecordForm.controls.record_date.errors.required">{{'this_field_is_required' |
+                  translate}}</div>
               </div>
             </div>
             <div class="form-group col-md-6">
@@ -484,18 +494,20 @@
               <small class="text-danger">{{'file_size_should_not_be_greater_than_5_mb' | translate}}</small><br>
             </div>
             <div class="custom-file">
-              <input #ngaddhealthrecordfileinput type="file" (change)="onChangeHealthRecordFile($event)" class="custom-file-input">
+              <input #ngaddhealthrecordfileinput type="file" (change)="onChangeHealthRecordFile($event)"
+                class="custom-file-input">
               <label class="custom-file-label">{{'choose_file' | translate}}</label>
             </div>
             <div class="invalid-feedback" *ngIf="addHealthRecordForm.controls.file.invalid &&
               (addHealthRecordForm.controls.file.dirty || addHealthRecordForm.controls.file.touched ||
-              ngaddhealthrecordform.submitted)"
-            >
-              <div *ngIf="addHealthRecordForm.controls.file.errors.required">{{'this_field_is_required' | translate}}</div>
+              ngaddhealthrecordform.submitted)">
+              <div *ngIf="addHealthRecordForm.controls.file.errors.required">{{'this_field_is_required' | translate}}
+              </div>
             </div>
           </div>
           <div class="form-group" *ngIf="addHealthRecordFileInput">
-            {{addHealthRecordFileInput.name}} <i class="mdi mdi-close mx-auto my-auto cp text-danger" (click)="removeHealthRecordFile()"></i>
+            {{addHealthRecordFileInput.name}} <i class="mdi mdi-close mx-auto my-auto cp text-danger"
+              (click)="removeHealthRecordFile()"></i>
           </div>
           <div class="form-group">
             <label>{{'type' | translate}} <span class="symbol required"></span></label>
@@ -513,10 +525,11 @@
                 <p>{{'other' | translate}}</p>
               </div>
             </div>
-            <div class="invalid-feedback" *ngIf="addHealthRecordForm.controls.record_type.invalid &&
-              (addHealthRecordForm.controls.record_type.dirty || addHealthRecordForm.controls.record_type.touched || ngaddhealthrecordform.submitted)"
-            >
-              <div *ngIf="addHealthRecordForm.controls.record_type.errors.required">{{'this_field_is_required' | translate}}</div>
+            <div class="invalid-feedback"
+              *ngIf="addHealthRecordForm.controls.record_type.invalid &&
+              (addHealthRecordForm.controls.record_type.dirty || addHealthRecordForm.controls.record_type.touched || ngaddhealthrecordform.submitted)">
+              <div *ngIf="addHealthRecordForm.controls.record_type.errors.required">{{'this_field_is_required' |
+                translate}}</div>
             </div>
           </div>
           <div class="form-group">
@@ -532,7 +545,8 @@
               </div>
               <div class="form-group col-md-6 my-auto text-right">
                 <button type="submit" [disabled]="addHealthRecordFormLoader" class="btn theme-btn mx-auto">
-                  <span [ngClass]="{'spinner-border spinner-border-sm':addHealthRecordFormLoader}"></span> {{'add' | translate}}
+                  <span [ngClass]="{'spinner-border spinner-border-sm':addHealthRecordFormLoader}"></span> {{'add' |
+                  translate}}
                 </button>
               </div>
             </div>

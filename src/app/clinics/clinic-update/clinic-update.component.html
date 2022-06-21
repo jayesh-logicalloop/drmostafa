@@ -489,6 +489,7 @@
                           class="symbol required"></span></label>
                       <input type="time" class="form-control" formControlName="slotFromTime" placeholder="From Time"
                         autocomplete="off" min="06:00 am" max="11:59 am" (change)="slotTimeChangeEvent(i,'from')">
+
                       <div class="invalid-feedback" *ngIf="slotSubmmited && item['controls'].slotFromTime?.errors">
                         <div *ngIf="item['controls'].slotFromTime?.errors.required">
                           {{'this_field_is_required' | translate}}</div>

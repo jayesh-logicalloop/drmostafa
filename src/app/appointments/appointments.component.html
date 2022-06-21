@@ -224,10 +224,7 @@
         <div class="tab-pane" [ngClass]="{'active':activeTab=='upcoming'}" id="nav-upcoming" role="tabpanel"
           aria-labelledby="nav-upcoming-tab-tab">
 
-          <div class="col-sm-12 text-right-1">
-            <button class="btn theme-btn ml-2" title="Export Notes Excel File" (click)="exportAppoinmentsData()"><i
-                class="mdi mdi-export"></i> Export</button>
-          </div>
+
 
           <ng-template [ngIf]="totalUpcomingItems">
             <div class="row">

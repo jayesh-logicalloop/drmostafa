@@ -155,8 +155,7 @@ export class AppointmentsComponent implements OnInit {
 
   addFormAction = false;
   patient_id = '';
-  EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
-  EXCEL_EXTENSION = '.xlsx';
+
 
   constructor(
     private translate: TranslateService,
@@ -911,55 +910,5 @@ export class AppointmentsComponent implements OnInit {
     }
   }
 
-  exportAppoinmentsData() {
-
-    let params = {
-      appointment_type: 'upcoming',
-      search: this.search,
-      from_date: this.from_date,
-      to_date: this.to_date,
-      patient_id: this.patient_id,
-      limit: this.totalUpcomingItems,
-      page: this.currentPageUp
-    };
-    this.showContentLoader = true;
-    this.appointmentService.appointments(params).subscribe((response: any) => {
-      if (response.status) {
-        this.upcoming_appointments = response.data;
-        let data = [];
-        response.data.forEach(element => {
-          data.push({
-            'appointment Id': element.appointment_id,
-            'appointment Date': element.appointment_date,
-            'Note': element.appointment_id,
-            'Patient Name': element.patient_name,
-          })
-        });
-        this.exportAsExcelFile(data, 'upcoming')
-      }
-      this.showContentLoader = false;
-    }, (error) => {
-      this.showContentLoader = false;
-    });
-
-
-  }
-
-  private exportAsExcelFile(json: any[], excelFileName: string): void {
-
-    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
-    console.log('worksheet', worksheet);
-    const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
-    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    //const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
-    this.saveAsExcelFile(excelBuffer, excelFileName);
-  }
-
-  private saveAsExcelFile(buffer: any, fileName: string): void {
-    const data: Blob = new Blob([buffer], {
-      type: this.EXCEL_TYPE
-    });
-    FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + this.EXCEL_EXTENSION);
-  }
 
 }
