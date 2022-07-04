@@ -137,11 +137,14 @@
       #ngprescriptionform="ngForm" [ngClass]="{'csspinner load1':prescriptionFormLoader}">
       <ckeditor formControlName="item_name" [config]="editorConfig"></ckeditor>
       <div class="form-group col-md-1 mt-2">
+
         <button *ngIf="!editButton" type="submit" title="{{'add_prescription' | translate}}"
           class="btn btn-success btn-sm">{{'add' | translate}}</button>
+
         <button *ngIf="editButton" (click)="onSubmitPrescriptionUpdateForm()" type="button" title="Update Prescription"
           class="btn btn-success btn-sm">
           {{'update' | translate}}
+
         </button>
       </div>
       <!-- <div class="form-row">

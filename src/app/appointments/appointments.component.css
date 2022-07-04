@@ -1,1 +1,3 @@
-
+.list-view .card-grid .actions{
+    max-width: 200px !important;
+}

@@ -366,7 +366,8 @@ span.text-gray.hour {
   padding-right: 30px;
 }
 .list-view .card-grid .actions{
-  max-width: 187px;
+  max-width: 200px;
+  
 }
 .list-view .ap-time {
   padding-left: 0.5rem !important;

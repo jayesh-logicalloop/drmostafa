@@ -95,12 +95,12 @@
                 <div class="apointment card-grid my-auto" [ngClass]="{'csspinner load1':addFormAction}">
                   <div class="card-profile-content commonbox">
                     <div class="card-profile"> <img
-                        [src]="appointment.patient_image_url && appointment.patient_image_url.includes('/assets/images/avatar.jpg') ? 'https://drmostafa.net/media/user-profile-images/3640bcff7cc4d4c2fa93b9d73928ec96-5.jpg' : appointment.patient_image_url"
+                        [src]="appointment.patient_image_url && appointment.patient_image_url.includes('/assets/images/avatar.jpg') ? 'https://drmostafa.net/media/user-profile-images/istockphoto-1223671392-612x612.jpg' : appointment.patient_image_url"
                         alt="">
                     </div>
                     <div class="name-action">
                       <div class="profile-name">
-                        <h6 class="m-0">{{appointment.patient_name}}</h6>
+                        <h6 class="m-0">{{appointment.patient_name}} </h6>
                         <div><small class="last-visit">{{appointment.last_visit}}</small></div>
                         <div><small class="last-visit">{{'booked_for' | translate}}
                             {{appointment.appointment_for}}</small></div>
@@ -109,10 +109,11 @@
                       </div>
 
                       <div class="hide-in-list icon-block mr-auto">
+
                         <a class="cp" *ngIf="userType == 'Doctor'"
                           (click)="confirmAppointment(appointment.appointment_id)"
                           matTooltip="{{'confirm_appointment' | translate}}" matTooltipClass="primary-tooltip">
-                          <i class="mdi mdi-check brdr-blue-btn"></i>
+                          <i class="mdi mdi-check brdr-blue-btn 1111"></i>
                         </a>
 
                         <a class="cp" *ngIf="userType == 'Patient'"
@@ -133,12 +134,16 @@
                           <i class="mdi mdi-refresh brdr-blue-btn"></i>
                         </a>
 
+
+
                         <a class="cp" (click)="onViewAppointmentDetail(appointment.appointment_id, i, 'pending')"
                           matTooltip="{{'view_detail' | translate}}" matTooltipClass="primary-tooltip">
                           <i class="mdi mdi-eye brdr-blue-btn" aria-hidden="true"></i>
                         </a>
 
+
                       </div>
+
                     </div>
                   </div>
                   <div class="date-times commonbox">
@@ -205,6 +210,11 @@
                         matTooltip="{{'view_detail' | translate}}" matTooltipClass="primary-tooltip">
                         <i class="mdi mdi-eye brdr-blue-btn" aria-hidden="true"></i>
                       </a>
+
+                      <a class="cp" routerLink="/appointments/consult/{{appointment.appointment_id}}"
+                        matTooltip="{{'consult_now' | translate}}" matTooltipClass="primary-tooltip">
+                        <i class="mdi mdi-headset brdr-blue-btn mt-2" aria-hidden="true"></i>
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -235,7 +245,7 @@
                 <div class="apointment card-grid my-auto" [ngClass]="{'csspinner load1':addFormAction}">
                   <div class="card-profile-content commonbox">
                     <div class="card-profile"> <img
-                        [src]="appointment.patient_image_url && appointment.patient_image_url.includes('/assets/images/avatar.jpg') ? 'https://drmostafa.net/media/user-profile-images/3640bcff7cc4d4c2fa93b9d73928ec96-5.jpg' : appointment.patient_image_url"
+                        [src]="appointment.patient_image_url && appointment.patient_image_url.includes('/assets/images/avatar.jpg') ? 'https://drmostafa.net/media/user-profile-images/istockphoto-1223671392-612x612.jpg' : appointment.patient_image_url"
                         alt="">
                     </div>
                     <div class="name-action">
@@ -367,7 +377,7 @@
                 <div class="apointment card-grid my-auto" [ngClass]="{'csspinner load1':addFormAction}">
                   <div class="card-profile-content commonbox">
                     <div class="card-profile"> <img
-                        [src]="appointment.patient_image_url && appointment.patient_image_url.includes('/assets/images/avatar.jpg') ? 'https://drmostafa.net/media/user-profile-images/3640bcff7cc4d4c2fa93b9d73928ec96-5.jpg' : appointment.patient_image_url"
+                        [src]="appointment.patient_image_url && appointment.patient_image_url.includes('/assets/images/avatar.jpg') ? 'https://drmostafa.net/media/user-profile-images/istockphoto-1223671392-612x612.jpg' : appointment.patient_image_url"
                         alt="">
                     </div>
                     <div class="name-action">
@@ -490,7 +500,7 @@
                 <div class="apointment card-grid my-auto" [ngClass]="{'csspinner load1':addFormAction}">
                   <div class="card-profile-content commonbox">
                     <div class="card-profile"> <img
-                        [src]="appointment.patient_image_url && appointment.patient_image_url.includes('/assets/images/avatar.jpg') ? 'https://drmostafa.net/media/user-profile-images/3640bcff7cc4d4c2fa93b9d73928ec96-5.jpg' : appointment.patient_image_url"
+                        [src]="appointment.patient_image_url && appointment.patient_image_url.includes('/assets/images/avatar.jpg') ? 'https://drmostafa.net/media/user-profile-images/istockphoto-1223671392-612x612.jpg' : appointment.patient_image_url"
                         alt="">
                     </div>
                     <div class="name-action">
@@ -518,6 +528,12 @@
                           matTooltip="{{'view_detail' | translate}}" matTooltipClass="primary-tooltip">
                           <i class="mdi mdi-eye brdr-blue-btn" aria-hidden="true"></i>
                         </a>
+
+                        <a class="cp" routerLink="/appointments/consult/{{appointment.appointment_id}}"
+                          matTooltip="{{'consult_now' | translate}}" matTooltipClass="primary-tooltip">
+                          <i class="mdi mdi-headset brdr-blue-btn mt-2" aria-hidden="true"></i>
+                        </a>
+
                       </div>
                     </div>
                   </div>
@@ -567,6 +583,12 @@
                         matTooltip="{{'view_detail' | translate}}" matTooltipClass="primary-tooltip">
                         <i class="mdi mdi-eye brdr-blue-btn" aria-hidden="true"></i>
                       </a>
+
+                      <a class="cp" routerLink="/appointments/consult/{{appointment.appointment_id}}"
+                        matTooltip="{{'consult_now' | translate}}" matTooltipClass="primary-tooltip">
+                        <i class="mdi mdi-headset brdr-blue-btn mt-2" aria-hidden="true"></i>
+                      </a>
+
                     </div>
                   </div>
                 </div>

@@ -332,6 +332,7 @@ export class ConsultComponent implements OnInit {
   }
 
   appointment_detail() {
+    this.getAppointmentPrescriptions();
     this.appointmentService.appointments({ 'appointment_id': this.appointment_id }).subscribe(
       (response: any) => {
         if (response.status) {
@@ -346,7 +347,7 @@ export class ConsultComponent implements OnInit {
             this.userID = this.appointmentDetail.user_id;
           }
           this.getAppointmentChats();
-          this.getAppointmentPrescriptions();
+          // this.getAppointmentPrescriptions();
           //this.createGroup();
           //this.getHealthRecords();
         } else {
@@ -435,6 +436,8 @@ export class ConsultComponent implements OnInit {
         if (x.prescription_type == 'Report') this.prescriptions.Report.push(x);
       });
 
+      this.prescriptions.Medicine.reverse();
+      // this.prescriptions.Medicine.sort((ele) => ele.)
       //console.log('this.prescriptions', this.prescriptions);
     });
   }
